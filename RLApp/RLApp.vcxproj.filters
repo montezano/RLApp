@@ -44,6 +44,18 @@
     <Filter Include="Header Files\control">
       <UniqueIdentifier>{f314961c-0ea5-47bc-8a49-d0c55fa8a452}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\util">
+      <UniqueIdentifier>{7443ddae-7d6f-4bb6-84ac-4fc41897d922}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{cd153ff7-ab2d-4f5e-af16-905a41d01fd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\model">
+      <UniqueIdentifier>{1f469b04-75ba-41f3-82f9-36006d5e3ddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\model">
+      <UniqueIdentifier>{8213d4e1-6898-4864-87d1-a46e2839618a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -64,6 +76,12 @@
     <ClCompile Include="src\controller\MainController.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
+    <ClCompile Include="src\util\Observer.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\RE.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.h">
@@ -82,6 +100,21 @@
     </ClInclude>
     <ClInclude Include="headers\controller\MainController.h">
       <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\util\Subject.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\util\Observer.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\util\Event.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\model\RE.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\util\Alphabet.h">
+      <Filter>Header Files\util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

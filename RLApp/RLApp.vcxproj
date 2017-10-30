@@ -83,6 +83,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RLApp.cpp" />
     <ClCompile Include="src\controller\MainController.cpp" />
+    <ClCompile Include="src\model\RE.cpp" />
+    <ClCompile Include="src\util\Observer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.h">
@@ -111,6 +113,11 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_RLApp.h" />
     <ClInclude Include="headers\controller\MainController.h" />
+    <ClInclude Include="headers\model\RE.h" />
+    <ClInclude Include="headers\util\Alphabet.h" />
+    <ClInclude Include="headers\util\Event.h" />
+    <ClInclude Include="headers\util\Observer.h" />
+    <ClInclude Include="headers\util\Subject.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
