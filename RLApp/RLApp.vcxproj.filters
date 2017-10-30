@@ -38,6 +38,12 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\control">
+      <UniqueIdentifier>{567a7fa2-34e6-46ae-8adc-a1615b2f4a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\control">
+      <UniqueIdentifier>{f314961c-0ea5-47bc-8a49-d0c55fa8a452}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -55,6 +61,9 @@
     <ClCompile Include="GeneratedFiles\qrc_RLApp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\MainController.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.h">
@@ -70,6 +79,9 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_RLApp.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\MainController.h">
+      <Filter>Header Files\control</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
