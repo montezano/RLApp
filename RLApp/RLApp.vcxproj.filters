@@ -61,7 +61,7 @@
     <ClCompile Include="GeneratedFiles\qrc_RLApp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\MainController.cpp">
+    <ClCompile Include="src\controller\MainController.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
   </ItemGroup>
@@ -80,7 +80,7 @@
     <ClInclude Include="GeneratedFiles\ui_RLApp.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\MainController.h">
+    <ClInclude Include="headers\controller\MainController.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,4 @@
-#include "MainController.h"
+#include "controller/MainController.h"
 
 MainController::MainController()
 {
