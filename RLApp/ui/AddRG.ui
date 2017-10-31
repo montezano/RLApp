@@ -41,7 +41,7 @@
    <property name="title">
     <string>Regular Grammar</string>
    </property>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="table_rg">
     <property name="geometry">
      <rect>
       <x>10</x>

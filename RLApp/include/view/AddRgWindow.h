@@ -14,7 +14,7 @@ public slots:
 	void addProductionName();
 	void addProduction();
 	void removeProductionName();
-	void RemoveProduction();
+	void removeProduction();
 
 private:
 	Ui::AddRG ui;
