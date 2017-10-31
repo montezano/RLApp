@@ -3,6 +3,7 @@
 
 #include "view/RLApp.h"
 #include "util/Observer.h"
+#include "controller/ModelController.h"
 
 class MainController: public Observer, public Subject
 {
@@ -16,6 +17,8 @@ public:
 
 private:
 	RLApp* _main_window;
+
+	ModelController _model_controller;
 
 
 	QString msg;

@@ -93,6 +93,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\controller\MainController.cpp" />
+    <ClCompile Include="src\controller\ModelController.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\model\RE.cpp" />
     <ClCompile Include="src\util\Observer.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="GeneratedFiles\ui_AddRG.h" />
     <ClInclude Include="GeneratedFiles\ui_RLApp.h" />
     <ClInclude Include="include\controller\MainController.h" />
+    <ClInclude Include="include\controller\ModelController.h" />
     <ClInclude Include="include\model\RE.h" />
     <ClInclude Include="include\util\Alphabet.h" />
     <ClInclude Include="include\util\Event.h" />

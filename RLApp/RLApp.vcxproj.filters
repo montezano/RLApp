@@ -109,6 +109,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_AddRgWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="src\controller\ModelController.cpp">
+      <Filter>Source Files\control</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_AddRG.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\controller\ModelController.h">
+      <Filter>Header Files\control</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

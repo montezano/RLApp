@@ -12,6 +12,10 @@ class AddReWindow : public QDialog, public Subject
 public:
 	AddReWindow(QWidget *parent = Q_NULLPTR);
 
+public slots:
+	void acceptedRE();
+
+
 private:
 	Ui::AddRE ui;
 };

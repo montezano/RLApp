@@ -36,4 +36,6 @@ void AddRgWindow::removeProduction()
 void AddRgWindow::acceptedGrammar()
 {
 	notify(NULL, Events::ADD_REGULAR_GRAMMAR);
+	//ui.line_re
+	//ui.
 }

@@ -3,7 +3,7 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_AddRG.h"
 
-#include "util\Subject.h"
+#include "util/Subject.h"
 
 class AddRgWindow : public QDialog, public Subject
 {

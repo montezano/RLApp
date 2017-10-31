@@ -4,15 +4,22 @@
 #include <string>
 #include <QString>
 
-#include "util\Alphabet.h"
+#include "util/Alphabet.h"
+#include "util/Subject.h"
 
-class RE
+class RE: public Subject
 {
 public:
-	RE();
-	RE(std::string re);
-	RE(QString re);
-	~RE();
+	//RE();
+	//RE(std::string re);
+	//RE(QString re);
+	//~RE();
+
+	void setRe(std::string re);
+	void setRe(QString re);
+
+	bool verify();
+
 
 private:
 	QString _re;

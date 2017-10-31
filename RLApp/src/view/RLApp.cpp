@@ -21,6 +21,9 @@ RLApp::RLApp(Observer* observer, QWidget *parent)
 	_add_re_window->addObserver(observer);
 	_add_rg_window->addObserver(observer);
 
+	_add_re_window->addObserver(this);
+	_add_rg_window->addObserver(this);
+
 	ui.setupUi(this);
 
 	QObject::connect(ui.add_exp_btn, SIGNAL(clicked()), this, SLOT(callAddREWindow()));
@@ -46,5 +49,17 @@ void RLApp::onNotify(void * entity, Events event)
 {
 	switch (event)
 	{
+	case UPDATE_REGULAR_EXPRESSION:
+		ui.line_re->insert(*(QString*)entity);
+		//ui.table_rg->row()
+
+		break;
+	case UPDATE_REGULAR_GRAMMAR:
+
+		break;
+
+	case UPDATE_FINITE_AUTOMATA:
+
+		break;
 	}
 }
