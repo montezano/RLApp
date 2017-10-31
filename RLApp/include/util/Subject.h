@@ -10,10 +10,10 @@
 class Subject
 {
 public:
-	void addObserver(Observer *observer);
-	void removeObserver(Observer *observer);
+	virtual void addObserver(Observer *observer);
+	virtual void removeObserver(Observer *observer);
 protected:
-	void notify(void *entity, Events event);
+	virtual void notify(void *entity, Events event);
 
 private:
 	std::vector<Observer*> _observers;

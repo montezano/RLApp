@@ -1,20 +1,24 @@
 #ifndef __MAINCONTROLLER_H__
 #define __MAINCONTROLLER_H__
 
-#include "view\MainWindow.h"
+#include "view/RLApp.h"
+#include "util/Observer.h"
 
-
-class MainController
+class MainController: public Observer, public Subject
 {
 public:
 	MainController();
 	~MainController();
 
-	static int run();
+	int run();
+
+	virtual void onNotify(void *data, Events event);
 
 private:
-	static MainWindow* _main_window;
+	RLApp* _main_window;
 
+
+	QString msg;
 };
 
 

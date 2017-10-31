@@ -32,7 +32,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="grp_box_re">
      <property name="geometry">
       <rect>
        <x>269</x>
@@ -44,7 +44,7 @@
      <property name="title">
       <string>Regular Expression</string>
      </property>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="line_re">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -55,7 +55,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="grp_box_fa">
      <property name="geometry">
       <rect>
        <x>200</x>
@@ -67,7 +67,7 @@
      <property name="title">
       <string>Finite Automata</string>
      </property>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="table_fa">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -137,7 +137,7 @@
       </item>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="groupBox_4">
+    <widget class="QGroupBox" name="grp_box_rg">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -149,7 +149,7 @@
      <property name="title">
       <string>Regular Grammar</string>
      </property>
-     <widget class="QTableWidget" name="tableWidget_2">
+     <widget class="QTableWidget" name="table_rg">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -276,7 +276,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="grp_box_opp">
        <property name="title">
         <string>Operations</string>
        </property>
@@ -327,7 +327,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="add_groupBox_2">
+      <widget class="QGroupBox" name="grp_box_accept">
        <property name="baseSize">
         <size>
          <width>0</width>

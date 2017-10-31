@@ -3,7 +3,9 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_AddRG.h"
 
-class AddRgWindow : public QDialog
+#include "util\Subject.h"
+
+class AddRgWindow : public QDialog, public Subject
 {
 	Q_OBJECT
 
@@ -15,6 +17,7 @@ public slots:
 	void addProduction();
 	void removeProductionName();
 	void removeProduction();
+	void acceptedGrammar();
 
 private:
 	Ui::AddRG ui;

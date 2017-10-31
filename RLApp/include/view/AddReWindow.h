@@ -3,7 +3,9 @@
 #include <QtWidgets/QMainWindow>
 #include "ui_AddRE.h"
 
-class AddReWindow : public QDialog
+#include "util/Subject.h"
+
+class AddReWindow : public QDialog, public Subject
 {
 	Q_OBJECT
 
