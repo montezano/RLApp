@@ -282,14 +282,14 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="opp_re_to_fa">
           <property name="text">
            <string>RE to FA</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="btn_opp_union">
           <property name="text">
            <string>Union</string>
           </property>
@@ -339,23 +339,9 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QPushButton" name="add_grammar_btn_2">
+         <widget class="QPushButton" name="acc_check">
           <property name="text">
            <string>Grammar</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="add_exp_btn_2">
-          <property name="text">
-           <string>Expression</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="add_afd_btn_2">
-          <property name="text">
-           <string>Finite Automata</string>
           </property>
          </widget>
         </item>
@@ -393,7 +379,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="RLApp.qrc"/>
+  <include location="../RLApp.qrc"/>
  </resources>
  <connections/>
 </ui>

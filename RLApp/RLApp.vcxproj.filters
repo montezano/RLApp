@@ -56,20 +56,14 @@
     <Filter Include="Source Files\model">
       <UniqueIdentifier>{8213d4e1-6898-4864-87d1-a46e2839618a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\view">
+      <UniqueIdentifier>{1c892f01-93b1-43b6-ad3a-87a0ce6f0c36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\view">
+      <UniqueIdentifier>{f6b91914-44ee-44ea-8e60-a24f92383f8f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RLApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_RLApp.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_RLApp.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_RLApp.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -82,39 +76,75 @@
     <ClCompile Include="src\model\RE.cpp">
       <Filter>Source Files\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\view\MainWindow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\RLApp.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_RLApp.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_RLApp.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AddReWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\AddReWindow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AddReWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="RLApp.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="RLApp.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="RLApp.qrc">
       <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\AddRE.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\RLApp.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\RLApp.h">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\AddReWindow.h">
+      <Filter>Header Files\view</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_RLApp.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\controller\MainController.h">
+    <ClInclude Include="GeneratedFiles\ui_AddRE.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\controller\MainController.h">
       <Filter>Header Files\control</Filter>
     </ClInclude>
-    <ClInclude Include="headers\util\Subject.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\util\Observer.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\util\Event.h">
-      <Filter>Header Files\util</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\model\RE.h">
+    <ClInclude Include="include\model\RE.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
-    <ClInclude Include="headers\util\Alphabet.h">
+    <ClInclude Include="include\util\Alphabet.h">
       <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\Event.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\Observer.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\util\Subject.h">
+      <Filter>Header Files\util</Filter>
+    </ClInclude>
+    <ClInclude Include="include\view\MainWindow.h">
+      <Filter>Header Files\view</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

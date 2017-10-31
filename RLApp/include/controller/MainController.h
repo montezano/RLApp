@@ -1,7 +1,7 @@
 #ifndef __MAINCONTROLLER_H__
 #define __MAINCONTROLLER_H__
 
-#include "RLApp.h"
+#include "view\MainWindow.h"
 
 
 class MainController
@@ -10,10 +10,11 @@ public:
 	MainController();
 	~MainController();
 
-	static int run(int argc, char *argv[]);
+	static int run();
 
 private:
-	static RLApp* w;
+	static MainWindow* _main_window;
+
 };
 
 

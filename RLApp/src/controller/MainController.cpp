@@ -8,12 +8,12 @@ MainController::~MainController()
 {
 }
 
-int MainController::run(int argc, char *argv[])
+int MainController::run()
 {
-	w = new RLApp();
-	w->show();
+	_main_window = new MainWindow();
+	_main_window->show();
 
 	return 0;
 }
 
-RLApp* MainController::w = NULL;
+MainWindow* MainController::_main_window = NULL;
