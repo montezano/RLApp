@@ -13,7 +13,8 @@ public:
 
 	int show();
 
-public slots:
+
+		
 	
 
 private:

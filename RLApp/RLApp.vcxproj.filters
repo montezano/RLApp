@@ -100,6 +100,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_AddReWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="src\view\AddRgWindow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AddRgWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AddRgWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -115,6 +124,12 @@
       <Filter>Header Files\view</Filter>
     </CustomBuild>
     <CustomBuild Include="include\view\AddReWindow.h">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\AddRG.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\AddRgWindow.h">
       <Filter>Header Files\view</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -145,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="include\view\MainWindow.h">
       <Filter>Header Files\view</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_AddRG.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
