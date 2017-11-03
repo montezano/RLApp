@@ -11,14 +11,15 @@ public:
 	MainController();
 	~MainController();
 
+	void initializeObservers();
+
 	int run();
 
 	virtual void onNotify(void *data, Events event);
 
 private:
 	RLApp* _main_window;
-
-	ModelController _model_controller;
+	ModelController* _model_controller;
 
 
 	QString msg;

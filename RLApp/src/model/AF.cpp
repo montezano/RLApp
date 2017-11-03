@@ -1,8 +1,12 @@
 #include "model/AF.h"
 
-void AF::setAF()
+void FA::setFA()
 {
-	//_re = QString(re.c_str());
+}
+
+MapModel FA::getFA()
+{
+	return map.data();
 }
 
 //void AF::setRe(QString re)
@@ -10,7 +14,25 @@ void AF::setAF()
 //	_re = re;
 //}
 
-bool AF::verify()
+bool FA::verify()
 {
 	return false;
+}
+
+///////////////////////////////////////////////
+// FAState
+///////////////////////////////////////////////
+
+
+FAState::FAState(FA * parent, NT state_name, QList<VT> transitions, StateType type):
+	_parent(parent),
+	_state_name(state_name),
+	_transitions(transitions),
+	_type(type)
+{
+	
+}
+
+FAState::~FAState()
+{
 }

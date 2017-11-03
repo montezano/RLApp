@@ -2,11 +2,14 @@
 #define __MODELCONTROLLER_H__
 
 #include "model/RE.h"
+#include "model/AF.h"
+#include "util/Observer.h"
 
 class ModelController
 {
 public:
 	ModelController();
+	ModelController(Observer* observer);
 	~ModelController();
 
 	bool updateRE();
@@ -14,7 +17,7 @@ public:
 private:
 	RE _re;
 	//GR _gr;
-	//FA _fa;
+	AF _fa;
 
 };
 

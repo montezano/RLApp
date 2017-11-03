@@ -2,13 +2,19 @@
 
 MainController::MainController()
 {
-	_main_window = new RLApp(this);
-	addObserver(_main_window);
-	
+	_main_window = new RLApp();
+	_model_controller = new ModelController(_main_window);
 }
 
 MainController::~MainController()
 {
+}
+
+void MainController::initializeObservers()
+{
+	addObserver(_main_window);
+
+	_main_window->addObserver(this);
 }
 
 int MainController::run()

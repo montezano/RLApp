@@ -18,17 +18,27 @@
 //{
 //}
 
-void RE::setRe(std::string re)
-{
-	_re = QString(re.c_str());
-}
+//void RE::setRe(std::string re)
+//{
+//	_re = QString(re.c_str());
+//}
 
 void RE::setRe(QString re)
 {
 	_re = re;
 }
 
-bool RE::verify()
+QString RE::getRe()
 {
+	return _re;
+}
+
+bool RE::verify(QString& re)
+{
+	for (auto terminal = re.begin; terminal != re.end; terminal++)
+	{
+		//if ()
+	}
+	//Alphabet::_terminals.
 	return false;
 }

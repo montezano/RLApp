@@ -19,6 +19,7 @@ public:
 	int columnCount(const QModelIndex& parent = QModelIndex()) const;
 	QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 	inline void setMap(QMap<QString, QList<QString>>* map) { _map = map; }
+	//void insertRow(QPair<QString, QList<QString>> row) { _map->insert() }
 
 private:
 	QMap<QString, QList<QString>>* _map;

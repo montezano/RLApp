@@ -15,13 +15,16 @@ public:
 	//RE(QString re);
 	//~RE();
 
-	void setRe(std::string re);
+	//void setRe(std::string re);
 	void setRe(QString re);
+	QString getRe();
 
-	bool verify();
 
 
 private:
+	bool verify(QString &re);
+
+
 	QString _re;
 
 };

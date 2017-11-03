@@ -70,9 +70,6 @@
     <ClCompile Include="src\controller\MainController.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\Observer.cpp">
-      <Filter>Source Files\util</Filter>
-    </ClCompile>
     <ClCompile Include="src\model\RE.cpp">
       <Filter>Source Files\model</Filter>
     </ClCompile>
@@ -112,6 +109,21 @@
     <ClCompile Include="src\controller\ModelController.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
+    <ClCompile Include="src\model\AF.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MapModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MapModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\model\MapModel.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\util\Subject.cpp">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -134,6 +146,9 @@
     </CustomBuild>
     <CustomBuild Include="include\view\AddRgWindow.h">
       <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\model\MapModel.h">
+      <Filter>Header Files\model</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="include\controller\ModelController.h">
       <Filter>Header Files\control</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model\AF.h">
+      <Filter>Header Files\model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
