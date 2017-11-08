@@ -65,7 +65,7 @@ bool FA::isEmpty()
 		}
 	}
 
-	return fertile_state.contains(_states[0]._state_name);
+	return !fertile_state.contains(_states[0]._state_name);
 }
 
 bool FA::isInfinite()

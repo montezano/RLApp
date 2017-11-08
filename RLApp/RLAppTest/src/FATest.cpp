@@ -93,7 +93,7 @@ public:
 		fa.addState({ { 1 } }, REGULAR);
 		fa.addState({ { 1 } }, FINAL);
 
-		Assert::IsTrue(fa.isEmpty());
+		Assert::IsFalse(fa.isEmpty());
 
 	}
 
@@ -108,6 +108,26 @@ public:
 		fa.addState({ { 1, 3 }, { 1, 1 } }, REGULAR);
 		fa.addState({ { 1, 4 }, { 1, 1 } }, REGULAR);
 		fa.addState({ { 1, 4 }, { 1, 1 } }, FINAL);
+
+
+
+		//fa.addState({ { 1 } }, FINAL);
+
+		Assert::IsFalse(fa.isEmpty());
+
+	}
+
+	TEST_METHOD(check_is_not_empty)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+
+		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 1, 1 } }, FINAL);
 
 
 
@@ -142,6 +162,21 @@ public:
 		fa.addState({ { 1 },{ 0 } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 1 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, FINAL);
+
+		Assert::IsTrue(fa.isInfinite());
+	}
+
+	TEST_METHOD(check_is_infinite_2)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+
+		fa.addState({ { 1 },{ 1 } }, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, REGULAR);
+		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, FINAL);
 
