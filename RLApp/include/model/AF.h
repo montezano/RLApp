@@ -5,40 +5,51 @@
 #include "model/MapModel.h"
 #include "util/Subject.h"
 
-//class FAState;
+struct FAState;
 
 
 class FA : public Subject
 {
 public:
-	void setFA(/*QMap< map*/);
-	void getFA();
+	FA();
+	~FA();
 
+	//ACCESS FUNCTIONS
+	void setTerminals(QVector<VT> terminals);
+	void addTerminal(VT terminal);
+	QVector<VT> getTerminals();
+	bool addState(QVector<TR> transitions, StateType type);
+
+	//
+	//bool minimize();
+	bool isEmpty();
 	bool verify();
 
+	// UTILS
+	unsigned getNextStateName();
+	QVector<NT> getFinalStates();
+
+
 private:
-	QList<QString> _terminals;
-	QList<FAState> _states;
+	QVector<VT> _terminals;
+	QVector<FAState> _states;
+	NT _last_state_add;
 
-
-	MapModel map;
+	//MapModel map;
 
 };
 
 
-class FAState
+struct FAState
 {
 public:
-	FAState(FA* parent, NT state_name, QList<VT> transitions, StateType type);
-	~FAState();
+	FAState();
+	FAState(FA* parent, NT state_name, QVector<TR> transitions, StateType type);
 
-private:
 	FA* _parent;
 	NT _state_name;
-	QList<VT> _transitions;
+	QVector<TR> _transitions;
 	StateType _type;
-
-
 };
 
 

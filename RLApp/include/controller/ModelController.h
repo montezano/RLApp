@@ -17,7 +17,7 @@ public:
 private:
 	RE _re;
 	//GR _gr;
-	AF _fa;
+	FA _fa;
 
 };
 

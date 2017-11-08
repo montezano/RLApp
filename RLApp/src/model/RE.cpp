@@ -35,10 +35,10 @@ QString RE::getRe()
 
 bool RE::verify(QString& re)
 {
-	for (auto terminal = re.begin; terminal != re.end; terminal++)
-	{
-		//if ()
-	}
+	//for (auto terminal = re.begin; terminal != re.end; terminal++)
+	//{
+	//	//if ()
+	//}
 	//Alphabet::_terminals.
 	return false;
 }

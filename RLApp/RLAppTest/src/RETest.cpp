@@ -1,3 +1,8 @@
+#ifndef __RETEST_H__
+#define __RETEST_H__
+
+
+
 #include "CppUnitTest.h"
 
 #include "model/RE.h"
@@ -28,3 +33,5 @@ public:
 	}
 
 };
+
+#endif // !__RETEST_H__
