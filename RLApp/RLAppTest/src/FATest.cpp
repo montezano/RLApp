@@ -82,7 +82,7 @@ public:
 
 		fa.addState({ { 0 } }, FINAL);
 
-		Assert::IsTrue(fa.isEmpty());
+		Assert::IsFalse(fa.isEmpty());
 
 	}
 
@@ -182,6 +182,70 @@ public:
 
 		Assert::IsTrue(fa.isInfinite());
 	}
+
+	TEST_METHOD(epsilon_transition_closure_without_E)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		QVector<TR> test_state = QVector<TR>({ { 1 },{ 1 } });
+		fa.addState(test_state, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, REGULAR);
+		fa.addState({ { 3 },{ 3 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, FINAL);
+
+		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+	}
+
+	TEST_METHOD(epsilon_transition_closure_with_E_1)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("&");
+
+		QVector<TR> test_state = QVector<TR>({ { 1, 2, 3, 4 },{ 1, 2, 3, 4 } });
+		fa.addState({ { 1 },{ 1 } }, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, REGULAR);
+		fa.addState({ { 3 },{ 3 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, REGULAR);
+		fa.addState({ { 4 },{ 4 } }, FINAL);
+
+		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+	}
+
+	TEST_METHOD(epsilon_transition_closure_with_E_2)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("&");
+
+		QVector<TR> test_state = QVector<TR>({ { 1 },{ 1, 2, 3, 4 } });
+		fa.addState({ { 1 },{ 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 2 } }, REGULAR);
+		fa.addState({ { 1 },{ 3 } }, REGULAR);
+		fa.addState({ { 1 },{ 4 } }, REGULAR);
+		fa.addState({ { 1 },{ 1 } }, FINAL);
+
+		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+	}
+
+	TEST_METHOD(epsilon_transition_closure_with_E_3)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("&");
+
+		QVector<TR> test_state = QVector<TR>({ { 1 },{ } });
+		fa.addState({ { 1 },{  } }, REGULAR);
+		fa.addState({ { 1 },{  } }, REGULAR);
+		fa.addState({ { 1 },{  } }, REGULAR);
+		fa.addState({ { 1 },{  } }, REGULAR);
+		fa.addState({ { 1 },{ 1 } }, FINAL);
+
+		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+	}
+	//TEST_METHOD(remove_E_transition)
+	//{
+	//	Assert::isTru
+	//}
 	//TEST_method(add_state_)
 
 	static FA fa;

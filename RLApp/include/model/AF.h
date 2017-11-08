@@ -21,18 +21,24 @@ public:
 	bool addState(QVector<TR> transitions, StateType type);
 
 	//
-	//bool minimize();
 	bool isEmpty();
 	bool isInfinite();
+	bool determinize();
+
+	// Return true if it removed sucessufully
+	bool removeETransition();
 	bool verify();
 
 	// UTILS
 	unsigned getNextStateName();
 	QVector<NT> getFinalStates();
-
+	QVector<TR> getEStateClosure(NT state_name);
 
 private:
 	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
+	QVector<TR> getEStateClosure(FAState state, QVector<NT> visited);
+	FAState findStateByName(NT state_name);
+	void organizeTransition(TR& transition);
 
 
 	QVector<VT> _terminals;

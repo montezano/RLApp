@@ -5,7 +5,7 @@ FA::FA() :
 	_states(),
 	_last_state_add(0)
 {
-	_terminals << "Trans";
+	//_terminals << "Trans";
 }
 
 FA::~FA()
@@ -29,7 +29,7 @@ QVector<VT> FA::getTerminals()
 
 bool FA::addState(QVector<TR> transitions, StateType type)
 {
-	if (transitions.size() != _terminals.size() - 1)
+	if (transitions.size() != _terminals.size())
 	{
 		return false;
 	}
@@ -77,6 +77,26 @@ bool FA::isInfinite()
 	return findCicle(_states[0], _states[0], visited);
 }
 
+bool FA::determinize()
+{
+
+	
+	return false;
+}
+
+bool FA::removeETransition()
+{
+	if (_terminals.contains("&"))
+	{
+		for (FAState state : _states)
+		{
+			//getEStateClosure()
+		}
+	}
+	
+	return true;
+}
+
 
 //def findCicle(self) :
 //	visited = []
@@ -113,6 +133,12 @@ QVector<NT> FA::getFinalStates()
 	return fertile_state;
 }
 
+QVector<TR> FA::getEStateClosure(NT state_name)
+{
+
+	return getEStateClosure(findStateByName(state_name), QVector<NT>());
+}
+
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)
 {
 	if (visited.contains(current_state._state_name))
@@ -140,6 +166,59 @@ bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visite
 	visited.remove(current_state._state_name);
 
 	return false;
+}
+
+QVector<TR> FA::getEStateClosure(FAState state, QVector<NT> visited)
+{
+	QVector<TR> closure = state._transitions;
+
+	visited.push_back(state._state_name);
+	int epsilon_index = _terminals.indexOf("&");
+	if (epsilon_index != -1)
+	{	
+		for (NT transition : state._transitions[epsilon_index])
+		{
+			if (!visited.contains(transition))
+			{
+				QVector<TR> ret = getEStateClosure(findStateByName(transition), visited);
+				for (int i = 0; i < ret.size(); i++)
+				{
+					closure[i] << ret[i];
+					organizeTransition(closure[i]);
+				}
+			}
+		}
+	}
+
+	return closure;
+}
+
+FAState FA::findStateByName(NT state_name)
+{
+	for (auto state : _states)
+	{
+		if (state._state_name == state_name)
+		{
+			return state;
+		}
+	}
+	return FAState();
+}
+
+void FA::organizeTransition(TR& transition)
+{
+	for (NT tr : transition)
+	{
+		if (transition.count(tr) > 1)
+		{
+			for (int i = 0; i < transition.count(tr) -1; i++)
+			{
+				transition.removeOne(tr);
+			}
+		}
+	}
+
+	qSort(transition);
 }
 
 //def findCicleOf(self, currentVertex, lastVertex, visited) :
