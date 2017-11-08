@@ -23,6 +23,7 @@ public:
 	//
 	//bool minimize();
 	bool isEmpty();
+	bool isInfinite();
 	bool verify();
 
 	// UTILS
@@ -31,6 +32,9 @@ public:
 
 
 private:
+	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
+
+
 	QVector<VT> _terminals;
 	QVector<FAState> _states;
 	NT _last_state_add;

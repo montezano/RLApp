@@ -68,6 +68,24 @@ bool FA::isEmpty()
 	return fertile_state.contains(_states[0]._state_name);
 }
 
+bool FA::isInfinite()
+{
+	QVector<NT> visited;
+
+	
+
+	return findCicle(_states[0], _states[0], visited);
+}
+
+
+//def findCicle(self) :
+//	visited = []
+//	return self.connected() and not self.findCicleOf(self.vertices.keys()[0], self.vertices.keys()[0], visited)
+
+
+
+
+
 bool FA::verify()
 {
 	return false;
@@ -95,6 +113,47 @@ QVector<NT> FA::getFinalStates()
 	return fertile_state;
 }
 
+bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)
+{
+	if (visited.contains(current_state._state_name))
+	{
+		return true;
+	}
+
+	visited.append(current_state._state_name);
+
+	for (auto transition : _states[current_state._state_name]._transitions)
+	{
+		for (auto tr : transition)
+		{
+			if (tr != last_state._state_name)
+			{
+				if (tr < _states.size() &&		//avoid checking out of bound
+					findCicle(_states[tr], _states[current_state._state_name], visited))
+				{
+					return true;
+				}
+			}
+		}
+	}
+
+	visited.remove(current_state._state_name);
+
+	return false;
+}
+
+//def findCicleOf(self, currentVertex, lastVertex, visited) :
+//	if currentVertex in visited :
+//return True
+//visited.append(currentVertex)
+//for adjacent in self.vertices[currentVertex] :
+//	if adjacent != lastVertex :
+//		if self.findCicleOf(adjacent, currentVertex, visited) :
+//			return True
+//visited.remove(currentVertex)
+//return False
+
+
 ///////////////////////////////////////////////
 // FAState
 ///////////////////////////////////////////////
@@ -116,3 +175,4 @@ FAState::FAState(FA * parent, NT state_name, QVector<TR> transitions, StateType 
 {
 	
 }
+
