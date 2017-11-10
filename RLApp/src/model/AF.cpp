@@ -32,6 +32,11 @@ QVector<FAState> FA::getStates()
 	return _states;
 }
 
+QVector<DetFAState> FA::getDetStates()
+{
+	return _states_determinized;
+}
+
 bool FA::addState(QVector<TR> transitions, StateType type)
 {
 	if (transitions.size() != _terminals.size())
@@ -84,9 +89,53 @@ bool FA::isInfinite()
 
 bool FA::determinize()
 {
+	DetFAState ini_state = DetFAState(this,
+								QString::number(_states[0]._state_name),
+								_states[0]._transitions, _states[0]._type);
+	_states_determinized << ini_state;
 
+	QMap<QString, bool> new_states;		/// < QString: state name;
+										/// < bool: visited or not (true for visited)
+	new_states.insert(ini_state._state_name, true);
+
+	//for (int i = 0; i < _terminals.size(); i++)
+	//{
+	reachableStateFrom({ 0 }, new_states);
+
+	//}
+
+	if (!new_states.isEmpty())
+	{
+		bool unvisited = true;
+		while (unvisited)
+		{
+			unvisited = false;
+			for (auto next_state = new_states.begin(); next_state != new_states.end(); ++next_state)
+			{
+				if (!next_state.value())
+				{
+					QString str_state = next_state.key();
+					TR state = strToTransition(str_state);
+
+					int old_states_size = new_states.size();
+					QVector<TR> trans = reachableStateFrom(state, new_states);
+					
+					if (new_states.size() != old_states_size)
+					{
+						unvisited = true;
+					}
+
+					StateType type = getDetStateType(state);
+
+					_states_determinized << DetFAState(this, str_state, trans, type);
+				}
+				next_state.value() = true;
+			}
+		}
+	}
 	
-	return false;
+	
+	return true;
 }
 
 bool FA::removeETransition()
@@ -230,16 +279,102 @@ void FA::organizeTransition(TR& transition)
 	qSort(transition);
 }
 
-//def findCicleOf(self, currentVertex, lastVertex, visited) :
-//	if currentVertex in visited :
-//return True
-//visited.append(currentVertex)
-//for adjacent in self.vertices[currentVertex] :
-//	if adjacent != lastVertex :
-//		if self.findCicleOf(adjacent, currentVertex, visited) :
-//			return True
-//visited.remove(currentVertex)
-//return False
+QString FA::transitionToStr(TR transition)
+{
+	QString ret;
+	for (auto tr : transition)
+	{
+		ret += QString::number(tr)+"-";
+
+	}
+	if (!ret.isEmpty())
+	{
+		ret.remove(ret.count() - 1, ret.count() - 1);
+	}
+	return ret;
+}
+
+TR FA::strToTransition(QString transition)
+{
+	QStringList tr_list = transition.split("-");
+	TR ret;
+	for (QString tr : tr_list)
+	{
+		
+		bool ok;
+		unsigned i = tr.toUInt(&ok);
+		if (ok)
+		{
+			ret << i;
+
+		}
+	}
+	return ret;
+}
+
+//void FA::determinizeState(FAState state)
+//{
+//
+//	for (int i = 0; i < _terminals.size(); i++)
+//	{
+//		StateType st_type = 0x0;
+//		QString n_st_name = transitionToStr(state._transitions[i]);
+//
+//		if (!n_st_name.isEmpty() && !_state_name_map.contains(n_st_name))
+//		{
+//			_state_name_map.insert(n_st_name, state._transitions[i]);
+//			//_states_determinized.insert(this, n_st_name, )
+//
+//			for (auto tr : state._transitions)
+//			{
+//
+//				_state_name_map.insert(transitionToStr(tr), tr);
+//				//_states_determinized << FAState(this, )
+//				//	state._transitions[i] << tr;
+//			}
+//		}
+//		organizeTransition(state._transitions[i]);
+//
+//	}
+//}
+
+QVector<TR> FA::reachableStateFrom(TR transitions, QMap<QString, bool>& added)
+{
+	QVector<TR> ret;
+	ret.resize(_terminals.size());
+
+	for (int i = 0; i < _terminals.size(); i++)
+	{
+
+		for (auto tr : transitions)
+		{
+			for (NT nt : _states[tr]._transitions[i])
+			{
+				ret[i] << nt;
+			}
+		}
+		organizeTransition(ret[i]);
+		QString st_name = transitionToStr(ret[i]);
+		if (!st_name.isEmpty() && !added.contains(st_name))
+		{
+			added.insert(st_name, false);
+		}		
+	}
+
+	return ret;
+}
+
+StateType FA::getDetStateType(TR state_name)
+{
+	StateType type = 0x1;
+
+	for (auto t : state_name)
+	{
+		type = (type |_states[t]._type) & ~INITIAL;
+	}
+
+	return type;
+}
 
 
 ///////////////////////////////////////////////
@@ -264,3 +399,41 @@ FAState::FAState(FA * parent, NT state_name, QVector<TR> transitions, StateType 
 	
 }
 
+FAState::FAState(FA * parent, NT state_name, StateType type) :
+	_parent(parent),
+	_state_name(state_name),
+	_type(type)
+{
+
+}
+
+
+///////////////////////////////////////////////
+// DetFAState
+///////////////////////////////////////////////
+
+
+DetFAState::DetFAState() :
+	_parent(),
+	_state_name(),
+	_transitions(),
+	_type()
+{
+}
+
+DetFAState::DetFAState(FA * parent, QString state_name, QVector<TR> transitions, StateType type) :
+	_parent(parent),
+	_state_name(state_name),
+	_transitions(transitions),
+	_type(type)
+{
+
+}
+
+DetFAState::DetFAState(FA * parent, QString state_name, StateType type) :
+	_parent(parent),
+	_state_name(state_name),
+	_type(type)
+{
+
+}

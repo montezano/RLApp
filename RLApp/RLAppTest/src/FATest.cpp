@@ -256,6 +256,33 @@ public:
 		fa.removeETransition();
 		Assert::IsTrue( fa.getStates()[0]._transitions == test_state);
 	}
+
+	TEST_METHOD(remove_E_transition_without_E_trans)
+	{
+		fa.addTerminal("a");
+
+		QVector<TR> test_state = QVector<TR>({ { 0 } });
+		fa.addState({ { 0 } }, REGULAR);
+		fa.addState({ { 1 } }, REGULAR);
+		fa.addState({ { 2 } }, FINAL);
+
+		fa.removeETransition();
+		Assert::IsTrue(fa.getStates()[0]._transitions == test_state);
+	}
+
+	TEST_METHOD(determinize_1)
+	{
+		QVector<TR> test_state = QVector<TR>({ { 0, 1, 2 } });
+
+		fa.addTerminal("a");
+
+		fa.addState({ { 0, 1 } }, REGULAR);
+		fa.addState({ { 2 } }, REGULAR);
+		fa.addState({ { 2 } }, FINAL);
+
+		fa.determinize();
+		Assert::IsTrue(fa.getDetStates()[2]._transitions == test_state);
+	}
 	//TEST_METHOD(remove_E_transition)
 	//{
 	//	Assert::isTru

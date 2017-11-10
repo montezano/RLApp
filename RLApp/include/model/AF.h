@@ -6,6 +6,8 @@
 #include "util/Subject.h"
 
 struct FAState;
+struct DetFAState;
+
 
 
 class FA : public Subject
@@ -45,6 +47,13 @@ public:
 	///
 	////////////////////////////////////////////////////////////
 	QVector<FAState> getStates();
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Get the list of states from the deterministic FA.
+	///	\return	QVector<FAState> list of Deterministic States
+	///
+	////////////////////////////////////////////////////////////
+	QVector<DetFAState> getDetStates();
 
 	////////////////////////////////////////////////////////////
 	/// \brief	Add a new state to the FA.
@@ -150,10 +159,17 @@ private:
 	QVector<TR> getEStateClosure(FAState state, QVector<NT> visited);
 	FAState findStateByName(NT state_name);
 	void organizeTransition(TR& transition);
+	QString transitionToStr(TR transition);
+	TR strToTransition(QString transition);
+	//void determinizeState(FAState state);
+	QVector<TR> reachableStateFrom(TR transitions, QMap<QString, bool>& added);
+	StateType getDetStateType(TR state_name);
 
 
 	QVector<VT> _terminals;
 	QVector<FAState> _states;
+	QVector<DetFAState> _states_determinized;
+	QMap<QString, TR> _state_name_map;
 	NT _last_state_add;
 
 	//MapModel map;
@@ -166,6 +182,7 @@ struct FAState
 public:
 	FAState();
 	FAState(FA* parent, NT state_name, QVector<TR> transitions, StateType type);
+	FAState(FA* parent, NT state_name, StateType type);
 
 	FA* _parent;
 	NT _state_name;
@@ -173,5 +190,17 @@ public:
 	StateType _type;
 };
 
+struct DetFAState
+{
+public:
+	DetFAState();
+	DetFAState(FA* parent, QString state_name, QVector<TR> transitions, StateType type);
+	DetFAState(FA* parent, QString state_name, StateType type);
+
+	FA* _parent;
+	QString _state_name;
+	QVector<TR> _transitions;
+	StateType _type;
+};
 
 #endif // !__FA_H__

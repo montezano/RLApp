@@ -2,16 +2,20 @@
 #define __ALPHABET_H__
 
 #include <vector>
+#include <QVector>
+#include <QString>
 
-#define NT	unsigned			//Not terminal
-#define VT	QString			//Terminals
-#define TR	QVector<NT>		//Transitions
+typedef QString VT;		//Terminals
+typedef unsigned NT;			//Not terminal
+typedef QVector<NT> TR;	//Transitions
 
 #define	StateType unsigned	//Regular, final, initial
 
 #define REGULAR			1<<0
 #define FINAL			1<<1
 #define INITIAL			1<<2
+
+#define FINAL_ST		REGULAR | FINAL
 
 
 //namespace Alphabet
