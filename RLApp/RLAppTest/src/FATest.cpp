@@ -242,6 +242,20 @@ public:
 
 		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
 	}
+
+	TEST_METHOD(remove_E_transition)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("&");
+
+		QVector<TR> test_state = QVector<TR>({ { 0, 1, 2 }});
+		fa.addState({ { 0 },{ 1 } }, REGULAR);
+		fa.addState({ { 1 },{ 2 } }, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, FINAL);
+
+		fa.removeETransition();
+		Assert::IsTrue( fa.getStates()[0]._transitions == test_state);
+	}
 	//TEST_METHOD(remove_E_transition)
 	//{
 	//	Assert::isTru

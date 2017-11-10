@@ -27,6 +27,11 @@ QVector<VT> FA::getTerminals()
 	return _terminals;
 }
 
+QVector<FAState> FA::getStates()
+{
+	return _states;
+}
+
 bool FA::addState(QVector<TR> transitions, StateType type)
 {
 	if (transitions.size() != _terminals.size())
@@ -88,28 +93,27 @@ bool FA::removeETransition()
 {
 	if (_terminals.contains("&"))
 	{
-		for (FAState state : _states)
+		for (FAState& state : _states)
 		{
-			//getEStateClosure()
+			QVector<TR> e_closure = getEStateClosure(state);
+			for (int i = 0; i < _terminals.size(); i++)
+			{
+				state._transitions[i] += e_closure[i];
+				organizeTransition(state._transitions[i]);
+
+			}
+			state._transitions.remove(_terminals.size() - 1);	/// < remove the last transition
+																///	it should be the & transition
 		}
 	}
 	
 	return true;
 }
 
-
-//def findCicle(self) :
-//	visited = []
-//	return self.connected() and not self.findCicleOf(self.vertices.keys()[0], self.vertices.keys()[0], visited)
-
-
-
-
-
-bool FA::verify()
-{
-	return false;
-}
+//bool FA::verify()
+//{
+//	return false;
+//}
 
 unsigned FA::getNextStateName()
 {
@@ -137,6 +141,11 @@ QVector<TR> FA::getEStateClosure(NT state_name)
 {
 
 	return getEStateClosure(findStateByName(state_name), QVector<NT>());
+}
+
+QVector<TR> FA::getEStateClosure(FAState state)
+{
+	return getEStateClosure(state, QVector<NT>());
 }
 
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)

@@ -40,6 +40,13 @@ public:
 	QVector<VT> getTerminals();
 
 	////////////////////////////////////////////////////////////
+	/// \brief	Get the list of states of the FA
+	///	\return	QVector<FAState> list of States
+	///
+	////////////////////////////////////////////////////////////
+	QVector<FAState> getStates();
+
+	////////////////////////////////////////////////////////////
 	/// \brief	Add a new state to the FA.
 	///	\param	QVector<TR> with the transitions of the state.
 	///			Transitions may be non deterministic (more than
@@ -125,6 +132,18 @@ public:
 	///
 	////////////////////////////////////////////////////////////
 	QVector<TR> getEStateClosure(NT state_name);
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Get a list of all the states that makes the &
+	///			transition closure for a gien state. & transition
+	///			closure consist of all states reachable from the
+	///			& transition from the given state.
+	///	\param	FAState	the state to get the & transition.
+	///	\return	QVector<TR> the list of all states reachable from
+	///			& transition.
+	///
+	////////////////////////////////////////////////////////////
+	QVector<TR> getEStateClosure(FAState state);
 
 private:
 	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
