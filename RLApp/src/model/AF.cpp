@@ -171,10 +171,52 @@ bool FA::removeETransition()
 	return true;
 }
 
-//bool FA::verify()
-//{
-//	return false;
-//}
+bool FA::removeDeadStates()
+{
+	QVector<QString> f_states = getDetFinalStates();
+
+	int f_states_size = f_states.size();
+	int f_states_recount = 0;
+
+	// makes a list of all states not dead
+	while (f_states_size != f_states_recount)
+	{
+		for (DetFAState state : _states_determinized)
+		{
+			for (TR transition : state._transitions)
+			{
+				for (QString st_name : f_states)
+				{
+					if (transition == strToTransition(st_name))
+					{
+						QString add_st = transitionToStr(transition);
+						if (f_states.count(add_st) < 1)
+						{
+							f_states << add_st;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	// remove dead states from the determinized FA
+	for (QString f_state : f_states)
+	{
+		for (DetFAState& det_state : _states_determinized)
+		{
+			if (det_state._state_name == f_state)
+			{
+				_states_determinized.removeOne(det_state);
+				break;
+			}
+		}
+	}
+
+
+
+	return true;
+}
 
 unsigned FA::getNextStateName()
 {
@@ -192,6 +234,21 @@ QVector<NT> FA::getFinalStates()
 		if (_states[state]._type & FINAL)
 		{
 			fertile_state << _states[state]._state_name;
+		}
+	}
+
+	return fertile_state;
+}
+
+QVector<QString> FA::getDetFinalStates()
+{
+	QVector<QString> fertile_state;
+
+	for (int state = 0; state < _states_determinized.size(); state++)
+	{
+		if (_states_determinized[state]._type & FINAL)
+		{
+			fertile_state << _states_determinized[state]._state_name;
 		}
 	}
 
