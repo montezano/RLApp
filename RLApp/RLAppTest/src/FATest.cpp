@@ -270,7 +270,7 @@ public:
 		Assert::IsTrue(fa.getStates()[0]._transitions == test_state);
 	}
 
-	TEST_METHOD(determinize_1)
+	TEST_METHOD(determinize_1_no_E)
 	{
 		QVector<TR> test_state = QVector<TR>({ { 0, 1, 2 } });
 
@@ -282,6 +282,21 @@ public:
 
 		fa.determinize();
 		Assert::IsTrue(fa.getDetStates()[2]._transitions == test_state);
+	}
+
+	TEST_METHOD(determinize_2_no_E)
+	{
+		QVector<TR> test_state = QVector<TR>({ { 2 }, { 1, 2} });
+
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		fa.addState({ { 0, 1 }, { 1, 2 } }, REGULAR);
+		fa.addState({ { 2 }, { 2 } }, REGULAR);
+		fa.addState({ { 2 }, { 1 } }, FINAL);
+
+		fa.determinize();
+		Assert::IsTrue(fa.getDetStates("1-2")._transitions == test_state);
 	}
 	//TEST_METHOD(remove_E_transition)
 	//{

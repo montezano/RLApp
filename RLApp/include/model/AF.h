@@ -56,6 +56,14 @@ public:
 	QVector<DetFAState> getDetStates();
 
 	////////////////////////////////////////////////////////////
+	/// \brief	Get a state of the deterministic FA by it's name.
+	///	\param	QString	state name
+	///	\return	DetFAState determistic FA state
+	///
+	////////////////////////////////////////////////////////////
+	DetFAState getDetStates(QString state_name);
+
+	////////////////////////////////////////////////////////////
 	/// \brief	Add a new state to the FA.
 	///	\param	QVector<TR> with the transitions of the state.
 	///			Transitions may be non deterministic (more than

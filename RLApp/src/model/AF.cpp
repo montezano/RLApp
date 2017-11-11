@@ -37,6 +37,18 @@ QVector<DetFAState> FA::getDetStates()
 	return _states_determinized;
 }
 
+DetFAState FA::getDetStates(QString state_name)
+{
+	for (DetFAState state : _states_determinized)
+	{
+		if (state._state_name == state_name)
+		{
+			return state;
+		}
+	}
+	return DetFAState();
+}
+
 bool FA::addState(QVector<TR> transitions, StateType type)
 {
 	if (transitions.size() != _terminals.size())
