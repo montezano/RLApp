@@ -352,7 +352,14 @@ public:
 
 	TEST_METHOD(minimize)
 	{
-		QVector<TR> test_state_2 = QVector<TR>({ { 1 },{ 2 } });
+		QVector<TR> test_state_0 = QVector<TR>({ { 6 },{ 1 } });
+		QVector<TR> test_state_1 = QVector<TR>({ { 5 },{ 4 } });
+		QVector<TR> test_state_2 = QVector<TR>({ { 2 },{ 6 } });
+		QVector<TR> test_state_4 = QVector<TR>({ { 4 },{ 0 } });
+		QVector<TR> test_state_5 = QVector<TR>({ { 1 },{ 2 } });
+		QVector<TR> test_state_6 = QVector<TR>({ { 6 },{ 5 } });
+
+
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -368,10 +375,14 @@ public:
 		
 
 		fa.determinize();
-		fa.removeDeadStates();
-		fa.removeEquivalenceClasses();
-		Assert::AreEqual(fa.getDetStates().size(), 3);
-		Assert::IsTrue(fa.getDetStates("1")._transitions == test_state_2);
+		fa.minimizeDeterministic();
+		Assert::AreEqual(6, fa.getDetStates().size());
+		Assert::IsTrue(fa.getDetStates("0")._transitions == test_state_0);
+		Assert::IsTrue(fa.getDetStates("1")._transitions == test_state_1);
+		Assert::IsTrue(fa.getDetStates("2")._transitions == test_state_2);
+		Assert::IsTrue(fa.getDetStates("4")._transitions == test_state_4);
+		Assert::IsTrue(fa.getDetStates("5")._transitions == test_state_5);
+		Assert::IsTrue(fa.getDetStates("6")._transitions == test_state_6);
 	}
 
 	//#define A 0
