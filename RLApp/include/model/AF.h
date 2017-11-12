@@ -16,7 +16,9 @@ public:
 	FA();
 	~FA();
 
-	//ACCESS FUNCTIONS
+	////////////////////////////////////////////////////////////
+	/// ACCESS FUNCTIONS
+	////////////////////////////////////////////////////////////
 
 	////////////////////////////////////////////////////////////
 	/// \brief	Set the vector with terminals. Make a copy to the
@@ -119,14 +121,26 @@ public:
 
 	////////////////////////////////////////////////////////////
 	/// \brief	Remove FA states that don't produce or don't point
-	///			to any state that's final
+	///			to any state that's final. Only works on a
+	///			determinized FA.
 	///	\return	bool true if finished correctly, false otherwise
 	///
 	////////////////////////////////////////////////////////////
 	bool removeDeadStates();
 
+	////////////////////////////////////////////////////////////
+	/// \brief	Group the existing states in equivalence classes
+	///			and remove the duplicates
+	///	\return	bool true if finished correctly, false otherwise
+	///
+	////////////////////////////////////////////////////////////
+	bool removeEquivalenceClasses();
 
-	// UTILS
+
+	////////////////////////////////////////////////////////////
+	/// UTILS
+	////////////////////////////////////////////////////////////
+
 	////////////////////////////////////////////////////////////
 	/// \brief	Get the state name to be added next. Use this method
 	///			if you're adding a new state to the FA.
@@ -184,6 +198,7 @@ private:
 	//void determinizeState(FAState state);
 	QVector<TR> reachableStateFrom(TR transitions, QMap<QString, bool>& added);
 	StateType getDetStateType(TR state_name);
+	QMap<QString, QVector<QString>>::iterator searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes);
 
 
 	QVector<VT> _terminals;

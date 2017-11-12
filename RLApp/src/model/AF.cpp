@@ -218,6 +218,76 @@ bool FA::removeDeadStates()
 	return true;
 }
 
+bool FA::removeEquivalenceClasses()
+{
+	QMap<QString, QVector<QString>> old_equiv_classes;
+	QMap<QString, QVector<QString>> new_equiv_classes;
+	old_equiv_classes.insert("0", QVector<QString>());
+	old_equiv_classes.insert("1", QVector<QString>());
+	
+	for (int i = 0; i < _states_determinized.size(); i++)
+	{
+		if (_states_determinized[i]._type == FINAL)
+		{
+			old_equiv_classes.find("0").value().append(_states_determinized[i]._state_name);
+		}
+		else
+		{
+			old_equiv_classes.find("1").value().append(_states_determinized[i]._state_name);
+		}
+	}
+
+	int old_size = old_equiv_classes.size();
+	int new_size = 0;
+
+	/// Until there is no change in the equivalence classes
+	while (old_size != new_size)
+	{
+		old_size = old_equiv_classes.size();
+		int class_number = 0;
+		/// For all equivalence classes, do:
+		for (auto equiv_class = old_equiv_classes.begin(); equiv_class != old_equiv_classes.end(); ++equiv_class)
+		{
+			
+			/// For each value of this equivalence class, do:
+			for (QString state : equiv_class.value())
+			{
+				QVector<TR> transitions = getDetStates(state)._transitions;
+
+				QString e_class_name;
+				for (TR transition : transitions)
+				{
+					QString str_trs = transitionToStr(transition);
+
+					auto found_class = searchStateEquivalenceClass(str_trs, old_equiv_classes);
+					//if (found_class == (old_equiv_classes.end()+1));
+					//{
+					//	return false;
+					//}
+					e_class_name += found_class.key();
+				}
+				auto add_class = new_equiv_classes.find(e_class_name);
+				if (add_class != new_equiv_classes.end())
+				{
+					new_equiv_classes.find(e_class_name)->append(state);
+				}
+				else
+				{
+					new_equiv_classes.insert(e_class_name, { state });
+				}				
+			}
+			class_number++;
+		}
+		new_size = new_equiv_classes.size();
+		old_equiv_classes = new_equiv_classes;
+		new_equiv_classes = QMap < QString, QVector<QString>>();
+	}
+
+
+
+	return false;
+}
+
 unsigned FA::getNextStateName()
 {
 	unsigned ret = _last_state_add;
@@ -381,32 +451,6 @@ TR FA::strToTransition(QString transition)
 	return ret;
 }
 
-//void FA::determinizeState(FAState state)
-//{
-//
-//	for (int i = 0; i < _terminals.size(); i++)
-//	{
-//		StateType st_type = 0x0;
-//		QString n_st_name = transitionToStr(state._transitions[i]);
-//
-//		if (!n_st_name.isEmpty() && !_state_name_map.contains(n_st_name))
-//		{
-//			_state_name_map.insert(n_st_name, state._transitions[i]);
-//			//_states_determinized.insert(this, n_st_name, )
-//
-//			for (auto tr : state._transitions)
-//			{
-//
-//				_state_name_map.insert(transitionToStr(tr), tr);
-//				//_states_determinized << FAState(this, )
-//				//	state._transitions[i] << tr;
-//			}
-//		}
-//		organizeTransition(state._transitions[i]);
-//
-//	}
-//}
-
 QVector<TR> FA::reachableStateFrom(TR transitions, QMap<QString, bool>& added)
 {
 	QVector<TR> ret;
@@ -443,6 +487,21 @@ StateType FA::getDetStateType(TR state_name)
 	}
 
 	return type;
+}
+
+QMap<QString, QVector<QString>>::iterator FA::searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes)
+{
+	for (auto equiv_class = equiv_classes.begin(); equiv_class != equiv_classes.end(); ++equiv_class)
+	{
+		for (QString e_class_state : equiv_class.value())
+		{
+			if (e_class_state == state)
+			{
+				return equiv_class;
+			}
+		}
+	}
+	return equiv_classes.end();
 }
 
 

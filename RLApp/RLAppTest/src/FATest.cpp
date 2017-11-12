@@ -315,6 +315,23 @@ public:
 		Assert::IsTrue(fa.getDetStates("1")._state_name == "NULL");
 		Assert::AreEqual(fa.getDetStates().size(), 2);
 	}
+
+	TEST_METHOD(equivalence_class)
+	{
+		QVector<TR> test_state = QVector<TR>({ { 2 },{ 1, 2 } });
+
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		fa.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, REGULAR);
+		fa.addState({ { 2 },{ 1 } }, FINAL);
+
+		fa.determinize();
+		fa.removeDeadStates();
+		fa.removeEquivalenceClasses();
+		Assert::IsTrue(fa.getDetStates("1-2")._transitions == test_state);
+	}
 	//TEST_METHOD(remove_E_transition)
 	//{
 	//	Assert::isTru
