@@ -201,6 +201,7 @@ private:
 	QMap<QString, QVector<QString>>::iterator searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes);
 
 
+
 	QVector<VT> _terminals;
 	QVector<FAState> _states;
 	QVector<DetFAState> _states_determinized;

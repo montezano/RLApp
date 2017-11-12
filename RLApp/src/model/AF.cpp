@@ -284,8 +284,28 @@ bool FA::removeEquivalenceClasses()
 	}
 
 
+	for (auto equiv_class : old_equiv_classes)
+	{
+		for (DetFAState& state : _states_determinized)
+		{
+			for (TR& transition : state._transitions)
+			{
+				for (int i = 1; i < equiv_class.size(); i++)
+				{
+					if (transition == strToTransition(equiv_class[i]))
+					{
+						transition = strToTransition(equiv_class[0]);
+					}
+				}
+			}
+		}
+		for (int i = 1; i < equiv_class.size(); i++)
+		{
+			equiv_class.remove(i);
+		}
+	}
 
-	return false;
+	return true;
 }
 
 unsigned FA::getNextStateName()
@@ -503,7 +523,6 @@ QMap<QString, QVector<QString>>::iterator FA::searchStateEquivalenceClass(QStrin
 	}
 	return equiv_classes.end();
 }
-
 
 ///////////////////////////////////////////////
 // FAState

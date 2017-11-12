@@ -318,7 +318,7 @@ public:
 
 	TEST_METHOD(equivalence_class)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 2 },{ 1, 2 } });
+		QVector<TR> test_state = QVector<TR>({ { 0 },{ 0 } });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -330,7 +330,7 @@ public:
 		fa.determinize();
 		fa.removeDeadStates();
 		fa.removeEquivalenceClasses();
-		Assert::IsTrue(fa.getDetStates("1-2")._transitions == test_state);
+		Assert::IsTrue(fa.getDetStates("0")._transitions == test_state);
 	}
 	//TEST_METHOD(remove_E_transition)
 	//{
