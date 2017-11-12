@@ -46,7 +46,7 @@ DetFAState FA::getDetStates(QString state_name)
 			return state;
 		}
 	}
-	return DetFAState();
+	return DetFAState(NULL, "NULL", 0x0);
 }
 
 bool FA::addState(QVector<TR> transitions, StateType type)
@@ -203,16 +203,16 @@ bool FA::removeDeadStates()
 	// remove dead states from the determinized FA
 	for (QString f_state : f_states)
 	{
-		for (DetFAState& det_state : _states_determinized)
+		//for (DetFAState& det_state : _states_determinized)
+		for(int i = 0; i < _states_determinized.size(); i++)
 		{
-			if (det_state._state_name == f_state)
+			if (_states_determinized[i]._state_name == f_state)
 			{
-				_states_determinized.removeOne(det_state);
+				_states_determinized.remove(i);
 				break;
 			}
 		}
 	}
-
 
 
 	return true;

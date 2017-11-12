@@ -26,10 +26,10 @@ public:
 	TEST_METHOD(creation)
 	{
 		RE re = RE();
-		re.setRe("string");
+		re.setReString("string");
 
-		Assert::IsTrue(0 == re.getRe().compare(QString("string")));
-		Assert::IsFalse(0 == re.getRe().compare(QString("string2")));
+		Assert::IsTrue(0 == re.getReString().compare(QString("string")));
+		Assert::IsFalse(0 == re.getReString().compare(QString("string2")));
 	}
 
 };

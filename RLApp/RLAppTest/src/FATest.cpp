@@ -298,6 +298,23 @@ public:
 		fa.determinize();
 		Assert::IsTrue(fa.getDetStates("1-2")._transitions == test_state);
 	}
+
+	TEST_METHOD(remove_dead_states)
+	{
+		QVector<TR> test_state = QVector<TR>({ { 2 },{ 1, 2 } });
+
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		/*0-*/fa.addState({ { 0 },{ 2 } }, REGULAR);
+		/*1-*/fa.addState({ { 2 },{ 0 } }, REGULAR);
+		/*2-*/fa.addState({ { 2 },{ 2 } }, FINAL);
+
+		fa.determinize();
+		fa.removeDeadStates();
+		Assert::IsTrue(fa.getDetStates("1")._state_name == "NULL");
+		Assert::AreEqual(fa.getDetStates().size(), 2);
+	}
 	//TEST_METHOD(remove_E_transition)
 	//{
 	//	Assert::isTru
