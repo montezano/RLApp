@@ -101,6 +101,7 @@ bool FA::isInfinite()
 
 bool FA::determinize()
 {
+	removeETransition();
 	DetFAState ini_state = DetFAState(this,
 								QString::number(_states[0]._state_name),
 								_states[0]._transitions, _states[0]._type);
@@ -181,39 +182,63 @@ bool FA::removeDeadStates()
 	// makes a list of all states not dead
 	while (f_states_size != f_states_recount)
 	{
+		f_states_size = f_states.size();
 		for (DetFAState state : _states_determinized)
 		{
 			for (TR transition : state._transitions)
 			{
-				for (QString st_name : f_states)
+				QVector<QString> f_states_temp = f_states;
+				for (QString st_name : f_states_temp)
 				{
 					if (transition == strToTransition(st_name))
 					{
-						QString add_st = transitionToStr(transition);
+						QString add_st = state._state_name;
 						if (f_states.count(add_st) < 1)
 						{
 							f_states << add_st;
 						}
 					}
 				}
+				//f_states = f_states_temp;
 			}
 		}
+		f_states_recount = f_states.size();
 	}
 	
 	// remove dead states from the determinized FA
-	for (QString f_state : f_states)
+
+	QVector<QString> remove_list;
+	//for (int i = 0; i < _states_determinized.size(); i++)
+	for (DetFAState& det_state : _states_determinized)
 	{
+		bool remove = true;
 		//for (DetFAState& det_state : _states_determinized)
-		for(int i = 0; i < _states_determinized.size(); i++)
+		for (QString f_state : f_states)
 		{
-			if (_states_determinized[i]._state_name == f_state)
+			if (det_state._state_name == f_state)
 			{
-				_states_determinized.remove(i);
+				remove = false;
 				break;
 			}
 		}
+		if (remove)
+		{
+			remove_list << det_state._state_name;
+		}
 	}
 
+	for (QString state : remove_list)
+	{
+		removeDetState(state);
+	}
+
+	for (DetFAState& state : _states_determinized)
+	{
+		for (QString remove : remove_list)
+		{
+			replaceTransition(state, strToTransition(remove), { -1 });
+		}
+	}
 
 	return true;
 }
@@ -227,7 +252,7 @@ bool FA::removeEquivalenceClasses()
 	
 	for (int i = 0; i < _states_determinized.size(); i++)
 	{
-		if (_states_determinized[i]._type == FINAL)
+		if (_states_determinized[i]._type & FINAL)
 		{
 			old_equiv_classes.find("0").value().append(_states_determinized[i]._state_name);
 		}
@@ -248,13 +273,13 @@ bool FA::removeEquivalenceClasses()
 		/// For all equivalence classes, do:
 		for (auto equiv_class = old_equiv_classes.begin(); equiv_class != old_equiv_classes.end(); ++equiv_class)
 		{
-			
+			QString e_class_name = equiv_class.key();
 			/// For each value of this equivalence class, do:
 			for (QString state : equiv_class.value())
 			{
 				QVector<TR> transitions = getDetStates(state)._transitions;
 
-				QString e_class_name;
+
 				for (TR transition : transitions)
 				{
 					QString str_trs = transitionToStr(transition);
@@ -305,7 +330,26 @@ bool FA::removeEquivalenceClasses()
 		}
 	}
 
+	for (auto equiv_class : old_equiv_classes)
+	{
+		for (int i = 1; i < equiv_class.size(); i++)
+		{
+			removeDetState(equiv_class[i]);
+		}
+	}
+	
+
 	return true;
+}
+
+bool FA::minimizeDeterministic()
+{
+	bool result = true;
+	bool result_dead_state = removeDeadStates();
+	bool result_equiv_class = removeEquivalenceClasses();
+	return result & result_dead_state & result_equiv_class;
+	// Good practices never die
+	//  (o_O)
 }
 
 unsigned FA::getNextStateName()
@@ -334,13 +378,21 @@ QVector<QString> FA::getDetFinalStates()
 {
 	QVector<QString> fertile_state;
 
-	for (int state = 0; state < _states_determinized.size(); state++)
+	for (DetFAState state : _states_determinized)
 	{
-		if (_states_determinized[state]._type & FINAL)
+		if (state._type & FINAL)
 		{
-			fertile_state << _states_determinized[state]._state_name;
+			fertile_state << state._state_name;
 		}
 	}
+
+	//for (int state = 0; state < _states_determinized.size(); state++)
+	//{
+	//	if (_states_determinized[state]._type & FINAL)
+	//	{
+	//		fertile_state << _states_determinized[state]._state_name;
+	//	}
+	//}
 
 	return fertile_state;
 }
@@ -499,14 +551,14 @@ QVector<TR> FA::reachableStateFrom(TR transitions, QMap<QString, bool>& added)
 
 StateType FA::getDetStateType(TR state_name)
 {
-	StateType type = 0x1;
+	StateType type = 1 << 0;
 
 	for (auto t : state_name)
 	{
-		type = (type |_states[t]._type) & ~INITIAL;
+		type = type | _states[t]._type;
 	}
 
-	return type;
+	return type & ~(INITIAL);
 }
 
 QMap<QString, QVector<QString>>::iterator FA::searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes)
@@ -522,6 +574,32 @@ QMap<QString, QVector<QString>>::iterator FA::searchStateEquivalenceClass(QStrin
 		}
 	}
 	return equiv_classes.end();
+}
+
+bool FA::removeDetState(QString state_name)
+{
+	for (int i = 0; i < _states_determinized.size(); i++)
+	{
+		if (_states_determinized[i]._state_name == state_name)
+		{
+			_states_determinized.remove(i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool FA::replaceTransition(DetFAState & state, TR find, TR replace)
+{
+	for (TR& transition : state._transitions)
+	{
+		if (transition == find)
+		{
+			transition = replace;
+		}
+	}
+
+	return true;
 }
 
 ///////////////////////////////////////////////

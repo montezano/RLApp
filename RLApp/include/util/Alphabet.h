@@ -6,7 +6,7 @@
 #include <QString>
 
 typedef QString VT;		//Terminals
-typedef unsigned NT;			//Not terminal
+typedef int NT;			//Not terminal
 typedef QVector<NT> TR;	//Transitions
 
 #define	StateType unsigned	//Regular, final, initial

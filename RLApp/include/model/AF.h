@@ -136,6 +136,16 @@ public:
 	////////////////////////////////////////////////////////////
 	bool removeEquivalenceClasses();
 
+	////////////////////////////////////////////////////////////
+	/// \brief	Minimize the FA previuosly determinized. It execute
+	///			two operations:
+	///			remove the dead states
+	///			remove the equivalent states
+	///	\return	bool true if finished correctly, false otherwise
+	///
+	////////////////////////////////////////////////////////////
+	bool minimizeDeterministic();
+
 
 	////////////////////////////////////////////////////////////
 	/// UTILS
@@ -199,6 +209,8 @@ private:
 	QVector<TR> reachableStateFrom(TR transitions, QMap<QString, bool>& added);
 	StateType getDetStateType(TR state_name);
 	QMap<QString, QVector<QString>>::iterator searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes);
+	bool removeDetState(QString state_name);
+	bool replaceTransition(DetFAState& state, TR find, TR replace);
 
 
 

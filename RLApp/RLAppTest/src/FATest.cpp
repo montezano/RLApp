@@ -7,6 +7,23 @@
 
 #include "model/AF.h"
 
+//#define A 1
+//#define B 2
+//#define C 3 
+//#define D 4
+//#define F 5 
+//#define G 6 
+//#define H 7 
+//#define I 8 
+//#define J 9 
+//#define K 10 
+//#define L 11
+//#define M 12 
+//#define N 13
+//#define O 14
+//#define P 15
+//#define Q 16
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 TEST_CLASS(FAtest)
@@ -301,24 +318,24 @@ public:
 
 	TEST_METHOD(remove_dead_states)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 2 },{ 1, 2 } });
+		QVector<TR> test_state = QVector<TR>({ { 2 },{ -1 } });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
 
-		/*0-*/fa.addState({ { 0 },{ 2 } }, REGULAR);
-		/*1-*/fa.addState({ { 2 },{ 0 } }, REGULAR);
+		/*0-*/fa.addState({ { 2 },{ 1 } }, REGULAR);
+		/*1-*/fa.addState({ { 1 },{ 1 } }, REGULAR);
 		/*2-*/fa.addState({ { 2 },{ 2 } }, FINAL);
 
 		fa.determinize();
 		fa.removeDeadStates();
-		Assert::IsTrue(fa.getDetStates("1")._state_name == "NULL");
-		Assert::AreEqual(fa.getDetStates().size(), 2);
+		Assert::IsTrue(fa.getDetStates("0")._transitions == test_state);
+		Assert::AreEqual(2, fa.getDetStates().size());
 	}
 
 	TEST_METHOD(equivalence_class)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 0 },{ 0 } });
+		QVector<TR> test_state = QVector<TR>({ { 0, 1 },{ 1 , 2 } });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -332,6 +349,41 @@ public:
 		fa.removeEquivalenceClasses();
 		Assert::IsTrue(fa.getDetStates("0")._transitions == test_state);
 	}
+
+	TEST_METHOD(minimize)
+	{
+		QVector<TR> test_state_2 = QVector<TR>({ { 1 },{ 2 } });
+
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		/*A*/fa.addState({ { 6 },{ 1 } }, FINAL);
+		/*B*/fa.addState({ { 5 },{ 4 } }, REGULAR);
+		/*C*/fa.addState({ { 2 },{ 6 } }, REGULAR);
+		/*D*/fa.addState({ { 0 },{ 7 } }, FINAL);
+		/*E*/fa.addState({ { 4 },{ 0 } }, REGULAR);
+		/*F*/fa.addState({ { 1 },{ 2 } }, REGULAR);
+		/*G*/fa.addState({ { 6 },{ 5 } }, FINAL);
+		/*H*/fa.addState({ { 7 },{ 3 } }, REGULAR);
+		
+
+		fa.determinize();
+		fa.removeDeadStates();
+		fa.removeEquivalenceClasses();
+		Assert::AreEqual(fa.getDetStates().size(), 3);
+		Assert::IsTrue(fa.getDetStates("1")._transitions == test_state_2);
+	}
+
+	//#define A 0
+	//#define B 1
+	//#define C 2 
+	//#define D 3
+	//#define E 4
+	//#define F 5 
+	//#define G 6 
+	//#define H 7 
+	//#define I 8 
+	//#define J 9
 	//TEST_METHOD(remove_E_transition)
 	//{
 	//	Assert::isTru
