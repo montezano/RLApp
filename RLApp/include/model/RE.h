@@ -40,11 +40,19 @@ public:
 	bool setReString(QString re);
 
 	////////////////////////////////////////////////////////////
-	/// \brief	Get the RE as a string.
-	///	\return QString RE as a string
+	/// \brief	Get the RE original string.
+	///	\return QString RE original string
 	///
 	////////////////////////////////////////////////////////////
-	QString getReString();
+	QString getOriginalReString();
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Get the RE with concatenation operations 
+	///			explicit.
+	///	\return QString RE original string
+	///
+	////////////////////////////////////////////////////////////
+	QString getDotReString();
 
 
 
@@ -55,12 +63,18 @@ private:
 	bool verify(QString &re);
 
 
-	QString _re_str;
+	QString _original_re;
+	QString _dot_re;
 
-	std::vector<char> _valid_terminals = { 'a', 'b', 'c', 'd',
+	QVector<QChar> _valid_terminals = { 'a', 'b', 'c', 'd',
 		'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
 		'r', 's', 't', 'u', 'v', 'x', 'w', 'y', 'z', '0', '1', '2', '3', '4',
 		'5', '6', '7', '8', '9' };
+	QChar _closure = '*';
+	QVector<QChar> _end_operators = { '*', ')' };
+	QVector<QChar> _open_operators = { '(' };
+	QChar _conjunction = '|';
+
 };
 
 
