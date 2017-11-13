@@ -57,15 +57,24 @@ public:
 	QString getDotReString();
 
 	////////////////////////////////////////////////////////////
-	/// \brief	Parse the | operators, spliting the RE in
+	/// \brief	Parse the desired symbol, spliting the RE in
+	///			before and after and returnin a list of sub
+	///			RE strings. This method is used to separete the
+	///			RE string betwen disjunction and conjunction
+	///			operators.
+	///	\return	bool true if set successufully, false otherwise
+	///
+	////////////////////////////////////////////////////////////
+	QList<QString> parseSymbol(QChar symbol);
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Parse the conjunction operator, spliting the RE in
 	///			before and after and returnin a list of sub
 	///			RE strings.
 	///	\return	bool true if set successufully, false otherwise
 	///
 	////////////////////////////////////////////////////////////
-	QList<QString> parseFirstStep();
-
-
+	QList<QString> parseConjunctionStep();
 
 
 private:

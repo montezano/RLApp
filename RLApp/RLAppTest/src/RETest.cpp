@@ -64,14 +64,38 @@ public:
 		Assert::AreNotEqual("s*(tr | n*g)(a*)", re.getDotReString().toStdString().c_str());
 	}
 
-	TEST_METHOD(parse_first_step)
+	TEST_METHOD(parse_disjunction_operator_1)
 	{
 		re.setReString("s*(tr) | (n*g)(a*)");
 
-		QList<QString> parsed_string = re.parseFirstStep();
+		QList<QString> parsed_string = re.parseSymbol(DISJUNCT);
 
 		Assert::AreEqual("s*.(t.r)", parsed_string[0].toStdString().c_str());
 		Assert::AreNotEqual("(n*.g)(a*)", parsed_string[1].toStdString().c_str());
+	}
+
+	TEST_METHOD(parse_disjunction_operator_2)
+	{
+		re.setReString("s*(tr) | (n* | g)(a*)");
+
+		QList<QString> parsed_string = re.parseSymbol(DISJUNCT);
+
+		Assert::AreEqual("s*.(t.r)", parsed_string[0].toStdString().c_str());
+		Assert::AreNotEqual("(n*|g)(a*)", parsed_string[1].toStdString().c_str());
+	}
+
+	TEST_METHOD(parse_conjunction_operator)
+	{
+		re.setReString("string");
+
+		QList<QString> parsed_string = re.parseSymbol(CONJUNCT);
+
+		Assert::AreEqual("s", parsed_string[0].toStdString().c_str());
+		Assert::AreEqual("t", parsed_string[1].toStdString().c_str());
+		Assert::AreEqual("r", parsed_string[2].toStdString().c_str());
+		Assert::AreEqual("i", parsed_string[3].toStdString().c_str());
+		Assert::AreEqual("n", parsed_string[4].toStdString().c_str());
+		Assert::AreEqual("g", parsed_string[5].toStdString().c_str());
 	}
 
 	static RE re;
