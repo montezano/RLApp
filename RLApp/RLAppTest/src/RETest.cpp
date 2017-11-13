@@ -86,17 +86,20 @@ public:
 
 	TEST_METHOD(parse_conjunction_operator)
 	{
-		re.setReString("string");
+		re.setReString("s(a|b)|c");
 
-		QList<QString> parsed_string = re.parseSymbol(CONJUNCT);
+		re.parse();
+		Node* tree = re.getDiSimoneTree();
 
-		Assert::AreEqual("s", parsed_string[0].toStdString().c_str());
-		Assert::AreEqual("t", parsed_string[1].toStdString().c_str());
-		Assert::AreEqual("r", parsed_string[2].toStdString().c_str());
-		Assert::AreEqual("i", parsed_string[3].toStdString().c_str());
-		Assert::AreEqual("n", parsed_string[4].toStdString().c_str());
-		Assert::AreEqual("g", parsed_string[5].toStdString().c_str());
+		Assert::IsTrue('|' == tree->symbol);
+		Assert::IsTrue('.' == tree->left_children->symbol);
+		Assert::IsTrue('s' == tree->left_children->left_children->symbol);
+		Assert::IsTrue('|' == tree->left_children->right_children->symbol);
+		Assert::IsTrue('a' == tree->left_children->right_children->left_children->symbol);
+		Assert::IsTrue('b' == tree->left_children->right_children->right_children->symbol);
+		Assert::IsTrue('c' == tree->right_children->symbol);
 	}
+
 
 	static RE re;
 };
