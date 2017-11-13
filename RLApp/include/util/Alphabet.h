@@ -17,5 +17,11 @@ typedef QVector<NT> TR;	//Transitions
 
 #define FINAL_ST		REGULAR | FINAL
 
+#define CLOSURE		'*'
+#define OP_PARENT	'('
+#define CL_PARENT	')'
+#define OPTION		'?'
+#define DISJUNCT	'|'
+#define	CONJUNCT	'.'
 
 #endif // !__ALPHABET_H__

@@ -64,6 +64,16 @@ public:
 		Assert::AreNotEqual("s*(tr | n*g)(a*)", re.getDotReString().toStdString().c_str());
 	}
 
+	TEST_METHOD(parse_first_step)
+	{
+		re.setReString("s*(tr) | (n*g)(a*)");
+
+		QList<QString> parsed_string = re.parseFirstStep();
+
+		Assert::AreEqual("s*.(t.r)", parsed_string[0].toStdString().c_str());
+		Assert::AreNotEqual("(n*.g)(a*)", parsed_string[1].toStdString().c_str());
+	}
+
 	static RE re;
 };
 

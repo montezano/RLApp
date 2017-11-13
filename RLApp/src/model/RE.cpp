@@ -39,6 +39,59 @@ QString RE::getDotReString()
 	return _dot_re;
 }
 
+QList<QString> RE::parseFirstStep()
+{
+	QVector<int> parse_position;
+	int last_position = 0;
+	int parenthesis_count = 0;
+	for (int i = 0; i < _dot_re.size(); i++)
+	{
+		if (_dot_re[i] == DISJUNCT && parenthesis_count == 0)
+		{
+			parse_position << (i - last_position);
+			last_position = i;
+
+		}
+		else
+		{
+			if (_dot_re[i] == OP_PARENT)
+			{
+				parenthesis_count++;
+			}
+			else
+			{
+				if (_dot_re[i] == CL_PARENT)
+				{
+					parenthesis_count--;
+				}
+			}
+		}
+	}
+	parse_position << (_dot_re.size() - last_position);
+
+	QList<QString> sub_re_list;
+	QString temp_dot_re = _dot_re;
+	for (int position : parse_position)
+	{
+		sub_re_list << temp_dot_re.left(position);
+		temp_dot_re.remove(0, position);
+	}
+
+	for (QString sub_re : sub_re_list)
+	{
+		if (sub_re[0] == DISJUNCT)
+		{
+			sub_re.remove(0, 1);
+		}
+		if (sub_re[sub_re.size() -1] == DISJUNCT)
+		{
+			sub_re.remove(sub_re.size() - 1, 1);
+		}
+	}
+
+	return sub_re_list;
+}
+
 bool RE::removeSpaces()
 {
 	if (_original_re.remove(" ") != "")
@@ -74,10 +127,6 @@ bool RE::addDot()
 	}
 	_dot_re += _original_re[_original_re.size() - 1];
 
-	//if (_dot_re[_dot_re.size() - 1] == '.')
-	//{
-	//	_dot_re.remove(_dot_re.size() - 1, 1);
-	//}
 	return false;
 }
 
