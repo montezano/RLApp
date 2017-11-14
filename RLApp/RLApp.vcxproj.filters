@@ -124,6 +124,9 @@
     <ClCompile Include="src\util\Subject.cpp">
       <Filter>Source Files\util</Filter>
     </ClCompile>
+    <ClCompile Include="src\model\Conversions.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -186,6 +189,9 @@
       <Filter>Header Files\control</Filter>
     </ClInclude>
     <ClInclude Include="include\model\AF.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model\Conversions.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
   </ItemGroup>

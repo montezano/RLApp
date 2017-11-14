@@ -23,5 +23,6 @@ typedef QVector<NT> TR;	//Transitions
 #define OPTION		'?'
 #define DISJUNCT	'|'
 #define	CONJUNCT	'.'
+#define PILE_END	'$'
 
 #endif // !__ALPHABET_H__

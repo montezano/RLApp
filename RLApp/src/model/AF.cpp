@@ -19,7 +19,10 @@ void FA::setTerminals(QVector<VT> terminals)
 
 void FA::addTerminal(VT terminal)
 {
-	_terminals << terminal;
+	if (!_terminals.contains(terminal))
+	{
+		_terminals << terminal;
+	}
 }
 
 QVector<VT> FA::getTerminals()
@@ -49,11 +52,11 @@ DetFAState FA::getDetStates(QString state_name)
 	return DetFAState(NULL, "NULL", 0x0);
 }
 
-bool FA::addState(QVector<TR> transitions, StateType type)
+NT FA::addState(QVector<TR> transitions, StateType type)
 {
 	if (transitions.size() != _terminals.size())
 	{
-		return false;
+		return -1;
 	}
 	if (_states.size() == 0)
 	{
@@ -61,7 +64,7 @@ bool FA::addState(QVector<TR> transitions, StateType type)
 		_last_state_add = 0;
 	}
 	_states << FAState(this, getNextStateName(), transitions, type);
-	return true;
+	return _last_state_add;
 }
 
 bool FA::isEmpty()
@@ -164,9 +167,19 @@ bool FA::removeETransition()
 				organizeTransition(state._transitions[i]);
 
 			}
+			
+		}
+
+		for (FAState& state : _states)
+		{
 			state._transitions.remove(_terminals.size() - 1);	/// < remove the last transition
 																///	it should be the & transition
+
 		}
+
+		_terminals.remove(_terminals.size() - 1);
+
+		
 	}
 	
 	return true;

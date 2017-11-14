@@ -69,7 +69,7 @@ public:
 		Assert::IsTrue(fa.getTerminals().contains("a"));
 	}
 
-	TEST_METHOD(add_transition_false)
+	TEST_METHOD(add_terminal_false)
 	{
 		//FA fa = FA();
 
@@ -79,9 +79,20 @@ public:
 		Assert::IsFalse(fa.getTerminals().contains("c"));
 	}
 
+	TEST_METHOD(add_terminals_repeated)
+	{
+		//FA fa = FA();
+
+		fa.addTerminal("a");
+		fa.addTerminal("a");
+		fa.addTerminal("a");
+
+		Assert::IsTrue(fa.getTerminals().size() == 1);
+	}
+
 	TEST_METHOD(add_state_wrong_size)
 	{
-		Assert::IsFalse(fa.addState({ {1}, {2}, {3} }, FINAL));
+		Assert::AreEqual(-1, fa.addState({ {1}, {2}, {3} }, FINAL));
 	}
 
 	TEST_METHOD(add_state_successufully)

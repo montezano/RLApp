@@ -102,6 +102,7 @@
     <ClCompile Include="src\controller\ModelController.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\model\AF.cpp" />
+    <ClCompile Include="src\model\Conversions.cpp" />
     <ClCompile Include="src\model\MapModel.cpp" />
     <ClCompile Include="src\model\RE.cpp" />
     <ClCompile Include="src\util\Subject.cpp" />
@@ -127,6 +128,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets" "-IC:\Users\Montezano\Source\Repos\RLApp\RLApp\include" "-IC:\Users\Montezano\Source\Repos\RLApp\RLApp\include\view"</Command>
     </CustomBuild>
+    <ClInclude Include="include\model\Conversions.h" />
     <ClInclude Include="include\model\RE.h" />
     <ClInclude Include="include\util\Alphabet.h" />
     <ClInclude Include="include\util\Event.h" />

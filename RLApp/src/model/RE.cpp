@@ -2,6 +2,7 @@
 
 RE::RE()
 {
+	f_node = new Node(NULL, PILE_END);
 }
 
 
@@ -9,6 +10,8 @@ RE::RE(QString re)
 {
 	_original_re = re;
 	removeSpaces();
+	f_node = new Node(NULL, PILE_END);
+
 }
 
 RE::~RE()
@@ -122,8 +125,37 @@ bool RE::parse(QString re, Node* tree)
 QVector<Node*> RE::buildDiSimoneComposition()
 {
 	Direction direction = Direction::BUILD;
-	decideOperation(direction, _di_simone_tree);
+	decideOperation(direction, _di_simone_tree, _di_simone_tree);
+	_di_simone_composition << f_node;
 	return _di_simone_composition;
+}
+
+QVector<Node*> RE::followSimoneTreeFrom(Node * node)
+{
+	Direction direction = Direction::UP;
+	QVector<Node*> comp_bkp = _di_simone_composition;
+	QVector<Node*> comp_ret;
+	_di_simone_composition.clear();
+
+	decideOperation(direction, node, node);
+
+	comp_ret = _di_simone_composition;
+	_di_simone_composition = comp_bkp;
+	return comp_ret;
+}
+
+QVector<Node*> RE::initialDiSimonePath()
+{
+	Direction direction = Direction::DOWN;
+	QVector<Node*> comp_bkp = _di_simone_composition;
+	QVector<Node*> comp_ret;
+	_di_simone_composition.clear();
+
+	decideOperation(direction, _di_simone_tree, _di_simone_tree);
+
+	comp_ret = _di_simone_composition;
+	_di_simone_composition = comp_bkp;
+	return comp_ret;
 }
 
 bool RE::removeSpaces()
@@ -231,99 +263,165 @@ QList<QString> RE::parseSymbol(QChar symbol, QString re)
 	return sub_re_list;
 }
 
-void RE::decideOperation(Direction direction, Node * node)
+void RE::decideOperation(Direction direction, Node * node, Node* last_node)
 {
 	if (node != NULL)
 	{
+
 		if (node->symbol == OPTION)
 		{
-			operationOption(direction, node);
+			operationOption(direction, node, last_node);
 		} else if (node->symbol == CLOSURE)
 		{
-			operationClosure(direction, node);
+			operationClosure(direction, node, last_node);
 		}else if (node->symbol == DISJUNCT)
 		{
-			operationDisjunction(direction, node);
+			operationDisjunction(direction, node, last_node);
 		}else if (node->symbol == CONJUNCT)
 		{
-			operationConjunction(direction, node);
+			operationConjunction(direction, node, last_node);
 		}else if (_valid_terminals.contains(node->symbol))
 		{
-			operatetionTerminals(direction, node);
+			operatetionTerminals(direction, node, last_node);
 		}
 	}
 }
 
-void RE::operationOption(Direction direction, Node * node)
+void RE::operationOption(Direction direction, Node * node, Node* last_node)
 {
 	switch (direction)
 	{
 	case UP:
-		decideOperation(direction, node->parent);
+		decideOperation(direction, node->parent, node);
 		break;
 	case DOWN:
-		decideOperation(direction, node->left_children);
-		decideOperation(direction, node->parent);
+		decideOperation(direction, node->left_children, node);
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			decideOperation(direction, node->parent, node);
+		}
 		break;
 	case BUILD:
-		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->left_children, node);
 
 	}
 }
 
-void RE::operationClosure(Direction direction, Node * node)
+void RE::operationClosure(Direction direction, Node * node, Node* last_node)
 {
 	switch (direction)
 	{
 	case UP:
-		decideOperation(direction, node->left_children);
-		decideOperation(direction, node->parent);
+		//decideOperation(direction, node->left_children);
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			decideOperation(direction, node->parent, node);
+		}
 		break;
 	case DOWN:
-		decideOperation(direction, node->left_children);
-		decideOperation(direction, node->parent);
+		decideOperation(direction, node->left_children, node);
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			decideOperation(direction, node->parent, node);
+		}
 		break;
 	case BUILD:
-		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->left_children, node);
 	}
 }
 
-void RE::operationDisjunction(Direction direction, Node * node)
+void RE::operationDisjunction(Direction direction, Node * node, Node* last_node)
 {
 	switch (direction)
 	{
 	case UP:
-		decideOperation(direction, node->parent);
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			decideOperation(direction, node->parent, node);
+		}
 		break;
 	case DOWN:
 	case BUILD:
-		decideOperation(direction, node->left_children);
-		decideOperation(direction, node->right_children);
+		decideOperation(direction, node->left_children, node);
+		decideOperation(direction, node->right_children, node);
 		break;
 
 	}
 }
 
-void RE::operationConjunction(Direction direction, Node * node)
+void RE::operationConjunction(Direction direction, Node * node, Node* last_node)
 {
 	switch (direction)
 	{
 	case UP:
-		decideOperation(direction, node->right_children);
+		if (last_node == node->left_children)
+		{
+			direction = Direction::DOWN;
+			decideOperation(direction, node->right_children, node);
+		}
+		else if (last_node == node->right_children)
+		{
+			decideOperation(direction, node->parent, node);
+		}
+		
 		break;
 	case DOWN:
-		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->left_children, node);
 		break;
 	case BUILD:
-		decideOperation(direction, node->left_children);
-		decideOperation(direction, node->right_children);
+		//decideNextStep(node);
+		decideOperation(direction, node->left_children, node);
+		decideOperation(direction, node->right_children, node);
 
 	}
 }
 
-void RE::operatetionTerminals(Direction direction, Node * node)
+void RE::operatetionTerminals(Direction direction, Node * node, Node* last_node)
 {
-	_di_simone_composition << node;
+	switch (direction)
+	{
+	case UP:
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			if (node == node->parent->left_children)
+			{
+				decideOperation(direction, node->parent, node);
+			}
+			else if (node == node->parent->right_children)
+			{
+				decideOperation(direction, node->parent->parent, node);
+			}
+			
+		}
+		break;
+	case DOWN:
+		_di_simone_composition << node;
+		break;
+	case BUILD:
+		_di_simone_composition << node;
+		break;
+
+	}
 	//direction = Direction::UP;
 	//decideOperation(direction, node->parent);
 }

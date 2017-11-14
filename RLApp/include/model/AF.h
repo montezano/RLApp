@@ -75,7 +75,7 @@ public:
 	///	\return	bool if the operation were done successufully
 	///
 	////////////////////////////////////////////////////////////
-	bool addState(QVector<TR> transitions, StateType type);
+	NT addState(QVector<TR> transitions, StateType type);
 
 
 	////////////////////////////////////////////////////////////

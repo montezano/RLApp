@@ -95,6 +95,10 @@ public:
 
 	QVector<Node*> buildDiSimoneComposition();
 
+	QVector<Node*> followSimoneTreeFrom(Node* node);
+
+	QVector<Node*> initialDiSimonePath();
+
 
 
 private:
@@ -112,13 +116,12 @@ private:
 	////////////////////////////////////////////////////////////
 	QList<QString> parseSymbol(QChar symbol, QString re);
 
-	void decideOperation(Direction direction, Node* node);
-	void operationOption(Direction direction, Node* node);
-	void operationClosure(Direction direction, Node* node);
-	void operationDisjunction(Direction direction, Node* node);
-	void operationConjunction(Direction direction, Node* node);
-	void operatetionTerminals(Direction direction, Node* node);
-
+	void decideOperation(Direction direction, Node* node, Node* last_node);
+	void operationOption(Direction direction, Node* node, Node* last_node);
+	void operationClosure(Direction direction, Node* node, Node* last_node);
+	void operationDisjunction(Direction direction, Node* node, Node* last_node);
+	void operationConjunction(Direction direction, Node* node, Node* last_node);
+	void operatetionTerminals(Direction direction, Node* node, Node* last_node);
 
 
 
@@ -135,6 +138,7 @@ private:
 		CONJUNCT, DISJUNCT };
 	QVector<QChar> _end_operators = { CLOSURE, CL_PARENT, OPTION };
 	QVector<QChar> _open_operators = { OP_PARENT };
+	Node* f_node;
 
 	enum Direction
 	{
@@ -149,11 +153,14 @@ struct Node
 public:
 	Node() {}
 	Node(Node* par) : parent(par) {}
+	Node(Node* par, QChar sym) : parent(par),
+		symbol(sym){}
 
 	Node* parent;
 	Node* left_children;
 	Node* right_children;
 	QChar symbol;
+	int comp_index;
 };
 
 

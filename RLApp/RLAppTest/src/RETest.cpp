@@ -114,6 +114,58 @@ public:
 		Assert::IsTrue('c' == di_simone_composition[3]->symbol);
 	}
 
+	TEST_METHOD(build_di_simone_comosition_2)
+	{
+		re.setReString("s(a|b)|c");
+
+		re.parse();
+
+		QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
+
+		Assert::IsTrue('s' == di_simone_composition[0]->symbol);
+		Assert::IsTrue('a' == di_simone_composition[1]->symbol);
+		Assert::IsTrue('b' == di_simone_composition[2]->symbol);
+		Assert::IsTrue('c' == di_simone_composition[3]->symbol);
+		Assert::IsTrue('$' == di_simone_composition[4]->symbol);
+	}
+
+	TEST_METHOD(follow_di_simone_tree)
+	{
+		re.setReString("a(a|b)|a");
+
+		re.parse();
+
+		QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
+
+		QVector<Node*> tree_1a = re.followSimoneTreeFrom(di_simone_composition[0]);
+
+		Assert::AreEqual(2, tree_1a.size());
+
+		Assert::IsTrue('a' == tree_1a[0]->symbol);
+		Assert::IsTrue('|' == tree_1a[0]->parent->symbol);
+		Assert::IsTrue('b' == tree_1a[1]->symbol);
+		Assert::IsTrue('|' == tree_1a[1]->parent->symbol);
+
+	}
+
+	TEST_METHOD(initial_di_simone_tree)
+	{
+		re.setReString("a(a|b)|a");
+
+		re.parse();
+
+		QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
+
+		QVector<Node*> tree_1a = re.initialDiSimonePath();
+
+		Assert::AreEqual(2, tree_1a.size());
+
+		Assert::IsTrue('a' == tree_1a[0]->symbol);
+		Assert::IsTrue('.' == tree_1a[0]->parent->symbol);
+		Assert::IsTrue('a' == tree_1a[1]->symbol);
+		Assert::IsTrue('|' == tree_1a[1]->parent->symbol);
+	}
+
 	static RE re;
 };
 
