@@ -100,6 +100,19 @@ public:
 		Assert::IsTrue('c' == tree->right_children->symbol);
 	}
 
+	TEST_METHOD(build_di_simone_comosition)
+	{
+		re.setReString("s(a|b)|c");
+
+		re.parse();
+
+		QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
+	
+		Assert::IsTrue('s' == di_simone_composition[0]->symbol);
+		Assert::IsTrue('a' == di_simone_composition[1]->symbol);
+		Assert::IsTrue('b' == di_simone_composition[2]->symbol);
+		Assert::IsTrue('c' == di_simone_composition[3]->symbol);
+	}
 
 	static RE re;
 };

@@ -11,6 +11,7 @@ struct Node;
 
 class RE: public Subject
 {
+	enum Direction;
 public:
 	////////////////////////////////////////////////////////////
 	/// \brief	Default constructor
@@ -92,6 +93,8 @@ public:
 	////////////////////////////////////////////////////////////
 	bool parse(QString re, Node* tree);
 
+	QVector<Node*> buildDiSimoneComposition();
+
 
 
 private:
@@ -109,10 +112,20 @@ private:
 	////////////////////////////////////////////////////////////
 	QList<QString> parseSymbol(QChar symbol, QString re);
 
+	void decideOperation(Direction direction, Node* node);
+	void operationOption(Direction direction, Node* node);
+	void operationClosure(Direction direction, Node* node);
+	void operationDisjunction(Direction direction, Node* node);
+	void operationConjunction(Direction direction, Node* node);
+	void operatetionTerminals(Direction direction, Node* node);
+
+
+
 
 	QString _original_re;
 	QString _normalized_re;
 	Node* _di_simone_tree;
+	QVector<Node*> _di_simone_composition;
 
 	QVector<QChar> _valid_terminals = { 'a', 'b', 'c', 'd',
 		'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
@@ -123,6 +136,12 @@ private:
 	QVector<QChar> _end_operators = { CLOSURE, CL_PARENT, OPTION };
 	QVector<QChar> _open_operators = { OP_PARENT };
 
+	enum Direction
+	{
+		UP,
+		DOWN,
+		BUILD
+	};
 };
 
 struct Node

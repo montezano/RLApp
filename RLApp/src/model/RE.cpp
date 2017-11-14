@@ -119,6 +119,13 @@ bool RE::parse(QString re, Node* tree)
 	return ret;
 }
 
+QVector<Node*> RE::buildDiSimoneComposition()
+{
+	Direction direction = Direction::BUILD;
+	decideOperation(direction, _di_simone_tree);
+	return _di_simone_composition;
+}
+
 bool RE::removeSpaces()
 {
 	if (_original_re.remove(" ") != "")
@@ -222,4 +229,101 @@ QList<QString> RE::parseSymbol(QChar symbol, QString re)
 	}
 
 	return sub_re_list;
+}
+
+void RE::decideOperation(Direction direction, Node * node)
+{
+	if (node != NULL)
+	{
+		if (node->symbol == OPTION)
+		{
+			operationOption(direction, node);
+		} else if (node->symbol == CLOSURE)
+		{
+			operationClosure(direction, node);
+		}else if (node->symbol == DISJUNCT)
+		{
+			operationDisjunction(direction, node);
+		}else if (node->symbol == CONJUNCT)
+		{
+			operationConjunction(direction, node);
+		}else if (_valid_terminals.contains(node->symbol))
+		{
+			operatetionTerminals(direction, node);
+		}
+	}
+}
+
+void RE::operationOption(Direction direction, Node * node)
+{
+	switch (direction)
+	{
+	case UP:
+		decideOperation(direction, node->parent);
+		break;
+	case DOWN:
+		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->parent);
+		break;
+	case BUILD:
+		decideOperation(direction, node->left_children);
+
+	}
+}
+
+void RE::operationClosure(Direction direction, Node * node)
+{
+	switch (direction)
+	{
+	case UP:
+		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->parent);
+		break;
+	case DOWN:
+		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->parent);
+		break;
+	case BUILD:
+		decideOperation(direction, node->left_children);
+	}
+}
+
+void RE::operationDisjunction(Direction direction, Node * node)
+{
+	switch (direction)
+	{
+	case UP:
+		decideOperation(direction, node->parent);
+		break;
+	case DOWN:
+	case BUILD:
+		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->right_children);
+		break;
+
+	}
+}
+
+void RE::operationConjunction(Direction direction, Node * node)
+{
+	switch (direction)
+	{
+	case UP:
+		decideOperation(direction, node->right_children);
+		break;
+	case DOWN:
+		decideOperation(direction, node->left_children);
+		break;
+	case BUILD:
+		decideOperation(direction, node->left_children);
+		decideOperation(direction, node->right_children);
+
+	}
+}
+
+void RE::operatetionTerminals(Direction direction, Node * node)
+{
+	_di_simone_composition << node;
+	//direction = Direction::UP;
+	//decideOperation(direction, node->parent);
 }
