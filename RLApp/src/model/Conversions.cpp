@@ -76,6 +76,46 @@ FA Conversions::reToFA(RE re)
 	return fa;
 }
 
+FA Conversions::grToFA(RG rg)
+{
+	QVector<VT> terminals;
+	QString final_state = "$$$";
+	QMap<PLeft, int> states_map;
+	int st_count = 0;
+	QList<PLeft> p_left = rg.getProductionLeft();
+
+	QMap<QString, QPair<VT, QString>> transitions_map;
+
+	for (PLeft prod : p_left)
+	{
+		states_map.insert(prod, st_count);
+		st_count++;
+		QList<PRight> p_rules = rg.getProduction(prod);
+
+		for (PRight rule : p_rules)
+		{
+			if (rule[0].isLower())
+			{
+				if (!terminals.contains(QString(rule[0])))
+				{
+					terminals << QString(rule[0]);
+				}
+				if (rule.size() < 2)
+				{
+					transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), final_state));
+				}
+				else if (rule.size() >= 2)
+				{
+					transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), rule.right(1)));
+				}
+			}
+		}
+
+
+	}
+	return FA();
+}
+
 QVector<VT> Conversions::getTerminals(FA& fa, QVector<Node*> di_simone_composition)
 {
 	QVector<VT> terminals;

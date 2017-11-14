@@ -4,10 +4,17 @@
 #include <vector>
 #include <QVector>
 #include <QString>
+#include <QMap>
+#include <QPair>
 
-typedef QString VT;		//Terminals
-typedef int NT;			//Not terminal
-typedef QVector<NT> TR;	//Transitions
+typedef QString VT;						//Terminals
+typedef int NT;							//Not terminal
+typedef QVector<NT> TR;					//Transitions
+typedef QString PLeft;					//left side of a RG production
+typedef QString PRight;					//Right side of a RG production
+typedef QMap<PLeft, PRight> Productions;	//RG productions
+typedef QPair<PLeft, PRight> Production;	//RG production
+
 
 #define	StateType unsigned	//Regular, final, initial
 

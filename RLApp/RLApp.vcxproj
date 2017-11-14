@@ -105,6 +105,7 @@
     <ClCompile Include="src\model\Conversions.cpp" />
     <ClCompile Include="src\model\MapModel.cpp" />
     <ClCompile Include="src\model\RE.cpp" />
+    <ClCompile Include="src\model\RG.cpp" />
     <ClCompile Include="src\util\Subject.cpp" />
     <ClCompile Include="src\view\AddReWindow.cpp" />
     <ClCompile Include="src\view\AddRgWindow.cpp" />
@@ -130,6 +131,7 @@
     </CustomBuild>
     <ClInclude Include="include\model\Conversions.h" />
     <ClInclude Include="include\model\RE.h" />
+    <ClInclude Include="include\model\RG.h" />
     <ClInclude Include="include\util\Alphabet.h" />
     <ClInclude Include="include\util\Event.h" />
     <ClInclude Include="include\util\Observer.h" />

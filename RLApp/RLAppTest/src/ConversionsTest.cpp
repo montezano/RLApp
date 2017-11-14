@@ -48,11 +48,23 @@ public:
 		}
 	}
 
+	TEST_METHOD(rg_to_fa)
+	{
+		rg.addProduction("S", "a");
+		rg.addProduction("S", "aA");
+		rg.addProduction("A", "a");
+		rg.addProduction("A", "b");
+
+		Assert::IsTrue(&Conversions::grToFA(rg) == NULL);
+	}
+
 
 	static RE re;
 	static FA fa;
+	static RG rg;
 };
 
 RE ConversionsTest::re;
 FA ConversionsTest::fa;
+RG ConversionsTest::rg;
 #endif // !__RETEST_H__
