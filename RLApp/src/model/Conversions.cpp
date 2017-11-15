@@ -133,9 +133,9 @@ FA Conversions::grToFA(RG rg)
 
 		for (auto transition : transitions_map.values(key))
 		{
-			if (!new_trans[terminals.indexOf(transition.first)].contains(states_map.indexOf(key)))
+			if (!new_trans[terminals.indexOf(transition.first)].contains(QString::number(states_map.indexOf(key))))
 			{
-				new_trans[terminals.indexOf(transition.first)] << states_map.indexOf(transition.second);
+				new_trans[terminals.indexOf(transition.first)] << QString::number(states_map.indexOf(transition.second));
 			}
 		}
 		fa.addState(new_trans, (key == "$$$" ? FINAL : REGULAR));
@@ -188,7 +188,7 @@ TR Conversions::createTransition(QVector<Node*> di_simone_composition, VT termin
 	{
 		if (node->symbol == terminal)
 		{
-			transition << node->comp_index;
+			transition << QString::number(node->comp_index);
 		}
 	}
 	return transition;

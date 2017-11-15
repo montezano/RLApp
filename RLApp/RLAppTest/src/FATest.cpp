@@ -49,21 +49,8 @@ public:
 	{
 	}
 
-	TEST_METHOD(creation)
-	{
-		//FA dfa = FA();
-
-		//FA fa = FA();
-		//fa.setFA("string");
-
-		//Assert::IsTrue(0 == fa.getRe().compare(QString("string")));
-		//Assert::IsFalse(0 == re.getRe().compare(QString("string2")));
-	}
-
 	TEST_METHOD(add_terminals_true)
 	{
-		//FA fa = FA();
-
 		fa.addTerminal("a");
 
 		Assert::IsTrue(fa.getTerminals().contains("a"));
@@ -71,8 +58,6 @@ public:
 
 	TEST_METHOD(add_terminal_false)
 	{
-		//FA fa = FA();
-
 		fa.addTerminal("a");
 		fa.addTerminal("b");
 
@@ -81,8 +66,6 @@ public:
 
 	TEST_METHOD(add_terminals_repeated)
 	{
-		//FA fa = FA();
-
 		fa.addTerminal("a");
 		fa.addTerminal("a");
 		fa.addTerminal("a");
@@ -92,7 +75,7 @@ public:
 
 	TEST_METHOD(add_state_wrong_size)
 	{
-		Assert::AreEqual(-1, fa.addState({ {1}, {2}, {3} }, FINAL));
+		Assert::IsTrue("-1" == fa.addState({ {1}, {2}, {3} }, FINAL));
 	}
 
 	TEST_METHOD(add_state_successufully)
@@ -101,14 +84,14 @@ public:
 		fa.addTerminal("b");
 		fa.addTerminal("c");
 
-		Assert::IsTrue(fa.addState({ {1}, {2}, {3} }, FINAL));
+		Assert::IsTrue(fa.addState({ {1}, {2}, {3} }, FINAL) != "0");
 	}
 
 	TEST_METHOD(check_is_empty_one_state)
 	{
 		fa.addTerminal("a");
 
-		fa.addState({ { 0 } }, FINAL);
+		fa.addState({ { "0" } }, FINAL);
 
 		Assert::IsFalse(fa.isEmpty());
 
@@ -187,7 +170,7 @@ public:
 		fa.addTerminal("b");
 
 
-		fa.addState({ { 1 },{ 0 } }, REGULAR);
+		fa.addState({ { "1" },{ "0" } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 1 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
@@ -216,14 +199,14 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("b");
 
-		QVector<TR> test_state = QVector<TR>({ { 1 },{ 1 } });
+		QVector<TR> test_state = QVector<TR>({ { "1" },{ "1" } });
 		fa.addState(test_state, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, FINAL);
 
-		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
 
 	TEST_METHOD(epsilon_transition_closure_with_E_1)
@@ -231,14 +214,15 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("&");
 
-		QVector<TR> test_state = QVector<TR>({ { 1, 2, 3, 4 },{ 1, 2, 3, 4 } });
+		QVector<TR> test_state = QVector<TR>({ { "1", "2", "3", "4" },
+												{ "1", "2", "3", "4" } });
 		fa.addState({ { 1 },{ 1 } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, FINAL);
 
-		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
 
 	TEST_METHOD(epsilon_transition_closure_with_E_2)
@@ -246,14 +230,14 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("&");
 
-		QVector<TR> test_state = QVector<TR>({ { 1 },{ 1, 2, 3, 4 } });
+		QVector<TR> test_state = QVector<TR>({ { "1" },{ "1", "2", "3", "4" } });
 		fa.addState({ { 1 },{ 1 } }, REGULAR);
 		fa.addState({ { 1 },{ 2 } }, REGULAR);
 		fa.addState({ { 1 },{ 3 } }, REGULAR);
 		fa.addState({ { 1 },{ 4 } }, REGULAR);
 		fa.addState({ { 1 },{ 1 } }, FINAL);
 
-		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
 
 	TEST_METHOD(epsilon_transition_closure_with_E_3)
@@ -261,14 +245,14 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("&");
 
-		QVector<TR> test_state = QVector<TR>({ { 1 },{ } });
-		fa.addState({ { 1 },{  } }, REGULAR);
-		fa.addState({ { 1 },{  } }, REGULAR);
-		fa.addState({ { 1 },{  } }, REGULAR);
-		fa.addState({ { 1 },{  } }, REGULAR);
-		fa.addState({ { 1 },{ 1 } }, FINAL);
+		QVector<TR> test_state = QVector<TR>({ { "1" },{ } });
+		fa.addState({ { "1" },{  } }, REGULAR);
+		fa.addState({ { "1" },{  } }, REGULAR);
+		fa.addState({ { "1" },{  } }, REGULAR);
+		fa.addState({ { "1" },{  } }, REGULAR);
+		fa.addState({ { "1" },{ "1" } }, FINAL);
 
-		Assert::IsTrue(fa.getEStateClosure(0) == test_state);
+		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
 
 	TEST_METHOD(remove_E_transition)
@@ -276,7 +260,7 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("&");
 
-		QVector<TR> test_state = QVector<TR>({ { 0, 1, 2 }});
+		QVector<TR> test_state = QVector<TR>({ { "0", "1", "2" }});
 		fa.addState({ { 0 },{ 1 } }, REGULAR);
 		fa.addState({ { 1 },{ 2 } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, FINAL);
@@ -289,8 +273,8 @@ public:
 	{
 		fa.addTerminal("a");
 
-		QVector<TR> test_state = QVector<TR>({ { 0 } });
-		fa.addState({ { 0 } }, REGULAR);
+		QVector<TR> test_state = QVector<TR>({ { "0" } });
+		fa.addState({ { "0" } }, REGULAR);
 		fa.addState({ { 1 } }, REGULAR);
 		fa.addState({ { 2 } }, FINAL);
 
@@ -300,7 +284,7 @@ public:
 
 	TEST_METHOD(determinize_1_no_E)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 0, 1, 2 } });
+		QVector<TR> test_state = QVector<TR>({ { "0", "1", "2" } });
 
 		fa.addTerminal("a");
 
@@ -314,7 +298,7 @@ public:
 
 	TEST_METHOD(determinize_2_no_E)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 2 }, { 1, 2} });
+		QVector<TR> test_state = QVector<TR>({ { "2" }, { "1", "2"} });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -329,7 +313,7 @@ public:
 
 	TEST_METHOD(remove_dead_states)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 2 },{ -1 } });
+		QVector<TR> test_state = QVector<TR>({ { "2" },{ "-1" } });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -346,7 +330,7 @@ public:
 
 	TEST_METHOD(equivalence_class)
 	{
-		QVector<TR> test_state = QVector<TR>({ { 0, 1 },{ 1 , 2 } });
+		QVector<TR> test_state = QVector<TR>({ { "0", "1" },{ "1" , "2" } });
 
 		fa.addTerminal("a");
 		fa.addTerminal("b");
@@ -363,12 +347,12 @@ public:
 
 	TEST_METHOD(minimize)
 	{
-		QVector<TR> test_state_0 = QVector<TR>({ { 6 },{ 1 } });
-		QVector<TR> test_state_1 = QVector<TR>({ { 5 },{ 4 } });
-		QVector<TR> test_state_2 = QVector<TR>({ { 2 },{ 6 } });
-		QVector<TR> test_state_4 = QVector<TR>({ { 4 },{ 0 } });
-		QVector<TR> test_state_5 = QVector<TR>({ { 1 },{ 2 } });
-		QVector<TR> test_state_6 = QVector<TR>({ { 6 },{ 5 } });
+		QVector<TR> test_state_0 = QVector<TR>({ { "6" },{ "1" } });
+		QVector<TR> test_state_1 = QVector<TR>({ { "5" },{ "4" } });
+		QVector<TR> test_state_2 = QVector<TR>({ { "2" },{ "6" } });
+		QVector<TR> test_state_4 = QVector<TR>({ { "4" },{ "0" } });
+		QVector<TR> test_state_5 = QVector<TR>({ { "1" },{ "2" } });
+		QVector<TR> test_state_6 = QVector<TR>({ { "6" },{ "5" } });
 
 
 
@@ -379,7 +363,7 @@ public:
 		/*B*/fa.addState({ { 5 },{ 4 } }, REGULAR);
 		/*C*/fa.addState({ { 2 },{ 6 } }, REGULAR);
 		/*D*/fa.addState({ { 0 },{ 7 } }, FINAL);
-		/*E*/fa.addState({ { 4 },{ 0 } }, REGULAR);
+		/*E*/fa.addState({ { "4" },{ "0" } }, REGULAR);
 		/*F*/fa.addState({ { 1 },{ 2 } }, REGULAR);
 		/*G*/fa.addState({ { 6 },{ 5 } }, FINAL);
 		/*H*/fa.addState({ { 7 },{ 3 } }, REGULAR);
@@ -396,21 +380,26 @@ public:
 		Assert::IsTrue(fa.getDetStates("6")._transitions == test_state_6);
 	}
 
-	//#define A 0
-	//#define B 1
-	//#define C 2 
-	//#define D 3
-	//#define E 4
-	//#define F 5 
-	//#define G 6 
-	//#define H 7 
-	//#define I 8 
-	//#define J 9
-	//TEST_METHOD(remove_E_transition)
-	//{
-	//	Assert::isTru
-	//}
-	//TEST_method(add_state_)
+	TEST_METHOD(union_fa)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		fa.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
+		fa.addState({ { 2 },{ 2 } }, REGULAR);
+		fa.addState({ { 2 },{ 1 } }, FINAL);
+
+		FA fa2 = FA();
+
+		fa2.addTerminal("a");
+		fa2.addTerminal("b");
+
+		fa2.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
+		fa2.addState({ { 2 },{ 2 } }, REGULAR);
+		fa2.addState({ { 2 },{ 1 } }, FINAL);
+
+		fa.faUnion(fa2);
+	}
 
 	static FA fa;
 };

@@ -60,13 +60,13 @@ public:
 		fa = Conversions::grToFA(rg);
 
 		QVector<FAState> states = fa.getStates();
-		Assert::AreEqual(0, states[0]._state_name);
+		Assert::IsTrue("0" == states[0]._state_name);
 		Assert::IsTrue(states[0]._transitions[0].size() == 0 );
-		Assert::IsTrue(states[0]._transitions[1][0] == 2);
-		Assert::AreEqual(1, states[1]._state_name);
-		Assert::IsTrue(states[1]._transitions[0][0] == 2);
-		Assert::IsTrue(states[1]._transitions[1][0] == 2);
-		Assert::AreEqual(2, states[2]._state_name);
+		Assert::IsTrue(states[0]._transitions[1][0] == "2");
+		Assert::IsTrue("1" == states[1]._state_name);
+		Assert::IsTrue(states[1]._transitions[0][0] == "2");
+		Assert::IsTrue(states[1]._transitions[1][0] == "2");
+		Assert::IsTrue("2" == states[2]._state_name);
 		Assert::IsTrue(states[2]._transitions[0].size() == 0);
 	}
 

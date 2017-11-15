@@ -51,11 +51,19 @@ public:
 	QVector<FAState> getStates();
 
 	////////////////////////////////////////////////////////////
+	/// \brief	Get the desired state
+	///	\return	desired state
+	///
+	////////////////////////////////////////////////////////////
+	FAState& getState(VT state_name);
+
+
+	////////////////////////////////////////////////////////////
 	/// \brief	Get the list of states from the deterministic FA.
 	///	\return	QVector<FAState> list of Deterministic States
 	///
 	////////////////////////////////////////////////////////////
-	QVector<DetFAState> getDetStates();
+	QVector<DetFAState>& getDetStates();
 
 	////////////////////////////////////////////////////////////
 	/// \brief	Get a state of the deterministic FA by it's name.
@@ -77,6 +85,45 @@ public:
 	////////////////////////////////////////////////////////////
 	NT addState(QVector<TR> transitions, StateType type);
 
+	////////////////////////////////////////////////////////////
+	/// \brief	Add a new state to the FA.
+	///	\param	QVector<TR> with the transitions of the state.
+	///			Transitions may be non deterministic (more than
+	///			transition for the same terminal)
+	///	\param	StateType	define if the state is FINAL, REGULAR,
+	///			INITIAL or a combination of those.
+	///	\return	bool if the operation were done successufully
+	///
+	////////////////////////////////////////////////////////////
+	NT addState(QVector<QVector<int>> transitions, StateType type);
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Add a new state to the FA.
+	///	\param	QVector<TR> with the transitions of the state.
+	///			Transitions may be non deterministic (more than
+	///			transition for the same terminal)
+	///	\param	StateType	define if the state is FINAL, REGULAR,
+	///			INITIAL or a combination of those.
+	///	\return	bool if the operation were done successufully
+	///
+	////////////////////////////////////////////////////////////
+	NT addState(NT state_name, QVector<TR> transitions, StateType type);
+
+	////////////////////////////////////////////////////////////
+	/// \brief	Add a new state to the FA.
+	///	\param	QVector<TR> with the transitions of the state.
+	///			Transitions may be non deterministic (more than
+	///			transition for the same terminal)
+	///	\param	StateType	define if the state is FINAL, REGULAR,
+	///			INITIAL or a combination of those.
+	///	\return	bool if the operation were done successufully
+	///
+	////////////////////////////////////////////////////////////
+	NT addState(FAState state);
+
+	FAState& getInitialState();
+
+	DetFAState& getInitialDetState();
 
 	////////////////////////////////////////////////////////////
 	/// MAIN FUNCTIONS
@@ -198,6 +245,8 @@ public:
 	////////////////////////////////////////////////////////////
 	QVector<TR> getEStateClosure(FAState state);
 
+	FA faUnion(FA fa);
+
 private:
 	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
 	QVector<TR> getEStateClosure(FAState state, QVector<NT> visited);
@@ -218,7 +267,8 @@ private:
 	QVector<FAState> _states;
 	QVector<DetFAState> _states_determinized;
 	QMap<QString, TR> _state_name_map;
-	NT _last_state_add;
+	FAState* _null_state;
+	int _last_state_number_add;
 
 	//MapModel map;
 
@@ -231,6 +281,7 @@ public:
 	FAState();
 	FAState(FA* parent, NT state_name, QVector<TR> transitions, StateType type);
 	FAState(FA* parent, NT state_name, StateType type);
+	FAState(DetFAState& state);
 
 	FA* _parent;
 	NT _state_name;
@@ -242,8 +293,9 @@ struct DetFAState
 {
 public:
 	DetFAState();
-	DetFAState(FA* parent, QString state_name, QVector<TR> transitions, StateType type);
-	DetFAState(FA* parent, QString state_name, StateType type);
+	DetFAState(FA* parent, NT state_name, QVector<TR> transitions, StateType type);
+	DetFAState(FA* parent, NT state_name, StateType type);
+	DetFAState(FAState& state);
 
 	FA* _parent;
 	QString _state_name;

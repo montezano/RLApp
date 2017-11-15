@@ -8,7 +8,7 @@
 #include <QPair>
 
 typedef QString VT;						//Terminals
-typedef int NT;							//Not terminal
+typedef QString NT;							//Not terminal
 typedef QVector<NT> TR;					//Transitions
 typedef QString PLeft;					//left side of a RG production
 typedef QString PRight;					//Right side of a RG production
