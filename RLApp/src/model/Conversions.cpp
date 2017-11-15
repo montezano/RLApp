@@ -80,31 +80,27 @@ FA Conversions::grToFA(RG rg)
 {
 	QVector<VT> terminals;
 	QString final_state = "$$$";
-	QMap<PLeft, int> states_map;
+	//QMap<PLeft, int> states_map;
+	QVector<PLeft> states_map;
+	QVector<PLeft> added_states;
+
 	int st_count = 1;
 	QList<PLeft> p_left = rg.getProductionLeft();
-	PLeft init_prod = rg.getInitial();
 	FA fa = FA();
 
 	QMap<QString, QPair<VT, QString>> transitions_map;
-	QVector<QString> added_state;
+
+	states_map << rg.getInitial();
 
 	for (PLeft prod : p_left)
 	{
-		if (!added_state.contains(prod))
+		if (!added_states.contains(prod))
 		{
-			if (prod == init_prod)
+			if (prod != states_map[0])
 			{
-				states_map.insert(prod, 0);
-				added_state << prod;
+				states_map << prod;
 			}
-			else
-			{
-				states_map.insert(prod, st_count);
-				st_count++;
-				added_state << prod;
-			}
-
+			added_states << prod;
 			QList<PRight> p_rules = rg.getProduction(prod);
 
 			for (PRight rule : p_rules)
@@ -127,35 +123,28 @@ FA Conversions::grToFA(RG rg)
 			}
 		}
 	}
-	states_map.insert(final_state, st_count);
-	added_state.clear();
+	states_map << final_state;
 	fa.setTerminals(terminals);
-	for (auto key : transitions_map.keys())
+
+	for (auto key : states_map)
 	{
 		QVector<TR> new_trans;
 		new_trans.resize(terminals.size());
 
 		for (auto transition : transitions_map.values(key))
 		{
-			if (!new_trans[terminals.indexOf(transition.first)].contains(states_map.value(key)))
+			if (!new_trans[terminals.indexOf(transition.first)].contains(states_map.indexOf(key)))
 			{
-				new_trans[terminals.indexOf(transition.first)] << states_map.value(transition.second);
+				new_trans[terminals.indexOf(transition.first)] << states_map.indexOf(transition.second);
 			}
 		}
-		if (!added_state.contains(key))
-		{
-			fa.addState(new_trans, (key == "$$$" ? FINAL : REGULAR));
-			added_state << key;
-		}
+		fa.addState(new_trans, (key == "$$$" ? FINAL : REGULAR));
 	}
-	QVector<TR> trans;
-	trans.resize(terminals.size());
-	//for (VT terminal : terminals)
-	//{
-	//	trans << TR();
-	//}
-	fa.addState( trans, FINAL);
-	return FA();
+	/*QVector<TR> trans;
+	trans.resize(terminals.size());*/
+
+	//fa.addState( trans, FINAL);
+	return fa;
 }
 
 QVector<VT> Conversions::getTerminals(FA& fa, QVector<Node*> di_simone_composition)
