@@ -27,6 +27,17 @@ QList<PLeft> RG::getProductionLeft()
 	return _rg.keys();
 }
 
+bool RG::setInitial(PLeft left)
+{
+	_initial_prod = left;
+	return true;
+}
+
+PLeft RG::getInitial()
+{
+	return _initial_prod;
+}
+
 bool RG::verifyProduction(PLeft pleft, PRight pright)
 {
 	for (QChar ch : pleft)

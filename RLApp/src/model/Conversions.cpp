@@ -81,38 +81,80 @@ FA Conversions::grToFA(RG rg)
 	QVector<VT> terminals;
 	QString final_state = "$$$";
 	QMap<PLeft, int> states_map;
-	int st_count = 0;
+	int st_count = 1;
 	QList<PLeft> p_left = rg.getProductionLeft();
+	PLeft init_prod = rg.getInitial();
+	FA fa = FA();
 
 	QMap<QString, QPair<VT, QString>> transitions_map;
+	QVector<QString> added_state;
 
 	for (PLeft prod : p_left)
 	{
-		states_map.insert(prod, st_count);
-		st_count++;
-		QList<PRight> p_rules = rg.getProduction(prod);
-
-		for (PRight rule : p_rules)
+		if (!added_state.contains(prod))
 		{
-			if (rule[0].isLower())
+			if (prod == init_prod)
 			{
-				if (!terminals.contains(QString(rule[0])))
+				states_map.insert(prod, 0);
+				added_state << prod;
+			}
+			else
+			{
+				states_map.insert(prod, st_count);
+				st_count++;
+				added_state << prod;
+			}
+
+			QList<PRight> p_rules = rg.getProduction(prod);
+
+			for (PRight rule : p_rules)
+			{
+				if (rule[0].isLower())
 				{
-					terminals << QString(rule[0]);
-				}
-				if (rule.size() < 2)
-				{
-					transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), final_state));
-				}
-				else if (rule.size() >= 2)
-				{
-					transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), rule.right(1)));
+					if (!terminals.contains(QString(rule[0])))
+					{
+						terminals << QString(rule[0]);
+					}
+					if (rule.size() < 2)
+					{
+						transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), final_state));
+					}
+					else if (rule.size() >= 2)
+					{
+						transitions_map.insertMulti(prod, QPair<VT, QString>(QString(rule[0]), rule.right(1)));
+					}
 				}
 			}
 		}
-
-
 	}
+	states_map.insert(final_state, st_count);
+	added_state.clear();
+	fa.setTerminals(terminals);
+	for (auto key : transitions_map.keys())
+	{
+		QVector<TR> new_trans;
+		new_trans.resize(terminals.size());
+
+		for (auto transition : transitions_map.values(key))
+		{
+			if (!new_trans[terminals.indexOf(transition.first)].contains(states_map.value(key)))
+			{
+				new_trans[terminals.indexOf(transition.first)] << states_map.value(transition.second);
+			}
+		}
+		if (!added_state.contains(key))
+		{
+			fa.addState(new_trans, (key == "$$$" ? FINAL : REGULAR));
+			added_state << key;
+		}
+	}
+	QVector<TR> trans;
+	trans.resize(terminals.size());
+	//for (VT terminal : terminals)
+	//{
+	//	trans << TR();
+	//}
+	fa.addState( trans, FINAL);
 	return FA();
 }
 

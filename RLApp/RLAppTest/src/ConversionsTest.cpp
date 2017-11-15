@@ -55,6 +55,8 @@ public:
 		rg.addProduction("A", "a");
 		rg.addProduction("A", "b");
 
+		rg.setInitial("S");
+
 		Assert::IsTrue(&Conversions::grToFA(rg) == NULL);
 	}
 
