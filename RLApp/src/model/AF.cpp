@@ -559,6 +559,30 @@ FA FA::faUnion(FA fa)
 	return united_fa;
 }
 
+FA FA::faComplement()
+{
+	FA ret_fa;
+
+	ret_fa.setTerminals(getTerminals());
+	for (FAState state : _states)
+	{
+		if (state._type & FINAL)
+		{
+			FAState temp_state = FAState(this, state._state_name, (state._type & ~(FINAL)));
+			temp_state._transitions = state._transitions;
+			ret_fa.addState(temp_state);
+		}
+		else if (state._type & REGULAR)
+		{
+			FAState temp_state = FAState(this, state._state_name, (state._type | FINAL_ST));
+			temp_state._transitions = state._transitions;
+			ret_fa.addState(temp_state);
+		}
+	}
+
+	return ret_fa;
+}
+
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)
 {
 	if (visited.contains(current_state._state_name))

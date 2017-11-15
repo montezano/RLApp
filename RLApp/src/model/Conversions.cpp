@@ -138,7 +138,7 @@ FA Conversions::grToFA(RG rg)
 				new_trans[terminals.indexOf(transition.first)] << QString::number(states_map.indexOf(transition.second));
 			}
 		}
-		fa.addState(new_trans, (key == "$$$" ? FINAL : REGULAR));
+		fa.addState(new_trans, (key == "$$$" ? FINAL_ST : REGULAR));
 	}
 	/*QVector<TR> trans;
 	trans.resize(terminals.size());*/
@@ -200,7 +200,7 @@ StateType Conversions::getStateType(QVector<Node*> di_simone_composition)
 	{
 		if (node->symbol == PILE_END)
 		{
-			return FINAL | REGULAR;
+			return FINAL_ST;
 		}
 	}
 	return REGULAR;

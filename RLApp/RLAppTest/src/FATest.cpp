@@ -75,7 +75,7 @@ public:
 
 	TEST_METHOD(add_state_wrong_size)
 	{
-		Assert::IsTrue("-1" == fa.addState({ {1}, {2}, {3} }, FINAL));
+		Assert::IsTrue("-1" == fa.addState({ {1}, {2}, {3} }, FINAL_ST));
 	}
 
 	TEST_METHOD(add_state_successufully)
@@ -84,14 +84,14 @@ public:
 		fa.addTerminal("b");
 		fa.addTerminal("c");
 
-		Assert::IsTrue(fa.addState({ {1}, {2}, {3} }, FINAL) != "0");
+		Assert::IsTrue(fa.addState({ {1}, {2}, {3} }, FINAL_ST) != "0");
 	}
 
 	TEST_METHOD(check_is_empty_one_state)
 	{
 		fa.addTerminal("a");
 
-		fa.addState({ { "0" } }, FINAL);
+		fa.addState({ { "0" } }, FINAL_ST);
 
 		Assert::IsFalse(fa.isEmpty());
 
@@ -102,7 +102,7 @@ public:
 		fa.addTerminal("a");
 		
 		fa.addState({ { 1 } }, REGULAR);
-		fa.addState({ { 1 } }, FINAL);
+		fa.addState({ { 1 } }, FINAL_ST);
 
 		Assert::IsFalse(fa.isEmpty());
 
@@ -118,7 +118,7 @@ public:
 		fa.addState({ { 1, 2 }, { 1, 1 } }, REGULAR);
 		fa.addState({ { 1, 3 }, { 1, 1 } }, REGULAR);
 		fa.addState({ { 1, 4 }, { 1, 1 } }, REGULAR);
-		fa.addState({ { 1, 4 }, { 1, 1 } }, FINAL);
+		fa.addState({ { 1, 4 }, { 1, 1 } }, FINAL_ST);
 
 
 
@@ -138,7 +138,7 @@ public:
 		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
 		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
 		fa.addState({ { 1 },{ 1, 1 } }, REGULAR);
-		fa.addState({ { 1 },{ 1, 1 } }, FINAL);
+		fa.addState({ { 1 },{ 1, 1 } }, FINAL_ST);
 
 
 
@@ -158,7 +158,7 @@ public:
 		fa.addState({ { 2, 2 },{ 2, 2 } }, REGULAR);
 		fa.addState({ { 3, 3 },{ 3, 3 } }, REGULAR);
 		fa.addState({ { 4, 4 },{ 4, 4 } }, REGULAR);
-		fa.addState({ { 5, 5 },{ 5, 5 } }, FINAL);
+		fa.addState({ { 5, 5 },{ 5, 5 } }, FINAL_ST);
 
 		Assert::IsFalse(fa.isInfinite());
 	}
@@ -174,7 +174,7 @@ public:
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 1 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
-		fa.addState({ { 4 },{ 4 } }, FINAL);
+		fa.addState({ { 4 },{ 4 } }, FINAL_ST);
 
 		Assert::IsTrue(fa.isInfinite());
 	}
@@ -189,7 +189,7 @@ public:
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
-		fa.addState({ { 4 },{ 4 } }, FINAL);
+		fa.addState({ { 4 },{ 4 } }, FINAL_ST);
 
 		Assert::IsTrue(fa.isInfinite());
 	}
@@ -204,7 +204,7 @@ public:
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
-		fa.addState({ { 4 },{ 4 } }, FINAL);
+		fa.addState({ { 4 },{ 4 } }, FINAL_ST);
 
 		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
@@ -220,7 +220,7 @@ public:
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
 		fa.addState({ { 3 },{ 3 } }, REGULAR);
 		fa.addState({ { 4 },{ 4 } }, REGULAR);
-		fa.addState({ { 4 },{ 4 } }, FINAL);
+		fa.addState({ { 4 },{ 4 } }, FINAL_ST);
 
 		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
@@ -235,7 +235,7 @@ public:
 		fa.addState({ { 1 },{ 2 } }, REGULAR);
 		fa.addState({ { 1 },{ 3 } }, REGULAR);
 		fa.addState({ { 1 },{ 4 } }, REGULAR);
-		fa.addState({ { 1 },{ 1 } }, FINAL);
+		fa.addState({ { 1 },{ 1 } }, FINAL_ST);
 
 		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
@@ -250,7 +250,7 @@ public:
 		fa.addState({ { "1" },{  } }, REGULAR);
 		fa.addState({ { "1" },{  } }, REGULAR);
 		fa.addState({ { "1" },{  } }, REGULAR);
-		fa.addState({ { "1" },{ "1" } }, FINAL);
+		fa.addState({ { "1" },{ "1" } }, FINAL_ST);
 
 		Assert::IsTrue(fa.getEStateClosure("0") == test_state);
 	}
@@ -263,7 +263,7 @@ public:
 		QVector<TR> test_state = QVector<TR>({ { "0", "1", "2" }});
 		fa.addState({ { 0 },{ 1 } }, REGULAR);
 		fa.addState({ { 1 },{ 2 } }, REGULAR);
-		fa.addState({ { 2 },{ 2 } }, FINAL);
+		fa.addState({ { 2 },{ 2 } }, FINAL_ST);
 
 		fa.removeETransition();
 		Assert::IsTrue( fa.getStates()[0]._transitions == test_state);
@@ -276,7 +276,7 @@ public:
 		QVector<TR> test_state = QVector<TR>({ { "0" } });
 		fa.addState({ { "0" } }, REGULAR);
 		fa.addState({ { 1 } }, REGULAR);
-		fa.addState({ { 2 } }, FINAL);
+		fa.addState({ { 2 } }, FINAL_ST);
 
 		fa.removeETransition();
 		Assert::IsTrue(fa.getStates()[0]._transitions == test_state);
@@ -290,7 +290,7 @@ public:
 
 		fa.addState({ { 0, 1 } }, REGULAR);
 		fa.addState({ { 2 } }, REGULAR);
-		fa.addState({ { 2 } }, FINAL);
+		fa.addState({ { 2 } }, FINAL_ST);
 
 		fa.determinize();
 		Assert::IsTrue(fa.getDetStates()[2]._transitions == test_state);
@@ -305,7 +305,7 @@ public:
 
 		fa.addState({ { 0, 1 }, { 1, 2 } }, REGULAR);
 		fa.addState({ { 2 }, { 2 } }, REGULAR);
-		fa.addState({ { 2 }, { 1 } }, FINAL);
+		fa.addState({ { 2 }, { 1 } }, FINAL_ST);
 
 		fa.determinize();
 		Assert::IsTrue(fa.getDetStates("1-2")._transitions == test_state);
@@ -320,7 +320,7 @@ public:
 
 		/*0-*/fa.addState({ { 2 },{ 1 } }, REGULAR);
 		/*1-*/fa.addState({ { 1 },{ 1 } }, REGULAR);
-		/*2-*/fa.addState({ { 2 },{ 2 } }, FINAL);
+		/*2-*/fa.addState({ { 2 },{ 2 } }, FINAL_ST);
 
 		fa.determinize();
 		fa.removeDeadStates();
@@ -337,7 +337,7 @@ public:
 
 		fa.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
-		fa.addState({ { 2 },{ 1 } }, FINAL);
+		fa.addState({ { 2 },{ 1 } }, FINAL_ST);
 
 		fa.determinize();
 		fa.removeDeadStates();
@@ -359,13 +359,13 @@ public:
 		fa.addTerminal("a");
 		fa.addTerminal("b");
 
-		/*A*/fa.addState({ { 6 },{ 1 } }, FINAL);
+		/*A*/fa.addState({ { 6 },{ 1 } }, FINAL_ST);
 		/*B*/fa.addState({ { 5 },{ 4 } }, REGULAR);
 		/*C*/fa.addState({ { 2 },{ 6 } }, REGULAR);
-		/*D*/fa.addState({ { 0 },{ 7 } }, FINAL);
+		/*D*/fa.addState({ { 0 },{ 7 } }, FINAL_ST);
 		/*E*/fa.addState({ { "4" },{ "0" } }, REGULAR);
 		/*F*/fa.addState({ { 1 },{ 2 } }, REGULAR);
-		/*G*/fa.addState({ { 6 },{ 5 } }, FINAL);
+		/*G*/fa.addState({ { 6 },{ 5 } }, FINAL_ST);
 		/*H*/fa.addState({ { 7 },{ 3 } }, REGULAR);
 		
 
@@ -387,7 +387,7 @@ public:
 
 		fa.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
 		fa.addState({ { 2 },{ 2 } }, REGULAR);
-		fa.addState({ { 2 },{ 1 } }, FINAL);
+		fa.addState({ { 2 },{ 1 } }, FINAL_ST);
 
 		FA fa2 = FA();
 
@@ -396,9 +396,21 @@ public:
 
 		fa2.addState({ { 0, 1 },{ 1, 2 } }, REGULAR);
 		fa2.addState({ { 2 },{ 2 } }, REGULAR);
-		fa2.addState({ { 2 },{ 1 } }, FINAL);
+		fa2.addState({ { 2 },{ 1 } }, FINAL_ST);
 
 		fa.faUnion(fa2);
+	}
+
+	TEST_METHOD(complement_fa)
+	{
+		fa.addTerminal("a");
+		fa.addTerminal("b");
+
+		fa.addState({ { "1" },{ "2" } }, REGULAR);
+		fa.addState({ { "2" },{ "2" } }, REGULAR);
+		fa.addState({ { "2" },{ "1" } }, FINAL_ST);
+
+		fa.faComplement();
 	}
 
 	static FA fa;

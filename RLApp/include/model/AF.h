@@ -193,6 +193,10 @@ public:
 	////////////////////////////////////////////////////////////
 	bool minimizeDeterministic();
 
+	FA faUnion(FA fa);
+
+	FA faComplement();
+
 
 	////////////////////////////////////////////////////////////
 	/// UTILS
@@ -245,7 +249,7 @@ public:
 	////////////////////////////////////////////////////////////
 	QVector<TR> getEStateClosure(FAState state);
 
-	FA faUnion(FA fa);
+
 
 private:
 	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
