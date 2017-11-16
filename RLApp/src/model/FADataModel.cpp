@@ -15,8 +15,15 @@ FADataModel::FADataModel(FA * fa, QObject * parent):
 
 int FADataModel::rowCount(const QModelIndex& parent) const
 {
-
-		return _states.size()+1;
+	if (determinized)
+	{
+		return _states_determinized.size() + 1;
+	}
+	else
+	{
+		return _states.size() + 1;
+	}
+	
 
 }
 
@@ -29,111 +36,188 @@ int FADataModel::columnCount(const QModelIndex & parent) const
 
 QVariant FADataModel::data(const QModelIndex & index, int role) const
 {
-	//if (_terminals.size() == 0)
-	//	return QVariant();
-	if (role == Qt::DisplayRole) {
 
-		if (index.column() == 0)
-		{
-			if (index.row() == 0)
-			{
-				return "States";
-			}
-
-			return _states[index.row()-1]._state_name;
-			//return _map->keys().at(index.row());
-		}
-		if (index.column() > 0)
-		{
-			if (index.row() == 0)
-			{
-				return _terminals[index.column()-1];
-			}
-			TR transition;
-			if (_states[index.row() - 1]._transitions.size() > 0)
-			{
-				transition = _states[index.row() - 1]._transitions.at(index.column() - 1);
-
-			}
-
-			return transitionToStr(transition);
-			//return _map->values().at(index.row()).at(index.column());
-		}
-	}
-	else if (role == Qt::BackgroundRole)
+	if (determinized)
 	{
-		if (index.row() != 0)
-		{
-			if (_states[index.row() - 1]._type & FINAL)  //change background only for cell(1,2)
+		if (role == Qt::DisplayRole) {
+
+			if (index.column() == 0)
 			{
-				QBrush redBackground(Qt::red);
-				return redBackground;
+				if (index.row() == 0)
+				{
+					return "States";
+				}
+
+				return _states_determinized[index.row() - 1]._state_name;
+				//return _map->keys().at(index.row());
+			}
+			if (index.column() > 0)
+			{
+				if (index.row() == 0)
+				{
+					return _terminals[index.column() - 1];
+				}
+				TR transition;
+				if (_states_determinized[index.row() - 1]._transitions.size() > 0)
+				{
+					transition = _states_determinized[index.row() - 1]._transitions.at(index.column() - 1);
+
+				}
+
+				return transitionToStr(transition);
+				//return _map->values().at(index.row()).at(index.column());
+			}
+		}
+		else if (role == Qt::BackgroundRole)
+		{
+			if (index.row() != 0)
+			{
+				if (_states_determinized[index.row() - 1]._type & FINAL)  //change background only for cell(1,2)
+				{
+					QBrush redBackground(Qt::red);
+					return redBackground;
+				}
 			}
 		}
 
+		return QVariant();
 	}
+	else
+	{
+		if (role == Qt::DisplayRole) {
 
-	//if (index.column() == 0)
-	//	return _map->values().at(index.row());
-	//if (index.column() == 1)
-	//	return _map->values().at(index.row());
-	return QVariant();
+			if (index.column() == 0)
+			{
+				if (index.row() == 0)
+				{
+					return "States";
+				}
+
+				return _states[index.row() - 1]._state_name;
+				//return _map->keys().at(index.row());
+			}
+			if (index.column() > 0)
+			{
+				if (index.row() == 0)
+				{
+					return _terminals[index.column() - 1];
+				}
+				TR transition;
+				if (_states[index.row() - 1]._transitions.size() > 0)
+				{
+					transition = _states[index.row() - 1]._transitions.at(index.column() - 1);
+
+				}
+
+				return transitionToStr(transition);
+				//return _map->values().at(index.row()).at(index.column());
+			}
+		}
+		else if (role == Qt::BackgroundRole)
+		{
+			if (index.row() != 0)
+			{
+				if (_states[index.row() - 1]._type & FINAL)  //change background only for cell(1,2)
+				{
+					QBrush redBackground(Qt::red);
+					return redBackground;
+				}
+			}
+
+		}
+
+		return QVariant();
+	}
+	
 }
 
 bool FADataModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-
-	//if (_terminals.size())
-	//	return false;
-	//if (index.row() < 0 ||
-	//	index.row() >= _states.size()/* ||
-	//	role != Qt::DisplayRole*/) {
-	//	return false;
-	//}
-
-	if (role == Qt::EditRole)
+	if (determinized)
 	{
-		
-		if (index.column() == 0)
+		if (role == Qt::EditRole)
 		{
-			if (index.row() == 0)
+
+			if (index.column() == 0)
 			{
+				if (index.row() == 0)
+				{
 
-				_terminals[0] = value.toString();
+					_terminals[0] = value.toString();
 
-				emit dataChanged(index, index);
+					emit dataChanged(index, index);
+					return true;
+				}
+
+				_states_determinized[index.row()]._state_name = value.toString();
 				return true;
+				//return _map->keys().at(index.row());
 			}
-			
-			_states[index.row()]._state_name = value.toString();
-			return true;
-			//return _map->keys().at(index.row());
-		}
-		if (index.column() >= 0)
-		{
-			if (index.row() == 0)
+			if (index.column() >= 0)
 			{
-				_terminals[index.column()] = value.toString();
+				if (index.row() == 0)
+				{
+					_terminals[index.column()] = value.toString();
+					emit dataChanged(index, index);
+
+					return true;
+				}
+				value.toString().replace(" ", "");
+
+				QList<QString> str_list = value.toString().split(",", QString::SkipEmptyParts);
+				TR transition = str_list.toVector();
+				_states_determinized[index.row() - 1]._transitions[index.column() - 1] = transition;
 				emit dataChanged(index, index);
 
 				return true;
+				//return _map->values().at(index.row()).at(index.column());
 			}
-			value.toString().replace(" ", "");
-
-			QList<QString> str_list = value.toString().split(",", QString::SkipEmptyParts);
-			TR transition = str_list.toVector();
-			_states[index.row()-1]._transitions[index.column()-1] = transition;
-			emit dataChanged(index, index);
-
-			return true;
-			//return _map->values().at(index.row()).at(index.column());
 		}
+		return false;
 	}
-	//if (index.column() == 0)
-	//	return _map->values().at(index.row());
-	//if (index.column() == 1)
-	//	return _map->values().at(index.row());
-	return false;
+	else
+	{
+		if (role == Qt::EditRole)
+		{
+
+			if (index.column() == 0)
+			{
+				if (index.row() == 0)
+				{
+
+					_terminals[0] = value.toString();
+
+					emit dataChanged(index, index);
+					return true;
+				}
+
+				_states[index.row()]._state_name = value.toString();
+				return true;
+				//return _map->keys().at(index.row());
+			}
+			if (index.column() >= 0)
+			{
+				if (index.row() == 0)
+				{
+					_terminals[index.column()] = value.toString();
+					emit dataChanged(index, index);
+
+					return true;
+				}
+				value.toString().replace(" ", "");
+
+				QList<QString> str_list = value.toString().split(",", QString::SkipEmptyParts);
+				TR transition = str_list.toVector();
+				_states[index.row() - 1]._transitions[index.column() - 1] = transition;
+				emit dataChanged(index, index);
+
+				return true;
+				//return _map->values().at(index.row()).at(index.column());
+			}
+		}
+		return false;
+	}
+
 }
 
 bool FADataModel::insertRows(int row, int count, const QModelIndex & parent)

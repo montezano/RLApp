@@ -279,9 +279,10 @@ protected:
 	QVector<VT> _terminals;
 	QVector<FAState> _states;
 	QVector<DetFAState> _states_determinized;
-	QMap<QString, TR> _state_name_map;
+	//QMap<QString, TR> _state_name_map;
 	FAState* _null_state;
 	int _last_state_number_add;
+	bool determinized;
 
 	//MapModel map;
 

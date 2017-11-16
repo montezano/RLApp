@@ -3,7 +3,8 @@
 FA::FA() :
 	_terminals(),
 	_states(),
-	_last_state_number_add(0)
+	_last_state_number_add(0),
+	determinized(false)
 {
 	_null_state = new FAState(this, "NULL", 0x0);
 	//_terminals << "Trans";
@@ -228,7 +229,7 @@ bool FA::determinize()
 		}
 	}
 	
-	
+	determinized = true;
 	return true;
 }
 
@@ -509,24 +510,24 @@ FA* FA::faUnion(FA& fa)
 
 	for (DetFAState& state : _states_determinized)
 	{
-		state._state_name.prepend("A-");
+		state._state_name.prepend("A");
 		for (TR& transitions : state._transitions)
 		{
 			for (NT& transition : transitions)
 			{
-				transition.prepend("A-");
+				transition.prepend("A");
 			}
 		}
 	}
 
 	for (DetFAState& state : fa.getDetStates())
 	{
-		state._state_name.prepend("B-");
+		state._state_name.prepend("B");
 		for (TR& transitions : state._transitions)
 		{
 			for (NT& transition : transitions)
 			{
-				transition.prepend("B-");
+				transition.prepend("B");
 			}
 		}
 	}
@@ -560,31 +561,32 @@ FA* FA::faUnion(FA& fa)
 	DetFAState init_st_fa1 = getInitialDetState();
 
 	new_init_st._parent= init_st_fa1._parent;
-	new_init_st._state_name = getInitialDetState()._state_name + fa.getInitialDetState()._state_name;
+	new_init_st._state_name = /*getInitialDetState()._state_name + "-" + fa.getInitialDetState()._state_name*/"C0";
+
 
 	for (int i = 0; i < init_st_fa1._transitions.size(); i++)
 	{
 		new_init_st._transitions[new_terminals.indexOf(_terminals[i])] << init_st_fa1._transitions[i];
 	}
 
-	////////////////////////////////////
-	DetFAState init_st_fa2 = fa.getInitialDetState();
+	//////////////////////////////////////
+	//DetFAState init_st_fa2 = fa.getInitialDetState();
 
-	new_init_st._parent = init_st_fa2._parent;
+	//new_init_st._parent = init_st_fa2._parent;
 
-	for (int i = 0; i < init_st_fa2._transitions.size(); i++)
-	{
-		new_init_st._transitions[new_terminals.indexOf(_terminals[i])] << init_st_fa2._transitions[i];
-	}
+	//for (int i = 0; i < init_st_fa2._transitions.size(); i++)
+	//{
+	//	new_init_st._transitions[new_terminals.indexOf(_terminals[i])] << init_st_fa2._transitions[i];
+	//}
 
-	///////////////////////////////////////////////
-	new_init_st._type = init_st_fa2._type | init_st_fa2._type;
+	/////////////////////////////////////////////////
+	//new_init_st._type = init_st_fa2._type | init_st_fa2._type;
 
-	for (int i = 0; i < fa.getInitialDetState()._transitions.size(); i++)
-	{
-		new_init_st._transitions[i] << fa.getInitialDetState()._transitions[i];
-	}
-	//new_init_st._transitions << fa.getInitialDetState()._transitions;
+	//for (int i = 0; i < fa.getInitialDetState()._transitions.size(); i++)
+	//{
+	//	new_init_st._transitions[i] << fa.getInitialDetState()._transitions[i];
+	//}
+	////new_init_st._transitions << fa.getInitialDetState()._transitions;
 
 	united_fa->addState(new_init_st);
 
