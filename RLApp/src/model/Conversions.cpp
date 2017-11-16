@@ -196,6 +196,10 @@ TR Conversions::createTransition(QVector<Node*> di_simone_composition, VT termin
 
 StateType Conversions::getStateType(QVector<Node*> di_simone_composition)
 {
+	if (di_simone_composition.size() == 0)
+	{
+		return FINAL_ST;
+	}
 	for (Node* node : di_simone_composition)
 	{
 		if (node->symbol == PILE_END)

@@ -222,6 +222,19 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QLabel" name="lbl_re_equiv_result">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>180</y>
+          <width>47</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">

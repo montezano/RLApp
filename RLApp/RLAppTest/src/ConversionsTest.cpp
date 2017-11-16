@@ -50,6 +50,28 @@ public:
 		}
 	}
 
+	TEST_METHOD(re_to_fa_conversion_2)
+	{
+		re.setReString("abc");
+
+		fa = Conversions::reToFA(re);
+		fa->determinize();
+		QVector<DetFAState> det_fa = fa->getDetStates();
+
+		QVector<QString> valid_states = { "0", "1-4", "2", "3" };
+
+		bool result = false;
+		for (DetFAState state : det_fa)
+		{
+			if (state._state_name == "3" && (state._type & (FINAL)))
+			{
+				result = true;
+			}
+		}
+		
+		Assert::IsTrue(result);
+	}
+
 	TEST_METHOD(rg_to_fa)
 	{
 		rg.addProduction("S", "a");

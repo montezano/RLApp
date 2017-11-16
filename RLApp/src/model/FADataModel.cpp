@@ -16,7 +16,7 @@ FADataModel::FADataModel(FA * fa, QObject * parent):
 int FADataModel::rowCount(const QModelIndex& parent) const
 {
 
-		return _states.size();
+		return _states.size()+1;
 
 }
 
@@ -49,7 +49,12 @@ QVariant FADataModel::data(const QModelIndex & index, int role) const
 			{
 				return _terminals[index.column()-1];
 			}
-			TR transition = _states[index.row()-1]._transitions.at(index.column()-1);
+			TR transition;
+			if (_states[index.row() - 1]._transitions.size() > 0)
+			{
+				transition = _states[index.row() - 1]._transitions.at(index.column() - 1);
+
+			}
 
 			return transitionToStr(transition);
 			//return _map->values().at(index.row()).at(index.column());
@@ -57,11 +62,15 @@ QVariant FADataModel::data(const QModelIndex & index, int role) const
 	}
 	else if (role == Qt::BackgroundRole)
 	{
-		if (_states[index.row()]._type & FINAL)  //change background only for cell(1,2)
+		if (index.row() != 0)
 		{
-			QBrush redBackground(Qt::red);
-			return redBackground;
+			if (_states[index.row() - 1]._type & FINAL)  //change background only for cell(1,2)
+			{
+				QBrush redBackground(Qt::red);
+				return redBackground;
+			}
 		}
+
 	}
 
 	//if (index.column() == 0)

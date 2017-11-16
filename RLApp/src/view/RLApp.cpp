@@ -116,6 +116,9 @@ void RLApp::onNotify(void * entity, Events event)
 
 		//fa_model->setData(*(QString*)entity);
 		break;
+	case RE_EQUIVALENCE_RESULT:
+		(*(bool*)entity?ui.lbl_re_equiv_result->setText("true"):
+			ui.lbl_re_equiv_result->setText("false"));
 	}
 }
 
@@ -133,12 +136,14 @@ void RLApp::reToFa()
 
 void RLApp::reUnion()
 {
-	notify((void*)ui.line_re, RE_UNION);
+	QString* ret_str = &ui.line_re_2->text();
+	notify((void*)ret_str, RE_UNION);
 }
 
 void RLApp::reIntersection()
 {
-	notify((void*)ui.line_re, RE_INTERSECTION);
+	QString* ret_str = &ui.line_re_2->text();
+	notify((void*)ret_str, RE_INTERSECTION);
 }
 
 void RLApp::reComplement()
@@ -148,7 +153,8 @@ void RLApp::reComplement()
 
 void RLApp::reEquivalence()
 {
-	notify((void*)ui.line_re, RE_EQUIVALENCE);
+	QString* ret_str = &ui.line_re_2->text();
+	notify((void*)ret_str, RE_EQUIVALENCE);
 }
 
 void RLApp::rgToFa()

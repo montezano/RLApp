@@ -204,6 +204,8 @@ public:
 
 	FA* faIntersection(FA fa);
 
+	bool faEquivalent(FA fa);
+
 
 	////////////////////////////////////////////////////////////
 	/// UTILS

@@ -134,7 +134,7 @@ DetFAState & FA::getInitialDetState()
 			return state;
 		}
 	}
-	return _states_determinized[0];
+	return DetFAState();
 	// TODO: insert return statement here
 }
 
@@ -180,9 +180,11 @@ bool FA::isInfinite()
 bool FA::determinize()
 {
 	removeETransition();
+	FAState old_ini_state = getInitialState();
 	DetFAState ini_state = DetFAState(this,
-								_states[0]._state_name,
-								_states[0]._transitions, _states[0]._type);
+							old_ini_state._state_name,
+							old_ini_state._transitions,
+							old_ini_state._type);
 	_states_determinized << ini_state;
 
 	QMap<QString, bool> new_states;		/// < QString: state name;
@@ -532,14 +534,51 @@ FA* FA::faUnion(FA& fa)
 
 
 	FA* united_fa = new FA();
+
+	QVector<VT> new_terminals;
+
+	for (VT term : _terminals)
+	{
+		if (!new_terminals.contains(term))
+		{
+			new_terminals << term;
+		}
+	}
+
+	for (VT term : fa.getTerminals())
+	{
+		if (!new_terminals.contains(term))
+		{
+			new_terminals << term;
+		}
+	}
 	
+	united_fa->setTerminals(new_terminals);
 	FAState new_init_st;
+	new_init_st._transitions.resize(new_terminals.size());
+	////////////////////////////////////////
 	DetFAState init_st_fa1 = getInitialDetState();
 
 	new_init_st._parent= init_st_fa1._parent;
-	new_init_st._state_name = "A-B-0";
-	new_init_st._transitions = init_st_fa1._transitions;
-	new_init_st._type = init_st_fa1._type;
+	new_init_st._state_name = getInitialDetState()._state_name + fa.getInitialDetState()._state_name;
+
+	for (int i = 0; i < init_st_fa1._transitions.size(); i++)
+	{
+		new_init_st._transitions[new_terminals.indexOf(_terminals[i])] << init_st_fa1._transitions[i];
+	}
+
+	////////////////////////////////////
+	DetFAState init_st_fa2 = fa.getInitialDetState();
+
+	new_init_st._parent = init_st_fa2._parent;
+
+	for (int i = 0; i < init_st_fa2._transitions.size(); i++)
+	{
+		new_init_st._transitions[new_terminals.indexOf(_terminals[i])] << init_st_fa2._transitions[i];
+	}
+
+	///////////////////////////////////////////////
+	new_init_st._type = init_st_fa2._type | init_st_fa2._type;
 
 	for (int i = 0; i < fa.getInitialDetState()._transitions.size(); i++)
 	{
@@ -551,12 +590,40 @@ FA* FA::faUnion(FA& fa)
 
 	for (DetFAState& state : _states_determinized)
 	{
-		united_fa->addState(DetFAState(state));
+		DetFAState new_state;
+		new_state._transitions.resize(new_terminals.size());
+		if (state._type & INITIAL)
+		{
+			state._type &= ~(INITIAL);
+		}
+		for (int i = 0; i < state._transitions.size(); i++)
+		{
+			new_state._transitions[new_terminals.indexOf(_terminals[i])] << state._transitions[i];
+		}
+		new_state._parent = state._parent;
+		new_state._state_name = state._state_name;
+		new_state._type = state._type;
+
+		united_fa->addState(new_state);
 	}
 
 	for (DetFAState& state : fa.getDetStates())
 	{
-		united_fa->addState(DetFAState(state));
+		DetFAState new_state;
+		new_state._transitions.resize(new_terminals.size());
+		if (state._type & INITIAL)
+		{
+			state._type &= ~(INITIAL);
+		}
+		for (int i = 0; i < state._transitions.size(); i++)
+		{
+			new_state._transitions[new_terminals.indexOf(fa.getTerminals()[i])] << state._transitions[i];
+		}
+		new_state._parent = state._parent;
+		new_state._state_name = state._state_name;
+		new_state._type = state._type;
+
+		united_fa->addState(new_state);
 	}
 
 	return united_fa;
@@ -602,6 +669,40 @@ FA* FA::faIntersection(FA fa)
 	fa2_comp->determinize();
 
 	return fa1_comp->faUnion(*fa2_comp);
+}
+
+bool FA::faEquivalent(FA fa)
+{
+	FA* fa1 = new FA(fa);
+	fa1->determinize();
+	fa1->minimizeDeterministic();
+
+	FA* fa1_comp = fa1->faComplement();
+	fa1_comp->determinize();
+	fa1_comp->minimizeDeterministic();
+
+	FA* fa2 = new FA(*this);
+	fa2->determinize();
+	fa2->minimizeDeterministic();
+
+	FA* fa2_comp = fa2->faComplement();
+	fa2_comp->determinize();
+	fa2_comp->minimizeDeterministic();
+	
+	FA* fa1_int_cfa2 = fa1->faIntersection(*fa2_comp);
+	fa1_int_cfa2->determinize();
+	fa1_int_cfa2->minimizeDeterministic();
+
+	FA* fa2_int_cfa1 = fa2->faIntersection(*fa1_comp);
+	fa2_int_cfa1->determinize();
+	fa2_int_cfa1->minimizeDeterministic();
+
+	bool ret = fa1_int_cfa2->isEmpty();
+	ret &= fa2_int_cfa1->isEmpty();
+
+
+
+	return ret;
 }
 
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)

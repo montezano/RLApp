@@ -292,11 +292,18 @@ void RE::operationOption(Direction direction, Node * node, Node* last_node)
 	switch (direction)
 	{
 	case UP:
-		decideOperation(direction, node->parent, node);
+		if (node->parent == NULL)
+		{
+			_di_simone_composition << f_node;
+		}
+		else
+		{
+			decideOperation(direction, node->parent, node);
+		}
 		break;
 	case DOWN:
 		decideOperation(direction, node->left_children, node);
-		if (node->parent == NULL)
+		if (node->parent == f_node)
 		{
 			_di_simone_composition << f_node;
 		}
@@ -377,7 +384,14 @@ void RE::operationConjunction(Direction direction, Node * node, Node* last_node)
 		}
 		else if (last_node == node->right_children)
 		{
-			decideOperation(direction, node->parent, node);
+			if (node->parent == NULL)
+			{
+				_di_simone_composition << f_node;
+			}
+			else
+			{
+				decideOperation(direction, node->parent, node);
+			}
 		}
 		
 		break;
@@ -409,7 +423,7 @@ void RE::operatetionTerminals(Direction direction, Node * node, Node* last_node)
 			}
 			else if (node == node->parent->right_children)
 			{
-				decideOperation(direction, node->parent->parent, node);
+				decideOperation(direction, node->parent->parent, node->parent);
 			}
 			
 		}
