@@ -2,9 +2,13 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_RLApp.h"
+#include "ui_AddFA.h"
 
+#include "model/FADataModel.h"
 #include "view\AddReWindow.h"
 #include "view\AddRgWindow.h"
+#include "view\AddFaWindow.h"
+#include "view/AddFATerminalWindow.h"
 #include "util\Subject.h"
 #include "util\Observer.h"
 
@@ -16,15 +20,41 @@ class RLApp : public QMainWindow, public Observer, public Subject
 
 public:
 	RLApp(QWidget *parent = Q_NULLPTR);
-	RLApp(Observer* observer, QWidget *parent = Q_NULLPTR);
+	RLApp(Observer* observer, FADataModel* fa_data, QWidget *parent = Q_NULLPTR);
 	void initializeObservers(Observer* observer);
+	void configureCallbacks();
 
 	virtual void onNotify(void *data, Events event);
 
 
 public slots:
 	// Window calls
-	void callAddREWindow();
+	void reToFa();
+	void reUnion();
+	void reIntersection();
+	void reComplement();
+	void reEquivalence();
+
+
+	void rgToFa();
+	void rgUnion();
+	void rgIntersection();
+	void rgComplement();
+	void rgEquivalence();
+
+	void faUnion();
+	void faIntersection();
+	void faComplement();
+	void faEquivalence();
+	void faDeterminization();
+	void faMinimization();
+	void faInsertTransitionName();
+	void faRemoveTransitionName();
+	void faInsertTransition();
+	void faRemoveTransition();
+
+	void callAddFAStatesWindow();
+	void callAddFATerminWindow();
 	void callAddRGWindow();
 	void callAddFAWindow();
 	
@@ -39,6 +69,11 @@ private:
 	Ui::RLAppClass ui;
 	AddReWindow* _add_re_window;
 	AddRgWindow* _add_rg_window;
+	AddFaWindow* _add_fa_window;
+	Ui::AddFA* _add_fa_state;
+	AddFATerminalWindow* _add_fa_terminals_w;
+
+	FADataModel* fa_model;
 
 
 

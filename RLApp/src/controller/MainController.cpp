@@ -2,8 +2,10 @@
 
 MainController::MainController()
 {
-	_main_window = new RLApp();
-	_model_controller = new ModelController(_main_window);
+	FADataModel* fa = new FADataModel();
+	
+	_model_controller = new ModelController(_main_window, fa);
+	_main_window = new RLApp(_model_controller, fa);
 }
 
 MainController::~MainController()
@@ -28,18 +30,18 @@ void MainController::onNotify(void * data, Events event)
 {
 	switch (event)
 	{
-	case ADD_REGULAR_GRAMMAR:
-		//msg = "blah";
-		//notify(&msg, Events::ANOTAAI)
-		notify(data, event);
-		break;
-		
-	case ADD_REGULAR_EXPRESSION:
-		notify(data, event);
-		break;
+	//case ADD_REGULAR_GRAMMAR:
+	//	//msg = "blah";
+	//	//notify(&msg, Events::ANOTAAI)
+	//	notify(data, event);
+	//	break;
+	//	
+	//case ADD_REGULAR_EXPRESSION:
+	//	notify(data, event);
+	//	break;
 
-	case ADD_FINITE_AUTOMATA:
-		break;
+	//case ADD_FINITE_AUTOMATA:
+	//	break;
 	}
 }
 

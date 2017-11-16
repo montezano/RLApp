@@ -26,10 +26,12 @@ public:
 	TEST_METHOD_INITIALIZE(MethodInitialize)
 	{
 		re = RE();
+		fa = new FA();
 	}
 
 	TEST_METHOD_CLEANUP(MethodCleanup)
 	{
+		delete fa;
 	}
 
 	TEST_METHOD(re_to_fa_conversion)
@@ -37,8 +39,8 @@ public:
 		re.setReString("a(a|b)|a");
 
 		fa = Conversions::reToFA(re);
-		fa.determinize();
-		QVector<DetFAState> det_fa = fa.getDetStates();
+		fa->determinize();
+		QVector<DetFAState> det_fa = fa->getDetStates();
 
 		QVector<QString> valid_states = { "0", "1-4", "2", "3" };
 
@@ -59,7 +61,7 @@ public:
 
 		fa = Conversions::grToFA(rg);
 
-		QVector<FAState> states = fa.getStates();
+		QVector<FAState> states = fa->getStates();
 		Assert::IsTrue("0" == states[0]._state_name);
 		Assert::IsTrue(states[0]._transitions[0].size() == 0 );
 		Assert::IsTrue(states[0]._transitions[1][0] == "2");
@@ -72,11 +74,11 @@ public:
 
 
 	static RE re;
-	static FA fa;
+	static FA* fa;
 	static RG rg;
 };
 
 RE ConversionsTest::re;
-FA ConversionsTest::fa;
+FA* ConversionsTest::fa = NULL;
 RG ConversionsTest::rg;
 #endif // !__RETEST_H__

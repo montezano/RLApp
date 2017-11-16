@@ -130,6 +130,27 @@
     <ClCompile Include="src\model\RG.cpp">
       <Filter>Source Files\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\model\FADataModel.cpp">
+      <Filter>Source Files\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\AddFaWindow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AddFaWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AddFaWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_AddFATerminalWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_AddFATerminalWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\AddFATerminalWindow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -156,11 +177,20 @@
     <CustomBuild Include="include\model\MapModel.h">
       <Filter>Header Files\model</Filter>
     </CustomBuild>
+    <CustomBuild Include="ui\AddFA.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\AddFaWindow.h">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\AddFAterminals.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\AddFATerminalWindow.h">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_RLApp.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_AddRE.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -199,6 +229,15 @@
     </ClInclude>
     <ClInclude Include="include\model\RG.h">
       <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="include\model\FADataModel.h">
+      <Filter>Header Files\model</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_AddFA.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_AddFAterminals.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

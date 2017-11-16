@@ -3,21 +3,25 @@
 
 #include "model/RE.h"
 #include "model/AF.h"
+#include "model/RG.h"
+#include "model/FADataModel.h"
 #include "util/Observer.h"
 
-class ModelController
+class ModelController : public Observer
 {
 public:
 	ModelController();
-	ModelController(Observer* observer);
+	ModelController(Observer* observer, FADataModel* fa_data);
 	~ModelController();
 
 	bool updateRE();
 
+	virtual void onNotify(void * entity, Events event);
+
 private:
 	RE _re;
-	//GR _gr;
-	FA _fa;
+	RG _rg;
+	FADataModel* _fa;
 
 };
 

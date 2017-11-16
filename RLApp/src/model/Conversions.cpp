@@ -1,15 +1,15 @@
 #include "model/Conversions.h"
 
-FA Conversions::reToFA(RE re)
+FA* Conversions::reToFA(RE re)
 {
-	FA fa = FA();
+	FA* fa = new FA();
 
 	re.parse();
 	QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
-	QVector<VT> terminals = getTerminals(fa, di_simone_composition);
+	QVector<VT> terminals = getTerminals(*fa, di_simone_composition);
 
 	terminals.append("&");
-	fa.setTerminals(terminals);
+	fa->setTerminals(terminals);
 	QVector<Node*> composition = re.initialDiSimonePath();
 
 
@@ -30,7 +30,7 @@ FA Conversions::reToFA(RE re)
 			}
 		}
 	}
-	last_state_add = fa.addState(st_transitions, getStateType(composition));
+	last_state_add = fa->addState(st_transitions, getStateType(composition));
 
 
 	//basic states (q1, q2, q3...)
@@ -51,7 +51,7 @@ FA Conversions::reToFA(RE re)
 			}
 		}
 
-		last_state_add = fa.addState(st_transitions, getStateType(composition));
+		last_state_add = fa->addState(st_transitions, getStateType(composition));
 	}
 
 	//composite non deterministic states (q1q2, q213, ...)
@@ -70,13 +70,13 @@ FA Conversions::reToFA(RE re)
 			}
 		}
 
-		last_state_add = fa.addState(st_transitions, getStateType(composition));
+		last_state_add = fa->addState(st_transitions, getStateType(composition));
 	}
 
 	return fa;
 }
 
-FA Conversions::grToFA(RG rg)
+FA* Conversions::grToFA(RG rg)
 {
 	QVector<VT> terminals;
 	QString final_state = "$$$";
@@ -86,7 +86,7 @@ FA Conversions::grToFA(RG rg)
 
 	int st_count = 1;
 	QList<PLeft> p_left = rg.getProductionLeft();
-	FA fa = FA();
+	FA* fa = new FA();
 
 	QMap<QString, QPair<VT, QString>> transitions_map;
 
@@ -124,7 +124,7 @@ FA Conversions::grToFA(RG rg)
 		}
 	}
 	states_map << final_state;
-	fa.setTerminals(terminals);
+	fa->setTerminals(terminals);
 
 	for (auto key : states_map)
 	{
@@ -138,7 +138,7 @@ FA Conversions::grToFA(RG rg)
 				new_trans[terminals.indexOf(transition.first)] << QString::number(states_map.indexOf(transition.second));
 			}
 		}
-		fa.addState(new_trans, (key == "$$$" ? FINAL_ST : REGULAR));
+		fa->addState(new_trans, (key == "$$$" ? FINAL_ST : REGULAR));
 	}
 	/*QVector<TR> trans;
 	trans.resize(terminals.size());*/

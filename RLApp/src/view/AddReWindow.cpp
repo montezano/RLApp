@@ -12,6 +12,6 @@ AddReWindow::AddReWindow(QWidget *parent)
 void AddReWindow::acceptedRE()
 {
 	
-	notify((void*)&(ui.lineEdit->text()), Events::ADD_REGULAR_EXPRESSION);
+	//notify((void*)&(ui.lineEdit->text()), Events::ADD_REGULAR_EXPRESSION);
 
 }

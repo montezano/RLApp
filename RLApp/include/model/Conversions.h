@@ -11,9 +11,9 @@ public:
 	//Conversions();
 	//~Conversions();
 	
-	static FA reToFA(RE re);
+	static FA* reToFA(RE re);
 
-	static FA grToFA(RG rg);
+	static FA* grToFA(RG rg);
 private:
 	static QVector<VT> getTerminals(FA& fa, QVector<Node*> di_simone_composition);
 	static QString compositionToString(QVector<Node*> di_simone_composition);

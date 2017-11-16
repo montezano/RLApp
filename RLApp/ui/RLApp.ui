@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
-    <height>518</height>
+    <width>797</width>
+    <height>416</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>781</width>
-      <height>491</height>
+      <width>861</width>
+      <height>501</height>
      </rect>
     </property>
     <property name="cursor">
@@ -32,264 +32,507 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QGroupBox" name="grp_box_re">
+    <widget class="QFrame" name="frame">
      <property name="geometry">
       <rect>
-       <x>269</x>
-       <y>29</y>
-       <width>341</width>
-       <height>51</height>
+       <x>10</x>
+       <y>0</y>
+       <width>771</width>
+       <height>391</height>
       </rect>
      </property>
-     <property name="title">
-      <string>Regular Expression</string>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
      </property>
-     <widget class="QLineEdit" name="line_re">
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <widget class="QTabWidget" name="tabWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>20</y>
-        <width>321</width>
-        <height>21</height>
+        <y>10</y>
+        <width>751</width>
+        <height>371</height>
        </rect>
       </property>
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="tab_re">
+       <attribute name="title">
+        <string>Regular Expression</string>
+       </attribute>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>30</y>
+          <width>491</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Regular Expression</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="line_re"/>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="grp_box_opp">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>161</width>
+          <height>213</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Operations</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QPushButton" name="btn_op_re_to_fa">
+           <property name="text">
+            <string>RE to FA</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_union_re">
+           <property name="text">
+            <string>Union</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_int_re">
+           <property name="text">
+            <string>Intersection</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_comp_re">
+           <property name="text">
+            <string>Complement</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_equ_re">
+           <property name="text">
+            <string>Equivalence</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="groupBox_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>100</y>
+          <width>521</width>
+          <height>51</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>RE to operate</string>
+        </property>
+        <widget class="QWidget" name="layoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>491</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Regular Expression</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="line_re_2"/>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QPushButton" name="btn_add_re">
+        <property name="geometry">
+         <rect>
+          <x>540</x>
+          <y>60</y>
+          <width>141</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Add RE</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Regular Grammar</string>
+       </attribute>
+       <widget class="QTableView" name="table_rg">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>401</width>
+          <height>311</height>
+         </rect>
+        </property>
+        <property name="gridStyle">
+         <enum>Qt::SolidLine</enum>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>1</number>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>30</number>
+        </attribute>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>0</number>
+        </attribute>
+        <attribute name="verticalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+       </widget>
+       <widget class="QGroupBox" name="grp_box_opp_rg">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>161</width>
+          <height>213</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Operations</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QPushButton" name="btn_op_gr_to_fa">
+           <property name="text">
+            <string>GR to FA</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_union_rg">
+           <property name="text">
+            <string>Union</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_int_rg">
+           <property name="text">
+            <string>Intersection</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_comp_rg">
+           <property name="text">
+            <string>Complement</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_equ_rg">
+           <property name="text">
+            <string>Equivalence</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="gr_box_prod">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>100</y>
+          <width>101</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Production</string>
+        </property>
+        <widget class="QPushButton" name="btn_add_prod">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_rem_prod">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="gr_box_prod_name">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>10</y>
+          <width>101</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Production Name</string>
+        </property>
+        <widget class="QPushButton" name="btn_add_prod_name">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_rem_prod_name">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Finite Automata</string>
+       </attribute>
+       <widget class="QTableView" name="table_fa">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>20</y>
+          <width>401</width>
+          <height>311</height>
+         </rect>
+        </property>
+        <property name="gridStyle">
+         <enum>Qt::SolidLine</enum>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>1</number>
+        </attribute>
+        <attribute name="horizontalHeaderHighlightSections">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>30</number>
+        </attribute>
+        <attribute name="horizontalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>0</number>
+        </attribute>
+        <attribute name="verticalHeaderStretchLastSection">
+         <bool>true</bool>
+        </attribute>
+       </widget>
+       <widget class="QGroupBox" name="grp_box_opp_3">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>10</y>
+          <width>161</width>
+          <height>213</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Operations</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QPushButton" name="btn_op_union_fa">
+           <property name="text">
+            <string>Union</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_int_fa">
+           <property name="text">
+            <string>Intersection</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_comp_fa">
+           <property name="text">
+            <string>Complement</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_equi_fa">
+           <property name="text">
+            <string>Equivalence</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_min_fa">
+           <property name="text">
+            <string>AF Minimization</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_op_det_fa">
+           <property name="text">
+            <string>AF Determinization</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QGroupBox" name="gr_box_trans">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>100</y>
+          <width>101</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Transition</string>
+        </property>
+        <widget class="QPushButton" name="btn_add_trans">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_rem_trans">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="gr_box_trans_name">
+        <property name="geometry">
+         <rect>
+          <x>630</x>
+          <y>10</y>
+          <width>101</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Transition Name</string>
+        </property>
+        <widget class="QPushButton" name="btn_add_trans_name">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>20</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btn_rem_trans_name">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>75</width>
+           <height>23</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
      </widget>
     </widget>
-    <widget class="QGroupBox" name="grp_box_fa">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>180</y>
-       <width>281</width>
-       <height>271</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Finite Automata</string>
-     </property>
-     <widget class="QTableView" name="table_fa">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>261</width>
-        <height>241</height>
-       </rect>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::SolidLine</enum>
-      </property>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>1</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>30</number>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>0</number>
-      </attribute>
-      <attribute name="verticalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-     </widget>
-    </widget>
-    <widget class="QGroupBox" name="grp_box_rg">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>180</y>
-       <width>281</width>
-       <height>271</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Regular Grammar</string>
-     </property>
-     <widget class="QTableView" name="table_rg">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>20</y>
-        <width>261</width>
-        <height>241</height>
-       </rect>
-      </property>
-      <property name="gridStyle">
-       <enum>Qt::SolidLine</enum>
-      </property>
-      <property name="sortingEnabled">
-       <bool>true</bool>
-      </property>
-      <attribute name="horizontalHeaderDefaultSectionSize">
-       <number>1</number>
-      </attribute>
-      <attribute name="horizontalHeaderHighlightSections">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>30</number>
-      </attribute>
-      <attribute name="horizontalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>0</number>
-      </attribute>
-      <attribute name="verticalHeaderStretchLastSection">
-       <bool>true</bool>
-      </attribute>
-     </widget>
-    </widget>
+    <zorder>frame</zorder>
+    <zorder>tabWidget</zorder>
    </widget>
-   <widget class="QFrame" name="operations_frame">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>181</width>
-      <height>451</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="grp_box_add">
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Add Regular</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
-        <item>
-         <widget class="QPushButton" name="add_grammar_btn">
-          <property name="text">
-           <string>Grammar</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="add_exp_btn">
-          <property name="text">
-           <string>Expression</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="add_afd_btn">
-          <property name="text">
-           <string>Finite Automata</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="grp_box_opp">
-       <property name="title">
-        <string>Operations</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QPushButton" name="opp_re_to_fa">
-          <property name="text">
-           <string>RE to FA</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_opp_union">
-          <property name="text">
-           <string>Union</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="text">
-           <string>Intersection</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_5">
-          <property name="text">
-           <string>Complement</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_4">
-          <property name="text">
-           <string>AF Determinization</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_6">
-          <property name="text">
-           <string>Equivalence</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QGroupBox" name="grp_box_accept">
-       <property name="baseSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Acceptance</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_6">
-        <item>
-         <widget class="QPushButton" name="acc_check">
-          <property name="text">
-           <string>Grammar</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QMenuBar" name="menuBar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>794</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <widget class="QMenu" name="menuO_que">
-    <property name="title">
-     <string>O que</string>
-    </property>
-   </widget>
-   <addaction name="menuO_que"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

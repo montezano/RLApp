@@ -491,7 +491,7 @@ QVector<TR> FA::getEStateClosure(FAState state)
 	return getEStateClosure(state, QVector<NT>());
 }
 
-FA FA::faUnion(FA fa)
+FA* FA::faUnion(FA& fa)
 {
 	determinize();
 	minimizeDeterministic();
@@ -525,7 +525,7 @@ FA FA::faUnion(FA fa)
 
 
 
-	FA united_fa;
+	FA* united_fa = new FA();
 	
 	FAState new_init_st;
 	DetFAState init_st_fa1 = getInitialDetState();
@@ -541,46 +541,61 @@ FA FA::faUnion(FA fa)
 	}
 	//new_init_st._transitions << fa.getInitialDetState()._transitions;
 
-	united_fa.addState(new_init_st);
+	united_fa->addState(new_init_st);
 
 	for (DetFAState& state : _states_determinized)
 	{
-		united_fa.addState(DetFAState(state));
+		united_fa->addState(DetFAState(state));
 	}
 
 	for (DetFAState& state : fa.getDetStates())
 	{
-		united_fa.addState(DetFAState(state));
+		united_fa->addState(DetFAState(state));
 	}
-
-
-
 
 	return united_fa;
 }
 
-FA FA::faComplement()
+FA* FA::faComplement()
 {
-	FA ret_fa;
+	FA* ret_fa = new FA();
 
-	ret_fa.setTerminals(getTerminals());
+	ret_fa->setTerminals(getTerminals());
 	for (FAState state : _states)
 	{
 		if (state._type & FINAL)
 		{
 			FAState temp_state = FAState(this, state._state_name, (state._type & ~(FINAL)));
-			temp_state._transitions = state._transitions;
-			ret_fa.addState(temp_state);
+			temp_state._transitions.resize(state._transitions.size());
+			for (int i = 0; i < state._transitions.size(); i++)
+			{
+				temp_state._transitions[i] = state._transitions[i];
+			}
+			ret_fa->addState(temp_state);
 		}
 		else if (state._type & REGULAR)
 		{
 			FAState temp_state = FAState(this, state._state_name, (state._type | FINAL_ST));
-			temp_state._transitions = state._transitions;
-			ret_fa.addState(temp_state);
+			temp_state._transitions.resize(state._transitions.size());
+			for (int i = 0; i < state._transitions.size(); i++)
+			{
+				temp_state._transitions[i] = state._transitions[i];
+			}
+			ret_fa->addState(temp_state);
 		}
 	}
 
 	return ret_fa;
+}
+
+FA* FA::faIntersection(FA fa)
+{
+	FA* fa1_comp = faComplement();
+	fa1_comp->determinize();
+	FA* fa2_comp = fa.faComplement();
+	fa2_comp->determinize();
+
+	return fa1_comp->faUnion(*fa2_comp);
 }
 
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)
@@ -666,7 +681,7 @@ void FA::organizeTransition(TR& transition)
 	qSort(transition);
 }
 
-QString FA::transitionToStr(TR transition)
+QString FA::transitionToStr(TR transition) const
 {
 	QString ret;
 	for (auto tr : transition)
@@ -713,10 +728,15 @@ QVector<TR> FA::reachableStateFrom(TR transitions, QMap<QString, bool>& added)
 
 		for (auto tr : transitions)
 		{
-			for (NT nt : getState(tr)._transitions[i])
+			if (getState(tr)._state_name != _null_state->_state_name)
 			{
-				ret[i] << nt;
+				for (NT nt : getState(tr)._transitions[i])
+				{
+					ret[i] << nt;
+				}
+
 			}
+			
 		}
 		organizeTransition(ret[i]);
 		QString st_name = transitionToStr(ret[i]);

@@ -16,6 +16,9 @@ public:
 	FA();
 	~FA();
 
+
+	
+
 	////////////////////////////////////////////////////////////
 	/// ACCESS FUNCTIONS
 	////////////////////////////////////////////////////////////
@@ -193,9 +196,11 @@ public:
 	////////////////////////////////////////////////////////////
 	bool minimizeDeterministic();
 
-	FA faUnion(FA fa);
+	FA* faUnion(FA& fa);
 
-	FA faComplement();
+	FA* faComplement();
+
+	FA* faIntersection(FA fa);
 
 
 	////////////////////////////////////////////////////////////
@@ -251,12 +256,12 @@ public:
 
 
 
-private:
+protected:
 	bool findCicle(FAState current_state, FAState last_state, QVector<NT> visited);
 	QVector<TR> getEStateClosure(FAState state, QVector<NT> visited);
 	FAState findStateByName(NT state_name);
 	void organizeTransition(TR& transition);
-	QString transitionToStr(TR transition);
+	QString transitionToStr(TR transition) const;
 	TR strToTransition(QString transition);
 	//void determinizeState(FAState state);
 	QVector<TR> reachableStateFrom(TR transitions, QMap<QString, bool>& added);
