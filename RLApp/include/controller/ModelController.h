@@ -4,10 +4,11 @@
 #include "model/RE.h"
 #include "model/AF.h"
 #include "model/RG.h"
+#include "model/Conversions.h"
 #include "model/FADataModel.h"
 #include "util/Observer.h"
 
-class ModelController : public Observer
+class ModelController : public Observer, public Subject
 {
 public:
 	ModelController();
@@ -22,6 +23,7 @@ private:
 	RE _re;
 	RG _rg;
 	FADataModel* _fa;
+	FADataModel* _fa_temp;
 
 };
 

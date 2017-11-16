@@ -1,9 +1,16 @@
 #include "model/FADataModel.h"
+#include <QBrush> 
 
 FADataModel::FADataModel(QObject *parent) :
 	QAbstractTableModel(parent)
 {
 	
+}
+
+FADataModel::FADataModel(FA * fa, QObject * parent):
+	FA(*fa),
+	QAbstractTableModel(parent)
+{
 }
 
 int FADataModel::rowCount(const QModelIndex& parent) const
@@ -16,7 +23,7 @@ int FADataModel::rowCount(const QModelIndex& parent) const
 int FADataModel::columnCount(const QModelIndex & parent) const
 {
 
-		return _terminals.size();
+		return _terminals.size()+1;
 
 }
 
@@ -30,17 +37,17 @@ QVariant FADataModel::data(const QModelIndex & index, int role) const
 		{
 			if (index.row() == 0)
 			{
-				return _terminals[0];
+				return "States";
 			}
 
-			return _states[index.row()]._state_name;
+			return _states[index.row()-1]._state_name;
 			//return _map->keys().at(index.row());
 		}
 		if (index.column() > 0)
 		{
 			if (index.row() == 0)
 			{
-				return _terminals[index.column()];
+				return _terminals[index.column()-1];
 			}
 			TR transition = _states[index.row()-1]._transitions.at(index.column()-1);
 
@@ -48,6 +55,15 @@ QVariant FADataModel::data(const QModelIndex & index, int role) const
 			//return _map->values().at(index.row()).at(index.column());
 		}
 	}
+	else if (role == Qt::BackgroundRole)
+	{
+		if (_states[index.row()]._type & FINAL)  //change background only for cell(1,2)
+		{
+			QBrush redBackground(Qt::red);
+			return redBackground;
+		}
+	}
+
 	//if (index.column() == 0)
 	//	return _map->values().at(index.row());
 	//if (index.column() == 1)
@@ -124,7 +140,7 @@ bool FADataModel::insertRows(int row, int count, const QModelIndex & parent)
 bool FADataModel::insertColumns(int column, int count, const QModelIndex & parent)
 {
 	beginInsertColumns(parent, column, column);
-	addTerminal("a"+QString::number(column));
+	addTerminal(""/*"a"+QString::number(column)*/);
 	
 	for (FAState& state : _states)
 	{

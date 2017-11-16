@@ -8,6 +8,8 @@ class FADataModel : public QAbstractTableModel, public FA
 {
 public:
 	FADataModel(QObject *parent = 0);
+	FADataModel(FA* fa, QObject *parent = 0);
+
 	//~FADataModel();
 
 	virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;

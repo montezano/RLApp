@@ -6,6 +6,8 @@ MainController::MainController()
 	
 	_model_controller = new ModelController(_main_window, fa);
 	_main_window = new RLApp(_model_controller, fa);
+
+	initializeObservers();
 }
 
 MainController::~MainController()
@@ -17,6 +19,9 @@ void MainController::initializeObservers()
 	addObserver(_main_window);
 
 	_main_window->addObserver(this);
+	_main_window->addObserver(_model_controller);
+
+	_model_controller->addObserver(_main_window);
 }
 
 int MainController::run()

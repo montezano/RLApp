@@ -10,6 +10,8 @@ ModelController::ModelController(Observer * observer, FADataModel* fa_data) :
 	_fa(fa_data)
 {
 	_re.addObserver(observer);
+	_fa->addTerminal("");
+	_fa->addState(FAState());
 }
 
 ModelController::~ModelController()
@@ -26,7 +28,13 @@ void ModelController::onNotify(void * entity, Events event)
 {
 	switch (event)
 	{
+	case RE_ADD:
+		_re.setReString(*(QString*)entity);
+		break;
 	case RE_TO_FA:
+		_fa_temp = new FADataModel(Conversions::reToFA(_re));
+		notify((void*)_fa_temp, FA_UPDATE_OPERATION);
+
 		break;
 	case RE_UNION:
 		break;

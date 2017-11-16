@@ -17,7 +17,7 @@ RLApp::RLApp(Observer* observer, FADataModel* fa_data, QWidget *parent)
 {
 	_add_re_window = new AddReWindow();
 	_add_rg_window = new AddRgWindow();
-	_add_fa_terminals_w = new AddFATerminalWindow();
+	_update_fa_window = new UpdateFAWindow();
 
 	initializeObservers(observer);
 
@@ -28,7 +28,12 @@ RLApp::RLApp(Observer* observer, FADataModel* fa_data, QWidget *parent)
 
 
 	ui.table_fa->setModel(fa_data);
-	//YourTableView.setModel(&mapmodel);
+
+	ui.table_fa->show();
+	ui.table_fa->verticalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
+	ui.table_fa->resizeColumnsToContents();
+	ui.table_fa->resizeRowsToContents();
 }
 
 void RLApp::initializeObservers(Observer * observer)
@@ -38,12 +43,12 @@ void RLApp::initializeObservers(Observer * observer)
 
 	_add_re_window->addObserver(this);
 	_add_rg_window->addObserver(this);
-	_add_fa_terminals_w->addObserver(this);
+	//_update_fa_window->addObserver(this);
 }
 
 void RLApp::configureCallbacks()
 {
-	QObject::connect(ui.btn_add_re, SIGNAL(clicked()), this, SLOT(updateRE()));
+	QObject::connect(ui.btn_add_re, SIGNAL(clicked()), this, SLOT(reUpdate()));
 	QObject::connect(ui.btn_op_re_to_fa, SIGNAL(clicked()), this, SLOT(reToFa()));
 	QObject::connect(ui.btn_op_union_re, SIGNAL(clicked()), this, SLOT(reUnion()));
 	QObject::connect(ui.btn_op_int_re, SIGNAL(clicked()), this, SLOT(reIntersection()));
@@ -69,6 +74,7 @@ void RLApp::configureCallbacks()
 
 	QObject::connect(ui.btn_rem_trans, SIGNAL(clicked()), this, SLOT(faRemoveTransition()));
 	QObject::connect(ui.btn_rem_trans_name, SIGNAL(clicked()), this, SLOT(faRemoveTransitionName()));
+	QObject::connect(ui.btn_set_final, SIGNAL(clicked()), this, SLOT(faSetFinalState()));
 
 
 	QObject::connect(ui.table_fa, SIGNAL(selectColumn()), this, SLOT(callAddRGWindow()));
@@ -80,35 +86,7 @@ void RLApp::configureCallbacks()
 
 }
 
-//void RLApp::callAddREWindow()
-//{
-//	_add_re_window->show();
-//	QList<QString> list = QList<QString>();
-//	list.append("value 11");
-//	list.append("value 12");
-//	list.append("value 13");
-//	list.append("value 14");
-//
-//	QList<QString> list2 = QList<QString>();
-//	list2.append("value 21");
-//	list2.append("value 22");
-//	list2.append("value 23");
-//	list2.append("value 24");
-//
-//	QList<QString> list3 = QList<QString>();
-//	list3.append("value 31");
-//	list3.append("value 32");
-//	list3.append("value 33");
-//	list3.append("value 34");
-//	map.insert("S", list );
-//	map.insert("A", list2);
-//	map.insert("B", list3);
-//
-//	mapmodel.setMap(&map);
-//
-//
-//
-//	
+
 //	ui.table_fa->setModel(&mapmodel);
 //	ui.table_fa->show();
 //	ui.table_fa->verticalHeader()->hide();
@@ -132,11 +110,20 @@ void RLApp::onNotify(void * entity, Events event)
 {
 	switch (event)
 	{
-	case FA_ADD_TERMINAL:
-		fa_model->insertColumn(fa_model->getTerminals().size());
+	case FA_UPDATE_OPERATION:
+		_update_fa_window->setDataModel((FADataModel*)entity);
+		_update_fa_window->show();
+
 		//fa_model->setData(*(QString*)entity);
 		break;
 	}
+}
+
+void RLApp::reUpdate()
+{
+	ui.line_added_re->setText(ui.line_re->text());
+	QString* ret_str = &ui.line_added_re->text();
+	notify((void*)ret_str, RE_ADD);
 }
 
 void RLApp::reToFa()
@@ -221,17 +208,17 @@ void RLApp::faInsertTransitionName()
 	fa_model->insertColumn(fa_model->getTerminals().size());
 	ui.table_fa->show();
 	ui.table_fa->verticalHeader()->hide();
-	ui.table_fa->horizontalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
 	ui.table_fa->resizeColumnsToContents();
 	ui.table_fa->resizeRowsToContents();
 }
 
 void RLApp::faRemoveTransitionName()
 {
-	fa_model->removeColumn(1);
+	fa_model->removeColumn(fa_model->getTerminals().size()-1);
 	ui.table_fa->show();
 	ui.table_fa->verticalHeader()->hide();
-	ui.table_fa->horizontalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
 	ui.table_fa->resizeColumnsToContents();
 	ui.table_fa->resizeRowsToContents();
 }
@@ -241,32 +228,37 @@ void RLApp::faInsertTransition()
 	fa_model->insertRow(fa_model->getStates().size());
 	ui.table_fa->show();
 	ui.table_fa->verticalHeader()->hide();
-	ui.table_fa->horizontalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
 	ui.table_fa->resizeColumnsToContents();
 	ui.table_fa->resizeRowsToContents();
 }
 
 void RLApp::faRemoveTransition()
 {
-	//fa_model->removeRow(1);
-	//ui.table_fa->show();
-	//ui.table_fa->verticalHeader()->hide();
-	//ui.table_fa->horizontalHeader()->hide();
-	//ui.table_fa->resizeColumnsToContents();
-	//ui.table_fa->resizeRowsToContents();
+	fa_model->removeRow(fa_model->getStates().size()-1);
+	ui.table_fa->show();
+	ui.table_fa->verticalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
+	ui.table_fa->resizeColumnsToContents();
+	ui.table_fa->resizeRowsToContents();
 
-	fa_model->insertColumn(0);
-	fa_model->insertColumn(1);
-	fa_model->insertColumn(2);
+	//fa_model->insertColumn(0);
+	//fa_model->insertColumn(1);
+	//fa_model->insertColumn(2);
 
-	fa_model->insertRow(0);
-	fa_model->insertRow(1);
-	fa_model->insertRow(2);
+	//fa_model->insertRow(0);
+	//fa_model->insertRow(1);
+	//fa_model->insertRow(2);
+}
+
+void RLApp::faSetFinalState()
+{
+	fa_model->setFinalState(ui.table_fa->selectionModel()->selectedIndexes()[0].data().toString());
 }
 
 void RLApp::callAddFAStatesWindow()
 {
-	_add_fa_terminals_w->show();
+	//_add_fa_terminals->show();
 }
 
 void RLApp::callAddFATerminWindow()

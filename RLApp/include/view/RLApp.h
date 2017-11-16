@@ -8,7 +8,7 @@
 #include "view\AddReWindow.h"
 #include "view\AddRgWindow.h"
 #include "view\AddFaWindow.h"
-#include "view/AddFATerminalWindow.h"
+#include "view/UpdateFAWindow.h"
 #include "util\Subject.h"
 #include "util\Observer.h"
 
@@ -29,6 +29,7 @@ public:
 
 public slots:
 	// Window calls
+	void reUpdate();
 	void reToFa();
 	void reUnion();
 	void reIntersection();
@@ -52,6 +53,7 @@ public slots:
 	void faRemoveTransitionName();
 	void faInsertTransition();
 	void faRemoveTransition();
+	void faSetFinalState();
 
 	void callAddFAStatesWindow();
 	void callAddFATerminWindow();
@@ -71,7 +73,7 @@ private:
 	AddRgWindow* _add_rg_window;
 	AddFaWindow* _add_fa_window;
 	Ui::AddFA* _add_fa_state;
-	AddFATerminalWindow* _add_fa_terminals_w;
+	UpdateFAWindow* _update_fa_window;
 
 	FADataModel* fa_model;
 

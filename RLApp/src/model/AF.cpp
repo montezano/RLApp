@@ -138,6 +138,12 @@ DetFAState & FA::getInitialDetState()
 	// TODO: insert return statement here
 }
 
+bool FA::setFinalState(VT state)
+{
+	getState(state)._type |= FINAL;
+	return false;
+}
+
 bool FA::isEmpty()
 {
 	QVector<NT> fertile_state = getFinalStates();
