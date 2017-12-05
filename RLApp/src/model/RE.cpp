@@ -138,6 +138,7 @@ QVector<Node*> RE::followSimoneTreeFrom(Node * node)
 	_di_simone_composition.clear();
 
 	decideOperation(direction, node, node);
+	unvisitDisimoneNodes();
 
 	comp_ret = _di_simone_composition;
 	_di_simone_composition = comp_bkp;
@@ -280,7 +281,7 @@ void RE::decideOperation(Direction direction, Node * node, Node* last_node)
 		}else if (node->symbol == CONJUNCT)
 		{
 			operationConjunction(direction, node, last_node);
-		}else if (_valid_terminals.contains(node->symbol))
+		}else if (node != NULL && _valid_terminals.contains(node->symbol))
 		{
 			operatetionTerminals(direction, node, last_node);
 		}
@@ -334,14 +335,22 @@ void RE::operationClosure(Direction direction, Node * node, Node* last_node)
 		}
 		break;
 	case DOWN:
-		decideOperation(direction, node->left_children, node);
+		if (!node->visited)
+		{
+			node->visited = true;
+			decideOperation(direction, node->left_children, node);
+		}
 		if (node->parent == NULL)
 		{
 			_di_simone_composition << f_node;
 		}
 		else
 		{
-			decideOperation(direction, node->parent, node);
+			if (!node->visited)
+			{
+				node->visited = true;
+				decideOperation(direction, node->parent, node);
+			}
 		}
 		break;
 	case BUILD:
@@ -438,4 +447,26 @@ void RE::operatetionTerminals(Direction direction, Node * node, Node* last_node)
 	}
 	//direction = Direction::UP;
 	//decideOperation(direction, node->parent);
+}
+
+void RE::unvisitDisimoneNodes()
+{
+	unvisitDisimoneNode(_di_simone_tree);
+}
+
+void RE::unvisitDisimoneNode(Node * node)
+{
+	if (node)
+	{
+		node->visited = false;
+	}
+	
+	if (node->left_children)
+	{
+		unvisitDisimoneNode(node->left_children);
+	}
+	if (node->right_children)
+	{
+		unvisitDisimoneNode(node->right_children);
+	}
 }

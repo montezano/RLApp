@@ -122,6 +122,8 @@ private:
 	void operationDisjunction(Direction direction, Node* node, Node* last_node);
 	void operationConjunction(Direction direction, Node* node, Node* last_node);
 	void operatetionTerminals(Direction direction, Node* node, Node* last_node);
+	void unvisitDisimoneNodes();
+	void unvisitDisimoneNode(Node* node);
 
 
 
@@ -151,16 +153,31 @@ private:
 struct Node
 {
 public:
-	Node() {}
-	Node(Node* par) : parent(par) {}
+	Node() : parent(NULL),
+		left_children(NULL),
+		right_children(NULL),
+		symbol('-'),
+		comp_index(-1),
+		visited(false) {}
+	Node(Node* par) : parent(par),
+		left_children(NULL),
+		right_children(NULL),
+		symbol('-'),
+		comp_index(-1),
+		visited(false){}
 	Node(Node* par, QChar sym) : parent(par),
-		symbol(sym){}
+		left_children(NULL),
+		right_children(NULL),
+		symbol(sym),
+		comp_index(-1),
+		visited(false) {}
 
 	Node* parent;
 	Node* left_children;
 	Node* right_children;
 	QChar symbol;
 	int comp_index;
+	bool visited;
 };
 
 
