@@ -153,6 +153,7 @@ QVector<Node*> RE::initialDiSimonePath()
 	_di_simone_composition.clear();
 
 	decideOperation(direction, _di_simone_tree, _di_simone_tree);
+	unvisitDisimoneNodes();
 
 	comp_ret = _di_simone_composition;
 	_di_simone_composition = comp_bkp;
@@ -303,14 +304,22 @@ void RE::operationOption(Direction direction, Node * node, Node* last_node)
 		}
 		break;
 	case DOWN:
-		decideOperation(direction, node->left_children, node);
+		if (!node->visited)
+		{
+			node->visited = true;
+			decideOperation(direction, node->left_children, node);
+		}
 		if (node->parent == f_node)
 		{
 			_di_simone_composition << f_node;
 		}
 		else
 		{
-			decideOperation(direction, node->parent, node);
+			if (!node->visited)
+			{
+				node->visited = true;
+				decideOperation(direction, node->parent, node);
+			}
 		}
 		break;
 	case BUILD:
@@ -327,11 +336,27 @@ void RE::operationClosure(Direction direction, Node * node, Node* last_node)
 		//decideOperation(direction, node->left_children);
 		if (node->parent == NULL)
 		{
+			if (!node->visited)
+			{
+				node->visited = true;
+				decideOperation(Direction::DOWN, node->left_children, node);
+			}
 			_di_simone_composition << f_node;
 		}
 		else
 		{
-			decideOperation(direction, node->parent, node);
+			if (!node->visited)
+			{
+				node->visited = true;
+				decideOperation(Direction::DOWN, node->left_children, node);
+
+				decideOperation(direction, node->parent, node);
+			}
+			else
+			{
+				decideOperation(direction, node->parent, node);
+			}
+			
 		}
 		break;
 	case DOWN:
