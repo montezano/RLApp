@@ -18,26 +18,25 @@ FA* Conversions::reToFA(RE re)
 	QVector<TR> nd_states;
 
 	//first state (q0)
-	for (VT terminal : terminals)
-	{
-		TR transition = createTransition(composition, terminal);
-		st_transitions << transition;
-		if (transition.size() > 1)
-		{
-			if (!nd_states.contains(transition))
-			{
-				nd_states << transition;
-			}
-		}
-	}
-	last_state_add = fa->addState(st_transitions, getStateType(composition));
+	//for (VT terminal : terminals)
+	//{
+	//	TR transition = createTransition(composition, terminal);
+	//	st_transitions << transition;
+	//	if (transition.size() > 1)
+	//	{
+	//		if (!nd_states.contains(transition))
+	//		{
+	//			nd_states << transition;
+	//		}
+	//	}
+	//}
+	//last_state_add = fa->addState(st_transitions, getStateType(composition));
 
 
 	//basic states (q1, q2, q3...)
 	for (int i = 0; i < di_simone_composition.size() - 1; i++)
 	{
 		st_transitions.clear();
-		composition = re.followSimoneTreeFrom(di_simone_composition[i]);
 		for (VT terminal : terminals)
 		{
 			TR transition = createTransition(composition, terminal);
@@ -52,6 +51,7 @@ FA* Conversions::reToFA(RE re)
 		}
 
 		last_state_add = fa->addState(st_transitions, getStateType(composition));
+		composition = re.followSimoneTreeFrom(di_simone_composition[i]);
 	}
 
 	//composite non deterministic states (q1q2, q213, ...)
