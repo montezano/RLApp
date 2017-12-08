@@ -5,7 +5,8 @@ UpdateFAWindow::UpdateFAWindow(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	//QObject::connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(addProductionName()));
+
+	QObject::connect(ui.btn_manipulate, SIGNAL(clicked()), this, SLOT(manipulateFA()));
 	//QObject::connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(cleanLineField()));
 
 	//QObject::connect(ui.btn_add_term, SIGNAL(accepted()), this, SLOT(addProductionName()));
@@ -22,6 +23,7 @@ void UpdateFAWindow::addProductionName()
 
 void UpdateFAWindow::setDataModel(FADataModel * data_model)
 {
+	temp_model = data_model;
 	ui.table_fa->setModel(data_model);
 
 	ui.table_fa->show();
@@ -34,4 +36,9 @@ void UpdateFAWindow::setDataModel(FADataModel * data_model)
 void UpdateFAWindow::cleanLineField()
 {
 	//ui.line_add_term->clear();
+}
+
+void UpdateFAWindow::manipulateFA()
+{
+	notify((void*)temp_model, FA_UPDATE_ORIGINAL);
 }

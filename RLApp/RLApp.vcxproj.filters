@@ -160,6 +160,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_UpdateFAWindow.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_NewFAWindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_NewFAWindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="src\view\NewFAWIndow.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="RLApp.qrc">
@@ -202,6 +211,12 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="include\view\UpdateFAWindow.h">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ui\NewFA.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="include\view\NewFAWindow.h">
       <Filter>Header Files\view</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -254,7 +269,7 @@
     <ClInclude Include="GeneratedFiles\ui_AddFAterminals.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_UpdateFA.h">
+    <ClInclude Include="GeneratedFiles\ui_NewFA.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

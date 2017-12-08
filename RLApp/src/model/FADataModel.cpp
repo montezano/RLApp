@@ -29,8 +29,12 @@ int FADataModel::rowCount(const QModelIndex& parent) const
 
 int FADataModel::columnCount(const QModelIndex & parent) const
 {
-
-		return _terminals.size()+1;
+	//if (_terminals.size() < 1)
+	//{
+	//	return 1;
+	//}
+	return _terminals.size()+1;
+		
 
 }
 
@@ -117,7 +121,7 @@ QVariant FADataModel::data(const QModelIndex & index, int role) const
 		{
 			if (index.row() != 0)
 			{
-				if (_states[index.row() - 1]._type & FINAL)  //change background only for cell(1,2)
+				if (_states[index.row() - 1]._type & FINAL)
 				{
 					QBrush redBackground(Qt::red);
 					return redBackground;
@@ -153,11 +157,11 @@ bool FADataModel::setData(const QModelIndex & index, const QVariant & value, int
 				return true;
 				//return _map->keys().at(index.row());
 			}
-			if (index.column() >= 0)
+			if (index.column() > 0)
 			{
 				if (index.row() == 0)
 				{
-					_terminals[index.column()] = value.toString();
+					_terminals[index.column()-1] = value.toString();
 					emit dataChanged(index, index);
 
 					return true;
@@ -166,7 +170,10 @@ bool FADataModel::setData(const QModelIndex & index, const QVariant & value, int
 
 				QList<QString> str_list = value.toString().split(",", QString::SkipEmptyParts);
 				TR transition = str_list.toVector();
-				_states_determinized[index.row() - 1]._transitions[index.column() - 1] = transition;
+				if (_states[index.row() - 1]._transitions.size() > 0)
+				{
+					_states_determinized[index.row() - 1]._transitions[index.column() - 1] = transition;
+				}
 				emit dataChanged(index, index);
 
 				return true;
@@ -191,15 +198,15 @@ bool FADataModel::setData(const QModelIndex & index, const QVariant & value, int
 					return true;
 				}
 
-				_states[index.row()]._state_name = value.toString();
+				_states[index.row()-1]._state_name = value.toString();
 				return true;
 				//return _map->keys().at(index.row());
 			}
-			if (index.column() >= 0)
+			if (index.column() > 0)
 			{
 				if (index.row() == 0)
 				{
-					_terminals[index.column()] = value.toString();
+					_terminals[index.column()-1] = value.toString();
 					emit dataChanged(index, index);
 
 					return true;
@@ -208,7 +215,10 @@ bool FADataModel::setData(const QModelIndex & index, const QVariant & value, int
 
 				QList<QString> str_list = value.toString().split(",", QString::SkipEmptyParts);
 				TR transition = str_list.toVector();
-				_states[index.row() - 1]._transitions[index.column() - 1] = transition;
+				if (_states[index.row() - 1]._transitions.size() > 0)
+				{
+					_states[index.row() - 1]._transitions[index.column() - 1] = transition;
+				}
 				emit dataChanged(index, index);
 
 				return true;
@@ -225,7 +235,15 @@ bool FADataModel::insertRows(int row, int count, const QModelIndex & parent)
 	beginInsertRows(parent, row, row);
 	QVector<TR> trans;
 	trans.resize(_terminals.size());
-	addState(FAState(NULL, "", trans, REGULAR)/*FAState(NULL, QString("teste"), { {QString("1")} }, 0x1)*/);
+	if (_states.size() == 0)
+	{
+		addState(FAState(NULL, "", trans, REGULAR | INITIAL)/*FAState(NULL, QString("teste"), { {QString("1")} }, 0x1)*/);
+	}
+	else
+	{
+		addState(FAState(NULL, "", trans, REGULAR)/*FAState(NULL, QString("teste"), { {QString("1")} }, 0x1)*/);
+	}
+	
 	endInsertRows();
 	return true;
 }

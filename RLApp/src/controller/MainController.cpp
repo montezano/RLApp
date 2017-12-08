@@ -3,9 +3,10 @@
 MainController::MainController()
 {
 	FADataModel* fa = new FADataModel();
+	FADataModel* fa2 = new FADataModel();
 	
-	_model_controller = new ModelController(_main_window, fa);
-	_main_window = new RLApp(_model_controller, fa);
+	_model_controller = new ModelController(_main_window, fa, fa2);
+	_main_window = new RLApp(_model_controller, fa, fa2);
 
 	initializeObservers();
 }

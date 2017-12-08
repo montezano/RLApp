@@ -19,6 +19,8 @@ public:
 
 	PLeft getInitial();
 
+	bool parse(QString rg);
+
 private:
 	bool verifyProduction(PLeft pleft, PRight pright);
 	Productions _rg;

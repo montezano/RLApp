@@ -9,6 +9,7 @@
 #include "view\AddRgWindow.h"
 #include "view\AddFaWindow.h"
 #include "view/UpdateFAWindow.h"
+#include "view/NewFAWindow.h"
 #include "util\Subject.h"
 #include "util\Observer.h"
 
@@ -20,7 +21,7 @@ class RLApp : public QMainWindow, public Observer, public Subject
 
 public:
 	RLApp(QWidget *parent = Q_NULLPTR);
-	RLApp(Observer* observer, FADataModel* fa_data, QWidget *parent = Q_NULLPTR);
+	RLApp(Observer* observer, FADataModel* fa_data, FADataModel* fa_data2, QWidget *parent = Q_NULLPTR);
 	void initializeObservers(Observer* observer);
 	void configureCallbacks();
 
@@ -43,6 +44,7 @@ public slots:
 	void rgComplement();
 	void rgEquivalence();
 
+	void faAddAnother();
 	void faUnion();
 	void faIntersection();
 	void faComplement();
@@ -59,6 +61,8 @@ public slots:
 	void callAddFATerminWindow();
 	void callAddRGWindow();
 	void callAddFAWindow();
+
+	void clearData();
 	
 
 	// Interface update
@@ -74,8 +78,10 @@ private:
 	AddFaWindow* _add_fa_window;
 	Ui::AddFA* _add_fa_state;
 	UpdateFAWindow* _update_fa_window;
+	NewFAWindow* _new_fa_window;
 
 	FADataModel* fa_model;
+	FADataModel* fa_model_2;
 
 
 

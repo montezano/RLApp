@@ -21,7 +21,7 @@ void FA::setTerminals(QVector<VT> terminals)
 
 void FA::addTerminal(VT terminal)
 {
-	if (!_terminals.contains(terminal))
+	if (!_terminals.contains(terminal) || terminal == "")
 	{
 		_terminals << terminal;
 	}
@@ -171,6 +171,39 @@ bool FA::isEmpty()
 	return !fertile_state.contains(_states[0]._state_name);
 }
 
+bool FA::isEmptyDeterministic()
+{
+	QVector<NT> fertile_state = getFinalStates();
+
+
+	for (int i = 0; i < _states_determinized.size(); i++)
+	{
+
+		for (int state = 0; state < _states_determinized.size(); state++)
+		{
+			for (auto transition : _states_determinized[state]._transitions)
+			{
+				for (NT st : transition)
+				{
+					if (fertile_state.contains(st))
+					{
+						fertile_state << _states_determinized[state]._state_name;
+					}
+				}
+			}
+		}
+	}
+
+	DetFAState init;
+	if (_states_determinized.size() < 1)
+	{
+		return true;
+	}
+	
+	init = getInitialDetState();
+	return !fertile_state.contains(init._state_name);
+}
+
 bool FA::isInfinite()
 {
 	QVector<NT> visited;
@@ -269,11 +302,14 @@ bool FA::removeDeadStates()
 	QVector<QString> f_states = getDetFinalStates();
 
 	int f_states_size = f_states.size();
+	QVector<QString> old_f_states;
 	int f_states_recount = 0;
 
 	// makes a list of all states not dead
-	while (f_states_size != f_states_recount)
+	/*while (f_states_size != f_states_recount)*/
+	while (old_f_states != f_states)
 	{
+		old_f_states = f_states;
 		f_states_size = f_states.size();
 		for (DetFAState state : _states_determinized)
 		{
@@ -294,6 +330,8 @@ bool FA::removeDeadStates()
 				//f_states = f_states_temp;
 			}
 		}
+		qSort(old_f_states);
+		qSort(f_states);
 		f_states_recount = f_states.size();
 	}
 	
@@ -303,17 +341,21 @@ bool FA::removeDeadStates()
 	//for (int i = 0; i < _states_determinized.size(); i++)
 	for (DetFAState& det_state : _states_determinized)
 	{
-		bool remove = true;
-		//for (DetFAState& det_state : _states_determinized)
-		for (QString f_state : f_states)
-		{
-			if (det_state._state_name == f_state)
-			{
-				remove = false;
-				break;
-			}
-		}
-		if (remove)
+		//bool remove = true;
+		////for (DetFAState& det_state : _states_determinized)
+		//for (QString f_state : f_states)
+		//{
+		//	if (det_state._state_name == f_state)
+		//	{
+		//		remove = false;
+		//		break;
+		//	}
+		//}
+		//if (remove)
+		//{
+		//	remove_list << det_state._state_name;
+		//}
+		if (!f_states.contains(det_state._state_name))
 		{
 			remove_list << det_state._state_name;
 		}
@@ -324,44 +366,60 @@ bool FA::removeDeadStates()
 		removeDetState(state);
 	}
 
-	for (DetFAState& state : _states_determinized)
-	{
-		for (QString remove : remove_list)
-		{
-			replaceTransition(state, strToTransition(remove), { QString::number(-1) });
-		}
-	}
+	//for (DetFAState& state : _states_determinized)
+	//{
+	//	for (QString remove : remove_list)
+	//	{
+	//		replaceTransition(state, strToTransition(remove), { QString::number(-1) });
+	//	}
+	//}
 
 	return true;
 }
 
 bool FA::removeEquivalenceClasses()
 {
+	completeDetFA();
 	QMap<QString, QVector<QString>> old_equiv_classes;
 	QMap<QString, QVector<QString>> new_equiv_classes;
-	old_equiv_classes.insert("0", QVector<QString>());
-	old_equiv_classes.insert("1", QVector<QString>());
+	new_equiv_classes.insert("0", QVector<QString>());
+	new_equiv_classes.insert("1", QVector<QString>());
 	
 	for (int i = 0; i < _states_determinized.size(); i++)
 	{
 		if (_states_determinized[i]._type & FINAL)
 		{
-			old_equiv_classes.find("0").value().append(_states_determinized[i]._state_name);
+			if (new_equiv_classes.find("0") != new_equiv_classes.end())
+			{
+				new_equiv_classes.find("0").value().append(_states_determinized[i]._state_name);
+			}
+			else
+			{
+				new_equiv_classes.insert("0", { _states_determinized[i]._state_name } );
+			}
 		}
 		else
 		{
-			old_equiv_classes.find("1").value().append(_states_determinized[i]._state_name);
+			if (new_equiv_classes.find("1") != new_equiv_classes.end())
+			{
+				new_equiv_classes.find("1").value().append(_states_determinized[i]._state_name);
+			}
+			else
+			{
+				new_equiv_classes.insert("1", { _states_determinized[i]._state_name });
+			}
 		}
 	}
 
-	int old_size = old_equiv_classes.size();
+	int old_size = new_equiv_classes.size();
 	int new_size = 0;
 
 	/// Until there is no change in the equivalence classes
-	while (old_size != new_size)
+	while (old_equiv_classes.size() != new_equiv_classes.size())
 	{
-		old_size = old_equiv_classes.size();
-		int class_number = 0;
+		old_equiv_classes = new_equiv_classes;
+		new_equiv_classes.clear();
+		//new_equiv_classes = old_equiv_classes;
 		/// For all equivalence classes, do:
 		for (auto equiv_class = old_equiv_classes.begin(); equiv_class != old_equiv_classes.end(); ++equiv_class)
 		{
@@ -371,33 +429,31 @@ bool FA::removeEquivalenceClasses()
 			{
 				QVector<TR> transitions = getDetStates(state)._transitions;
 
-
+				QString temp_class_name = e_class_name;
 				for (TR transition : transitions)
 				{
 					QString str_trs = transitionToStr(transition);
 
 					auto found_class = searchStateEquivalenceClass(str_trs, old_equiv_classes);
-					//if (found_class == (old_equiv_classes.end()+1));
-					//{
-					//	return false;
-					//}
-					e_class_name += found_class.key();
+					if (found_class != old_equiv_classes.end()/*+1*/);
+					{
+						temp_class_name += found_class.key();
+					}
 				}
-				auto add_class = new_equiv_classes.find(e_class_name);
+				auto add_class = new_equiv_classes.find(temp_class_name);
 				if (add_class != new_equiv_classes.end())
 				{
-					new_equiv_classes.find(e_class_name)->append(state);
+					new_equiv_classes.find(temp_class_name)->append(state);
 				}
 				else
 				{
-					new_equiv_classes.insert(e_class_name, { state });
+					new_equiv_classes.insert(temp_class_name, { state });
 				}				
 			}
-			class_number++;
 		}
-		new_size = new_equiv_classes.size();
-		old_equiv_classes = new_equiv_classes;
-		new_equiv_classes = QMap < QString, QVector<QString>>();
+		//new_size = new_equiv_classes.size();
+		//old_equiv_classes = new_equiv_classes;
+		//new_equiv_classes = QMap < QString, QVector<QString>>();
 	}
 
 
@@ -439,6 +495,7 @@ bool FA::minimizeDeterministic()
 	bool result = true;
 	bool result_dead_state = removeDeadStates();
 	bool result_equiv_class = removeEquivalenceClasses();
+	_states_determinized.pop_back();
 	return result & result_dead_state & result_equiv_class;
 	// Good practices never die
 	//  (o_O)
@@ -498,6 +555,16 @@ QVector<TR> FA::getEStateClosure(NT state_name)
 QVector<TR> FA::getEStateClosure(FAState state)
 {
 	return getEStateClosure(state, QVector<NT>());
+}
+
+void FA::clearData()
+{
+	_terminals.clear();
+	_states.clear();
+	_states_determinized.clear();
+	//QMap<QString, TR> _state_name_map;
+	_last_state_number_add = 0;
+	bool determinized = false;
 }
 
 FA* FA::faUnion(FA& fa)
@@ -588,6 +655,9 @@ FA* FA::faUnion(FA& fa)
 	//}
 	////new_init_st._transitions << fa.getInitialDetState()._transitions;
 
+	FAState in1 = getInitialState();
+	FAState in2 = fa.getInitialState();
+	new_init_st._type = in1._type | in2._type;
 	united_fa->addState(new_init_st);
 
 	for (DetFAState& state : _states_determinized)
@@ -648,7 +718,7 @@ FA* FA::faComplement()
 			}
 			ret_fa->addState(temp_state);
 		}
-		else if (state._type & REGULAR)
+		else /*if (!(state._type & FINAL))*/
 		{
 			FAState temp_state = FAState(this, state._state_name, (state._type | FINAL_ST));
 			temp_state._transitions.resize(state._transitions.size());
@@ -667,8 +737,10 @@ FA* FA::faIntersection(FA fa)
 {
 	FA* fa1_comp = faComplement();
 	fa1_comp->determinize();
+	fa1_comp->minimizeDeterministic();
 	FA* fa2_comp = fa.faComplement();
 	fa2_comp->determinize();
+	fa2_comp->minimizeDeterministic();
 
 	return fa1_comp->faUnion(*fa2_comp);
 }
@@ -691,20 +763,80 @@ bool FA::faEquivalent(FA fa)
 	fa2_comp->determinize();
 	fa2_comp->minimizeDeterministic();
 	
-	FA* fa1_int_cfa2 = fa1->faIntersection(*fa2_comp);
+	FA* fa1_int_cfa2 = fa1->faUnion(*fa2_comp);
 	fa1_int_cfa2->determinize();
 	fa1_int_cfa2->minimizeDeterministic();
 
-	FA* fa2_int_cfa1 = fa2->faIntersection(*fa1_comp);
+	/////
+	FA* comp_fa1_int_cfa2 = fa1_int_cfa2->faComplement();
+	comp_fa1_int_cfa2->determinize();
+	comp_fa1_int_cfa2->minimizeDeterministic();
+	/////
+
+	FA* fa2_int_cfa1 = fa2->faUnion(*fa1_comp);
 	fa2_int_cfa1->determinize();
 	fa2_int_cfa1->minimizeDeterministic();
 
-	bool ret = fa1_int_cfa2->isEmpty();
-	ret &= fa2_int_cfa1->isEmpty();
+	//////
+	FA* comp_fa2_int_cfa1 = fa2_int_cfa1->faComplement();
+	comp_fa2_int_cfa1->determinize();
+	comp_fa2_int_cfa1->minimizeDeterministic();
+	/////
+
+
+	bool ret = comp_fa1_int_cfa2->isEmptyDeterministic();
+	bool ret2 = comp_fa2_int_cfa1->isEmptyDeterministic();
 
 
 
-	return ret;
+	return ret && ret2;
+}
+
+bool FA::faEquivalent(FA* fa)
+{
+	FA* fa1 = new FA(*fa);
+	fa1->determinize();
+	fa1->minimizeDeterministic();
+
+	FA* fa1_comp = fa1->faComplement();
+	fa1_comp->determinize();
+	fa1_comp->minimizeDeterministic();
+
+	FA* fa2 = new FA(*this);
+	fa2->determinize();
+	fa2->minimizeDeterministic();
+
+	FA* fa2_comp = fa2->faComplement();
+	fa2_comp->determinize();
+	fa2_comp->minimizeDeterministic();
+
+	FA* fa1_int_cfa2 = fa1->faUnion(*fa2_comp);
+	fa1_int_cfa2->determinize();
+	fa1_int_cfa2->minimizeDeterministic();
+
+	/////
+	FA* comp_fa1_int_cfa2 = fa1_int_cfa2->faComplement();
+	comp_fa1_int_cfa2->determinize();
+	comp_fa1_int_cfa2->minimizeDeterministic();
+	/////
+
+	FA* fa2_int_cfa1 = fa2->faUnion(*fa1_comp);
+	fa2_int_cfa1->determinize();
+	fa2_int_cfa1->minimizeDeterministic();
+
+	//////
+	FA* comp_fa2_int_cfa1 = fa2_int_cfa1->faComplement();
+	comp_fa2_int_cfa1->determinize();
+	comp_fa2_int_cfa1->minimizeDeterministic();
+	/////
+
+
+	bool ret = comp_fa1_int_cfa2->isEmptyDeterministic();
+	bool ret2 = comp_fa2_int_cfa1->isEmptyDeterministic();
+
+
+
+	return ret && ret2;
 }
 
 bool FA::findCicle(FAState current_state, FAState last_state, QVector<NT> visited)
@@ -909,6 +1041,31 @@ bool FA::replaceTransition(DetFAState & state, TR find, TR replace)
 	}
 
 	return true;
+}
+
+bool FA::completeDetFA()
+{
+	//(FA* parent, NT state_name, QVector<TR> transitions, StateType type
+	QVector<TR> new_transition; /*TR new_transition;*/
+	new_transition.resize(_terminals.size());
+	for (int i = 0; i < _terminals.size(); i++)
+	{
+		new_transition[i] = { "ER" };
+	}
+	_states_determinized.append(DetFAState(this, QString("ER"), new_transition, REGULAR));
+	for (DetFAState& state : _states_determinized)
+	{
+		for (TR &transition : state._transitions)
+		{
+			if (transition.size() < 1)
+			{
+				transition.push_back("ER");
+			}
+
+
+		}
+	}
+	return false;
 }
 
 ///////////////////////////////////////////////

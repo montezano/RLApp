@@ -11,13 +11,15 @@ RLApp::RLApp(QWidget *parent)
 	configureCallbacks();
 }
 
-RLApp::RLApp(Observer* observer, FADataModel* fa_data, QWidget *parent)
+RLApp::RLApp(Observer* observer, FADataModel* fa_data, FADataModel* fa_data2, QWidget *parent)
 	: QMainWindow(parent),
-	fa_model(fa_data)
+	fa_model(fa_data),
+	fa_model_2(fa_data2)
 {
 	_add_re_window = new AddReWindow();
 	_add_rg_window = new AddRgWindow();
 	_update_fa_window = new UpdateFAWindow();
+	_new_fa_window = new NewFAWindow();
 
 	initializeObservers(observer);
 
@@ -43,7 +45,8 @@ void RLApp::initializeObservers(Observer * observer)
 
 	_add_re_window->addObserver(this);
 	_add_rg_window->addObserver(this);
-	//_update_fa_window->addObserver(this);
+
+	_update_fa_window->addObserver(this);
 }
 
 void RLApp::configureCallbacks()
@@ -62,6 +65,7 @@ void RLApp::configureCallbacks()
 	QObject::connect(ui.btn_op_comp_rg, SIGNAL(clicked()), this, SLOT(rgComplement()));
 	QObject::connect(ui.btn_op_equ_rg, SIGNAL(clicked()), this, SLOT(rgEquivalence()));
 
+	QObject::connect(ui.btn_op_add_another_fa, SIGNAL(clicked()), this, SLOT(faAddAnother()));
 	QObject::connect(ui.btn_op_union_fa, SIGNAL(clicked()), this, SLOT(faUnion()));
 	QObject::connect(ui.btn_op_int_fa, SIGNAL(clicked()), this, SLOT(faIntersection()));
 	QObject::connect(ui.btn_op_comp_fa, SIGNAL(clicked()), this, SLOT(faComplement()));
@@ -79,10 +83,7 @@ void RLApp::configureCallbacks()
 
 	QObject::connect(ui.table_fa, SIGNAL(selectColumn()), this, SLOT(callAddRGWindow()));
 
-	
-
-
-
+	QObject::connect(ui.btn_op_clear_data, SIGNAL(clicked()), this, SLOT(clearData()));
 
 }
 
@@ -106,11 +107,29 @@ void RLApp::callAddFAWindow()
 	_add_rg_window->show();
 }
 
+void RLApp::clearData()
+{
+
+
+	fa_model->clearData();
+	
+	fa_model_2->clearData();
+
+
+	ui.table_fa->show();
+	ui.table_fa->verticalHeader()->hide();
+	ui.table_fa->horizontalHeader()->show();
+	ui.table_fa->resizeColumnsToContents();
+	ui.table_fa->resizeRowsToContents();
+}
+
 void RLApp::onNotify(void * entity, Events event)
 {
 	switch (event)
 	{
 	case FA_UPDATE_OPERATION:
+		_update_fa_window = new UpdateFAWindow();
+		_update_fa_window->addObserver(this);
 		_update_fa_window->setDataModel((FADataModel*)entity);
 		_update_fa_window->show();
 
@@ -119,6 +138,34 @@ void RLApp::onNotify(void * entity, Events event)
 	case RE_EQUIVALENCE_RESULT:
 		(*(bool*)entity?ui.lbl_re_equiv_result->setText("true"):
 			ui.lbl_re_equiv_result->setText("false"));
+		break;
+	case FA_NEW:
+		_new_fa_window = new NewFAWindow();
+		_new_fa_window->setDataModel((FADataModel*)entity);
+		_update_fa_window->show();
+		break;
+	case FA_UPDATE_ORIGINAL:
+		fa_model = (FADataModel*)entity;
+		if (fa_model != NULL)
+		{
+			ui.table_fa->setModel(fa_model);
+		}
+		ui.table_fa->show();
+		ui.table_fa->verticalHeader()->hide();
+		ui.table_fa->horizontalHeader()->show();
+		ui.table_fa->resizeColumnsToContents();
+		ui.table_fa->resizeRowsToContents();
+		notify((void*)fa_model, FA_ADD);
+		break;
+	case RG_TO_FA_UPDATE:
+		_new_fa_window = new NewFAWindow();
+		_new_fa_window->setDataModel((FADataModel*)entity);
+		_update_fa_window->show();
+
+		//ui.table_rg->verticalHeader()->hide();
+		//ui.table_rg->horizontalHeader()->show();
+		//ui.table_rg->resizeColumnsToContents();
+		//ui.table_rg->resizeRowsToContents();
 	}
 }
 
@@ -159,7 +206,10 @@ void RLApp::reEquivalence()
 
 void RLApp::rgToFa()
 {
-	//notify((void*)ui.line_re, RG_EQUIVALENCE);
+
+	QString gr = ui.text_edit_rg->toPlainText();
+	QString* p_gr = new QString(gr);
+	notify((void*)p_gr, RG_TO_FA);
 
 }
 
@@ -179,14 +229,23 @@ void RLApp::rgEquivalence()
 {
 }
 
+void RLApp::faAddAnother()
+{
+	//fa_model_2 = new FADataModel();
+	_new_fa_window = new NewFAWindow();
+	_new_fa_window->setDataModel(fa_model_2);
+	_new_fa_window->show();
+}
+
 void RLApp::faUnion()
 {
-	notify(NULL, FA_UNION);
+
+	notify((void*)fa_model_2, FA_UNION);
 }
 
 void RLApp::faIntersection()
 {
-	notify(NULL, FA_INTERSECTION);
+	notify((void*)fa_model_2, FA_INTERSECTION);
 }
 
 void RLApp::faComplement()
@@ -196,7 +255,7 @@ void RLApp::faComplement()
 
 void RLApp::faEquivalence()
 {
-	notify(NULL, FA_EQUIVALENCE);
+	notify((void*)fa_model_2, FA_EQUIVALENCE);
 }
 
 void RLApp::faDeterminization()
@@ -247,14 +306,6 @@ void RLApp::faRemoveTransition()
 	ui.table_fa->horizontalHeader()->show();
 	ui.table_fa->resizeColumnsToContents();
 	ui.table_fa->resizeRowsToContents();
-
-	//fa_model->insertColumn(0);
-	//fa_model->insertColumn(1);
-	//fa_model->insertColumn(2);
-
-	//fa_model->insertRow(0);
-	//fa_model->insertRow(1);
-	//fa_model->insertRow(2);
 }
 
 void RLApp::faSetFinalState()

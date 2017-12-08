@@ -12,7 +12,7 @@ class ModelController : public Observer, public Subject
 {
 public:
 	ModelController();
-	ModelController(Observer* observer, FADataModel* fa_data);
+	ModelController(Observer* observer, FADataModel* fa_data, FADataModel* fa_data2);
 	~ModelController();
 
 	bool updateRE();
@@ -23,6 +23,7 @@ private:
 	RE _re;
 	RG _rg;
 	FADataModel* _fa;
+	FADataModel* _fa2;
 	FADataModel* _fa_temp;
 
 };

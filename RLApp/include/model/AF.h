@@ -142,6 +142,8 @@ public:
 	////////////////////////////////////////////////////////////
 	bool isEmpty();
 
+	bool isEmptyDeterministic();
+
 	////////////////////////////////////////////////////////////
 	/// \brief	Verify if the actual FA is infinite of finite.
 	///			An infinite FA is one that generate sentences with
@@ -206,6 +208,8 @@ public:
 
 	bool faEquivalent(FA fa);
 
+	bool faEquivalent(FA* fa);
+
 
 	////////////////////////////////////////////////////////////
 	/// UTILS
@@ -258,6 +262,8 @@ public:
 	////////////////////////////////////////////////////////////
 	QVector<TR> getEStateClosure(FAState state);
 
+	void clearData();
+
 
 
 protected:
@@ -273,6 +279,7 @@ protected:
 	QMap<QString, QVector<QString>>::iterator searchStateEquivalenceClass(QString state, QMap<QString, QVector<QString>>& equiv_classes);
 	bool removeDetState(QString state_name);
 	bool replaceTransition(DetFAState& state, TR find, TR replace);
+	bool completeDetFA();
 
 
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>797</width>
-    <height>416</height>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -57,7 +57,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_re">
        <attribute name="title">
@@ -226,7 +226,7 @@
         <property name="geometry">
          <rect>
           <x>180</x>
-          <y>180</y>
+          <y>190</y>
           <width>47</width>
           <height>13</height>
          </rect>
@@ -240,40 +240,6 @@
        <attribute name="title">
         <string>Regular Grammar</string>
        </attribute>
-       <widget class="QTableView" name="table_rg">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>20</y>
-          <width>401</width>
-          <height>311</height>
-         </rect>
-        </property>
-        <property name="gridStyle">
-         <enum>Qt::SolidLine</enum>
-        </property>
-        <property name="sortingEnabled">
-         <bool>true</bool>
-        </property>
-        <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>1</number>
-        </attribute>
-        <attribute name="horizontalHeaderHighlightSections">
-         <bool>true</bool>
-        </attribute>
-        <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>30</number>
-        </attribute>
-        <attribute name="horizontalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-        <attribute name="verticalHeaderDefaultSectionSize">
-         <number>0</number>
-        </attribute>
-        <attribute name="verticalHeaderStretchLastSection">
-         <bool>true</bool>
-        </attribute>
-       </widget>
        <widget class="QGroupBox" name="grp_box_opp_rg">
         <property name="geometry">
          <rect>
@@ -402,6 +368,16 @@
          </property>
         </widget>
        </widget>
+       <widget class="QPlainTextEdit" name="text_edit_rg">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>20</y>
+          <width>411</width>
+          <height>301</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -451,6 +427,13 @@
          <string>Operations</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <widget class="QPushButton" name="btn_op_add_another_fa">
+           <property name="text">
+            <string>Add Another FA</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QPushButton" name="btn_op_union_fa">
            <property name="text">
@@ -588,6 +571,19 @@
        </widget>
       </widget>
      </widget>
+    </widget>
+    <widget class="QPushButton" name="btn_op_clear_data">
+     <property name="geometry">
+      <rect>
+       <x>340</x>
+       <y>390</y>
+       <width>141</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Clear Data</string>
+     </property>
     </widget>
    </widget>
   </widget>

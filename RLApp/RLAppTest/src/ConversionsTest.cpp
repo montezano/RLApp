@@ -72,6 +72,22 @@ public:
 		Assert::IsTrue(result);
 	}
 
+	TEST_METHOD(re_to_fa_conversion_3)
+	{
+		re.setReString("a*");
+
+		fa = Conversions::reToFA(re);
+		fa->determinize();
+		QVector<DetFAState> det_fa = fa->getDetStates();
+
+		QVector<QString> valid_states = { "0" };
+
+		bool result = false;
+
+		Assert::IsTrue(fa->getStates()[0]._transitions[0][0] == "0");
+
+	}
+
 	TEST_METHOD(rg_to_fa)
 	{
 		rg.addProduction("S", "a");

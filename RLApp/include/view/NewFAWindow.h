@@ -1,31 +1,35 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
-#include "ui_UpdateFA.h"
+#include "ui_NewFA.h"
 
 #include "util/Subject.h"
 #include "model/FADataModel.h"
 
-class UpdateFAWindow : public QDialog, public Subject
+class NewFAWindow : public QDialog, public Subject
 {
 	Q_OBJECT
 
 public:
-	UpdateFAWindow(QWidget *parent = Q_NULLPTR);
+	NewFAWindow(QWidget *parent = Q_NULLPTR);
 
 	void setDataModel(FADataModel* data_model);
 
 
 	public slots:
-	void addProductionName();
+	void updateFAModel();
 	void cleanLineField();
-	void manipulateFA();
+	void faInsertTransitionName();
+	void faRemoveTransitionName();
+	void faInsertTransition();
+	void faRemoveTransition();
+	void faSetFinalState();
 	//void addProduction();
 	//void removeProductionName();
 	//void removeProduction();
 	//void acceptedGrammar();
 
 private:
-	Ui::UpdateFA ui;
-	FADataModel* temp_model;
+	FADataModel* fa_model;
+	Ui::NewFA ui;
 };

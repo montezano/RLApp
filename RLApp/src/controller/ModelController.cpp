@@ -1,17 +1,19 @@
 #include "controller/ModelController.h"
 
 ModelController::ModelController() :
-	_re()
+	_re(),
+	_rg()
 {
 }
 
-ModelController::ModelController(Observer * observer, FADataModel* fa_data) :
+ModelController::ModelController(Observer * observer, FADataModel* fa_data, FADataModel* fa_data2) :
 	_re(),
-	_fa(fa_data)
+	_fa(fa_data),
+	_fa2(fa_data2)
 {
 	_re.addObserver(observer);
-	_fa->addTerminal("");
-	_fa->addState(FAState());
+	//_fa->addTerminal("");
+	//_fa->addState(FAState());
 }
 
 ModelController::~ModelController()
@@ -37,7 +39,8 @@ void ModelController::onNotify(void * entity, Events event)
 		break;
 	case RE_TO_FA:
 		_fa_temp = new FADataModel(Conversions::reToFA(_re));
-		_fa_temp->determinize();
+		//_fa_temp->determinize();
+		//_fa_temp->minimizeDeterministic();
 		notify((void*)_fa_temp, FA_UPDATE_OPERATION);
 		break;
 	case RE_UNION:
@@ -87,6 +90,11 @@ void ModelController::onNotify(void * entity, Events event)
 		notify((void*)ret, RE_EQUIVALENCE_RESULT);
 		break;
 	case RG_TO_FA:
+		_rg.parse(*(QString*)entity);
+
+		ret_fa = new FADataModel(Conversions::grToFA(_rg));
+
+		notify((void*)ret_fa, FA_UPDATE_OPERATION);
 		break;
 	case RG_UNION:
 		break;
@@ -96,24 +104,39 @@ void ModelController::onNotify(void * entity, Events event)
 		break;
 	case RG_EQUIVALENCE:
 		break;
+	case FA_ADD:
+		_fa = (FADataModel*)entity;
+		break;
 	case FA_UNION:
-		//temp_re.setReString(*(QString*)entity);
+		ret_fa = new FADataModel(_fa->faUnion(*_fa2));
+		notify((void*)ret_fa, FA_UPDATE_OPERATION);
 
-		//_fa_temp = new FADataModel(*_fa);
-		//FADataModel* ret_fa;
-
-		//ret_fa = new FADataModel(_fa_temp->faUnion(*(FADataModel*)entity));
-		//notify((void*)ret_fa, FA_UPDATE_OPERATION);
 		break;
 	case FA_INTERSECTION:
+		conv_re = (FADataModel*)entity;
+		ret_fa = new FADataModel(_fa->faIntersection(*_fa2));
+		notify((void*)ret_fa, FA_UPDATE_OPERATION);
 		break;
 	case FA_COMPLEMENT:
+		ret_fa = new FADataModel(_fa->faComplement());
+		notify((void*)ret_fa, FA_UPDATE_OPERATION);
 		break;
 	case FA_EQUIVALENCE:
+		conv_re = (FADataModel*)entity;
+		ret = new bool(_fa->faEquivalent(*_fa2));
+		notify((void*)ret, FA_UPDATE_OPERATION);
 		break;
 	case FA_DETERMINIZATION:
+		_fa->determinize();
+		//notify((void*)ret, FA_UPDATE_OPERATION);
+		notify((void*)_fa, FA_UPDATE_ORIGINAL);
+
 		break;
 	case FA_MINIMIZATION:
+		_fa->determinize();
+		_fa->minimizeDeterministic();
+		notify((void*)_fa, FA_UPDATE_ORIGINAL);
+
 		break;	
 
 	}

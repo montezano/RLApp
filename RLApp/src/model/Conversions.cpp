@@ -34,7 +34,7 @@ FA* Conversions::reToFA(RE re)
 
 
 	//basic states (q1, q2, q3...)
-	for (int i = 0; i < di_simone_composition.size() - 1; i++)
+	for (int i = 0; i < di_simone_composition.size(); i++)
 	{
 		st_transitions.clear();
 		for (VT terminal : terminals)

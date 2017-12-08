@@ -48,8 +48,23 @@ public:
 
 	TEST_METHOD(add_rg_production_fail)
 	{
-		Assert::IsFalse(rg.addProduction("Sa", "aaS"));
+		rg.addProduction("Z", "aA");
+		rg.addProduction("Z", "bB");
+		rg.addProduction("Z", "&");
+		rg.addProduction("S", "aA");
+		rg.addProduction("S", "bB");
+		rg.addProduction("A", "aS");
+		rg.addProduction("A", "bC");
+		rg.addProduction("A", "a");
+		rg.addProduction("B", "aC");
+		rg.addProduction("B", "bS");
+		rg.addProduction("B", "b");
+		rg.addProduction("C", "aB");
+		rg.addProduction("C", "bA");
+		
 	}
+
+
 
 
 

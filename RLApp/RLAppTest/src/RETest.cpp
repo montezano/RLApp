@@ -166,6 +166,18 @@ public:
 		Assert::IsTrue('|' == tree_1a[1]->parent->symbol);
 	}
 
+	TEST_METHOD(terminals_end)
+	{
+		re.setReString("(aaa)*aa?");
+
+		re.parse();
+
+		QVector<Node*> di_simone_composition = re.buildDiSimoneComposition();
+
+		QVector<Node*> tree_1a = re.initialDiSimonePath();
+
+	}
+
 	static RE re;
 };
 
